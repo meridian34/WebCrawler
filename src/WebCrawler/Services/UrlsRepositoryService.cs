@@ -90,39 +90,51 @@ namespace WebCrawler.Services
             });
         }
 
-        private bool AddLink(string url)
+        private bool AddLink(string link)
         {
             try
             {
-                if (IsUrl(url) && !Contains(url) && url.Contains(_root))
+                if (IsUrl(link))
                 {
-                    if (IsAbsoluteUrl(url))
-                    {
-                        Uri uriResult;
-                        Uri.TryCreate(url, UriKind.Absolute, out uriResult);
-                        if (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)
-                        {
-                            LinkItems.Add(new LinkItem { IsCrawled = false, Url = url });
-                            Count++;
-                            return true;
-                        }
-
-                        return false;
-                    }
-                    else
-                    {
-                        var root = new Uri(_root);
-                        var newUri = new Uri(root, url);
-                        AddLink(newUri.ToString());
-                    }
+                    AddUrl(link);
+                    return true;
                 }
 
                 return false;
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                Console.WriteLine(e);
                 throw;
             }
+        }
+
+        private bool AddUrl(string url)
+        {
+            if (IsAbsoluteUrl(url))
+            {
+                Uri uriResult;
+                Uri.TryCreate(url, UriKind.Absolute, out uriResult);
+                if ((uriResult.Scheme == Uri.UriSchemeHttp ||
+                    uriResult.Scheme == Uri.UriSchemeHttps) &&
+                    !Contains(url) &&
+                    url.Contains(_root))
+                {
+                    LinkItems.Add(new LinkItem { IsCrawled = false, Url = url });
+                    Count++;
+                    return true;
+                }
+
+                return false;
+            }
+            else
+            {
+                var root = new Uri(_root);
+                var newUri = new Uri(root, url);
+                AddUrl(newUri.ToString());
+            }
+
+            return false;
         }
 
         private async Task SafeInvoke(Action action)

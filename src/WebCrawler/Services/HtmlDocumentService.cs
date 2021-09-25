@@ -11,9 +11,7 @@ namespace WebCrawler.Services
         {
             var htmlDocument = new HtmlDocument();
             htmlDocument.LoadHtml(htmlBody);
-            var links = GetLinkByTag(htmlDocument, "link").ToList();
-            var links2 = GetLinkByTag(htmlDocument, "a");
-            links.AddRange(links2);
+            var links = GetLinkByTag(htmlDocument, "a").ToList();
             return links;
         }
 

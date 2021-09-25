@@ -12,6 +12,8 @@ namespace WebCrawler.Services
         private readonly ISiteMapService _siteMapService;
         private readonly ISiteScanService _siteScanService;
         private readonly string _sitemapLink = "sitemap.xml";
+        private readonly string _httpScheme = "http://";
+        private readonly string _httpsScheme = "https://";
         private IReadOnlyCollection<HttpScanResult> _sitemapResults;
         private IReadOnlyCollection<HttpScanResult> _scanResults;
         private IReadOnlyCollection<HttpScanResult> _sitemapUniqueResults;
@@ -35,6 +37,11 @@ namespace WebCrawler.Services
 
         public async Task RunCrowler(string url)
         {
+            if (!UrlIsHttpScheme(url) && !UrlIsHttpsScheme(url))
+            {
+                url = PrepareUrl(url);
+            }
+
             if (!UrlIsValid(url))
             {
                 throw new ArgumentException();
@@ -70,7 +77,9 @@ namespace WebCrawler.Services
 
         public IReadOnlyCollection<HttpScanResult> GetAllSortedResults()
         {
-            return _scanResults.OrderBy(x => x.ElapsedMilliseconds).ToList();
+            var results = _scanResults.ToList();
+            results.AddRange(_sitemapResults.ToList());
+            return results.OrderBy(x => x.ElapsedMilliseconds).ToList();
         }
 
         private void SendResults()
@@ -126,6 +135,21 @@ namespace WebCrawler.Services
             var baseUri = new Uri(GetRootUrl(url));
             var myUri = new Uri(baseUri, _sitemapLink);
             return myUri.ToString();
+        }
+
+        private bool UrlIsHttpsScheme(string url)
+        {
+            return url.Contains(_httpsScheme);
+        }
+
+        private bool UrlIsHttpScheme(string url)
+        {
+            return url.Contains(_httpScheme);
+        }
+
+        private string PrepareUrl(string url)
+        {
+            return new UriBuilder(url).Uri.ToString();
         }
     }
 }
