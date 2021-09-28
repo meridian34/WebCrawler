@@ -13,7 +13,7 @@ namespace WebCrawler.Service
             var webCrawler = Startup.GetWebCrawler;
             webCrawler.SendingScanUniqueResults += PrintSiteScansHanler;
             webCrawler.SendingSitemapUniqueResults += PrintSitemapsHandler;
-            await webCrawler.RunCrowler(url);
+            await webCrawler.RunCrawler(url);
             PrintTimeResult(webCrawler.GetAllSortedResults());
             PrintCount(webCrawler.GetScanResults().Count, webCrawler.GetSitemapResults().Count);
             Console.ReadKey();            

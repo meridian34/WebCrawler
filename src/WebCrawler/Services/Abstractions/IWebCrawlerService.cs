@@ -27,6 +27,6 @@ namespace WebCrawler.Services.Abstractions
 
         public IReadOnlyCollection<HttpScanResult> GetAllSortedResults();
 
-        public Task RunCrowler(string url);
+        public Task RunCrawler(string url);
     }
 }

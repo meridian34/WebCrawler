@@ -35,7 +35,7 @@ namespace WebCrawler.Services
 
         public event Action<IReadOnlyCollection<HttpScanResult>> SendingAllSortedResults;
 
-        public async Task RunCrowler(string url)
+        public async Task RunCrawler(string url)
         {
             if (!UrlIsHttpScheme(url) && !UrlIsHttpsScheme(url))
             {
