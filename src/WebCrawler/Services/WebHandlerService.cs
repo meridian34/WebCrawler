@@ -13,7 +13,7 @@ namespace WebCrawler.Services
 {
     public class WebHandlerService : IWebHandlerService
     {
-        private readonly IReadOnlyCollection<string> _contentTypes = new List<string>() { "text/html; charset=utf-8", "text/html" };
+        private readonly IReadOnlyCollection<string> _contentTypes;
         private readonly int _maxConcarency;
         private readonly int _dalayMilliseconds;
 
