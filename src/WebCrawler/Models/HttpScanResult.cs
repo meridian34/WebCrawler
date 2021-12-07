@@ -6,6 +6,8 @@ namespace WebCrawler.Models
     {
         public string Url { get; set; }
 
+        public bool IsCrawled { get; set; }
+
         public long ElapsedMilliseconds { get; set; }
 
         public int HttpStausCode { get; set; }

@@ -24,9 +24,7 @@ namespace WebCrawler
             var maxConcarency = configuration.GetSection("maxConcarency").Get<int>();
 
             _services = new ServiceCollection();
-            _services.AddTransient<IComparerService, ComparerService>();
             _services.AddTransient<IHtmlDocumentService, HtmlDocumentService>();
-            _services.AddTransient<IUrlsRepositoryService, UrlsRepositoryService>();            
             _services.AddTransient<IWebHandlerFactory>((serviceProvider) =>
             {
                 return new WebHandlerFactory(

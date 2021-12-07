@@ -48,7 +48,7 @@ namespace WebCrawler.Services
             }
 
             _sitemapResults = await _siteMapService.MapAsync(GetSitemapXmlUrl(url));
-            _scanResults = await _siteScanService.ScanAsync(GetRootUrl(url));
+            _scanResults = await _siteScanService.ScanSiteAsync(GetRootUrl(url));
             _sitemapUniqueResults = _sitemapResults.Where(x => _scanResults.Where(y => y.Url == x.Url).FirstOrDefault() == null).ToList();
             _scanUniqueResults = _scanResults.Where(x => _sitemapResults.Where(y => y.Url == x.Url).FirstOrDefault() == null).ToList();
 

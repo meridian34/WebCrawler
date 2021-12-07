@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
@@ -10,40 +11,72 @@ namespace WebCrawler.Services
     {
         private readonly IWebHandlerService _webHandlerService;
         private readonly IHtmlDocumentService _htmlDocumentService;
-        private readonly IUrlsRepositoryService _repositoryService;
-        private List<HttpScanResult> _results;
+        private List<HttpScanResult> _scanList;
+        private string _root;
 
         public SiteScanService(
             IWebHandlerFactory webHandlerFactory,
-            IHtmlDocumentService htmlDocumentService,
-            IUrlsRepositoryService linkRepositoryService)
+            IHtmlDocumentService htmlDocumentService
+            )
         {
-            _results = new List<HttpScanResult>();
+            _scanList = new List<HttpScanResult>();
             _webHandlerService = webHandlerFactory.CreateForSiteScan();
             _htmlDocumentService = htmlDocumentService;
-            _repositoryService = linkRepositoryService;
+            
         }
 
-        public async Task<IReadOnlyCollection<HttpScanResult>> ScanAsync(string url)
+        public async Task<IReadOnlyCollection<HttpScanResult>> ScanSiteAsync(string url)
         {
-            _results.Clear();
-            await _repositoryService.InitRootAsync(url);
-            while (_repositoryService.Count > 0)
-            {
-                var urls = await _repositoryService.GetListUniqueUrlsAsync();
-                var results = await _webHandlerService.ScanUrlConcurencyAsync(urls);
-                var contents = results.Where(x => x.Content != null && x.Exception == null)
-                                        .Select(x => x.Content);
-                foreach (var body in contents)
-                {
-                    var links = _htmlDocumentService.GetLinks(body);
-                    await _repositoryService.AddLinkAsync(links);
-                }
+            _scanList.Clear();
+            Uri uriResult = new Uri(url);
+            _root = uriResult.GetLeftPart(UriPartial.Authority);
+            _scanList.Add(new HttpScanResult() { Url = _root, IsCrawled = false });
 
-                _results.AddRange(results);
+            while (_scanList.Any(x => !x.IsCrawled))
+            {
+                var scanResults = await _webHandlerService.ScanUrlConcurencyAsync(_scanList.Where(x => x.IsCrawled == false).ToList());
+                var contentList = scanResults.Where(x => x.Content != null && x.Exception == null)
+                                        .Select(x => x.Content);
+
+                foreach (var htmlContent in contentList)
+                {
+                    var links = _htmlDocumentService.GetLinks(htmlContent);
+                    AddInScanList(links);
+                }
             }
 
-            return _results;
+            return _scanList;
+        }
+
+        private void AddInScanList(string link)
+        {   
+            Uri uriResult;
+            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out uriResult);
+            if (isAbsoluteLink)
+            {
+                var isUniqueLink = !_scanList.Any(x => x.Url == link);
+                var isValidUrl = (uriResult.Scheme == Uri.UriSchemeHttp ||
+                        uriResult.Scheme == Uri.UriSchemeHttps) &&
+                        isUniqueLink && link.Contains(_root);
+
+                if (isValidUrl)
+                {
+                    _scanList.Add(new HttpScanResult() { Url = link, IsCrawled = false });
+                }
+            }
+            else
+            {
+                var root = new Uri(_root);
+                var newUri = new Uri(root, link);
+                AddInScanList(newUri.ToString());
+            }
+        }
+        private void AddInScanList(IReadOnlyCollection<string> links)
+        {
+            foreach(var link in links)
+            {
+                AddInScanList(link);
+            }
         }
     }
 }

@@ -28,11 +28,14 @@ namespace WebCrawler.Services
         {
             var result = new HttpScanResult();
             result.Url = url;
+            return await ScanUrlAsync(result);
+        }
+        public async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
+        {   
             var timer = new Stopwatch();
-
             try
             {
-                var request = (HttpWebRequest)WebRequest.Create(url);
+                var request = (HttpWebRequest)WebRequest.Create(result.Url);
                 timer.Start();
                 var response = (HttpWebResponse)(await request.GetResponseAsync());
                 timer.Stop();
@@ -45,8 +48,6 @@ namespace WebCrawler.Services
                     using StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
                     result.Content = readStream.ReadToEnd();
                 }
-
-                return result;
             }
             catch (Exception e)
             {
@@ -55,15 +56,16 @@ namespace WebCrawler.Services
                 result.ElapsedMilliseconds = timer.ElapsedMilliseconds;
             }
 
-            return await Task.FromResult(result);
+            result.IsCrawled = true;
+            return result;
         }
 
-        public async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<string> urls)
+        public async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<HttpScanResult> urls)
         {
             try
             {
                 var tasks = new List<Task<HttpScanResult>>();
-                var queue = new Queue<string>(urls);
+                var queue = new Queue<HttpScanResult>(urls);
 
                 while (queue.Count > 0)
                 {
@@ -76,6 +78,7 @@ namespace WebCrawler.Services
                             {
                                 await Task.Delay(_dalayMilliseconds);
                                 var result = await ScanUrlAsync(item);
+
                                 return result;
                             }));
                         }

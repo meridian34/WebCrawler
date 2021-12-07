@@ -31,31 +31,31 @@ namespace WebCrawler.Services
                 throw new ArgumentException();
             }
 
-            var results = new List<HttpScanResult>();
-            var doc2 = new XmlDocument();
-            doc2.LoadXml(webResult.Content);
+            var scanResults = new List<HttpScanResult>();
+            var xmlDocument = new XmlDocument();
+            xmlDocument.LoadXml(webResult.Content);
 
-            var isSitemapIndexDocument = doc2.DocumentElement.Name == _sitemapindexName;
-            var isUrlSetDocument = doc2.DocumentElement.Name == _urlsetName;
+            var isSitemapIndexDocument = xmlDocument.DocumentElement.Name == _sitemapindexName;
+            var isUrlSetDocument = xmlDocument.DocumentElement.Name == _urlsetName;
 
             if (isUrlSetDocument)
             {
-                var nodeList = doc2.GetElementsByTagName(_urlTag);
+                var nodeList = xmlDocument.GetElementsByTagName(_urlTag);
                 var urls = GetUrlsCollection(nodeList);                
                 return await _webHandlerService.ScanUrlConcurencyAsync(urls);
             }
             else if (isSitemapIndexDocument)
             {
-                var nodeList = doc2.GetElementsByTagName(_sitemapTag);
+                var nodeList = xmlDocument.GetElementsByTagName(_sitemapTag);
                 var urls = GetUrlsCollection(nodeList);
                 var sitemapIndexResults = await _webHandlerService.ScanUrlConcurencyAsync(urls);
 
                 foreach (var resuslt in sitemapIndexResults)
                 {
-                    results.AddRange(await MapAsync(resuslt.Content));
+                    scanResults.AddRange(await MapAsync(resuslt.Content));
                 }
 
-                return results;
+                return scanResults;
             }
             else
             {
@@ -63,12 +63,12 @@ namespace WebCrawler.Services
             }
         }
         
-        private IReadOnlyCollection<string> GetUrlsCollection(XmlNodeList nodeList)
+        private IReadOnlyCollection<HttpScanResult> GetUrlsCollection(XmlNodeList nodeList)
         {
-            var resultList = new List<string>();
+            var resultList = new List<HttpScanResult>();
             foreach (XmlNode nodeItem in nodeList)
             {
-                resultList.Add(nodeItem[_linkTag].InnerText);
+                resultList.Add(new HttpScanResult() { Url = nodeItem[_linkTag].InnerText, IsCrawled = false });
             }
 
             return resultList;
