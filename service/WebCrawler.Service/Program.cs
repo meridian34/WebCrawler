@@ -11,20 +11,20 @@ namespace WebCrawler.Service
         {
             var url = Console.ReadLine();
             var webCrawler = Startup.GetWebCrawler;
-            webCrawler.SendingScanUniqueResults += PrintSiteScansHanler;
-            webCrawler.SendingSitemapUniqueResults += PrintSitemapsHandler;
             await webCrawler.RunCrawler(url);
+            PrintSitemapUniqueLink(webCrawler.GetSitemapUniqueResults());
+            PrintSiteScanUniqueLink(webCrawler.GetScanUniqueResults());
             PrintTimeResult(webCrawler.GetAllSortedResults());
             PrintCount(webCrawler.GetScanResults().Count, webCrawler.GetSitemapResults().Count);
             Console.ReadKey();            
         }
 
-        private static void PrintSitemapsHandler(IReadOnlyCollection<HttpScanResult> results)
+        private static void PrintSitemapUniqueLink(IReadOnlyCollection<HttpScanResult> results)
         {
             PrintResult(results, "Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
         }
 
-        private static void PrintSiteScansHanler(IReadOnlyCollection<HttpScanResult> results)
+        private static void PrintSiteScanUniqueLink(IReadOnlyCollection<HttpScanResult> results)
         {
             PrintResult(results, "Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
         }

@@ -28,6 +28,7 @@ namespace WebCrawler.Services
         {
             var result = new HttpScanResult();
             result.Url = url;
+
             return await ScanUrlAsync(result);
         }
         public async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
@@ -49,7 +50,7 @@ namespace WebCrawler.Services
                     result.Content = readStream.ReadToEnd();
                 }
             }
-            catch (Exception e)
+            catch (WebException e)
             {
                 timer.Stop();
                 result.Exception = e;

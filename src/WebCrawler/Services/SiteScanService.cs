@@ -52,6 +52,7 @@ namespace WebCrawler.Services
         {   
             Uri uriResult;
             var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out uriResult);
+
             if (isAbsoluteLink)
             {
                 var isUniqueLink = !_scanList.Any(x => x.Url == link);

@@ -7,16 +7,6 @@ namespace WebCrawler.Services.Abstractions
 {
     public interface IWebCrawlerService
     {
-        public event Action<IReadOnlyCollection<HttpScanResult>> SendingSitemapUniqueResults;
-
-        public event Action<IReadOnlyCollection<HttpScanResult>> SendingScanUniqueResults;
-
-        public event Action<IReadOnlyCollection<HttpScanResult>> SendingSitemapResults;
-
-        public event Action<IReadOnlyCollection<HttpScanResult>> SendingScanResults;
-
-        public event Action<IReadOnlyCollection<HttpScanResult>> SendingAllSortedResults;
-
         public IReadOnlyCollection<HttpScanResult> GetSitemapUniqueResults();
 
         public IReadOnlyCollection<HttpScanResult> GetScanUniqueResults();

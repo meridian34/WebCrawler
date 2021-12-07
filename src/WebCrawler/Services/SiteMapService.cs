@@ -9,11 +9,11 @@ namespace WebCrawler.Services
 {
     public class SiteMapService : ISiteMapService
     {
-        private const string _sitemapindexName = "sitemapindex";
-        private const string _urlsetName = "urlset";
-        private const string _linkTag = "loc";
-        private const string _urlTag = "url";
-        private const string _sitemapTag = "sitemap";
+        const string _sitemapindexName = "sitemapindex";
+        const string _urlsetName = "urlset";
+        const string _linkTag = "loc";
+        const string _urlTag = "url";
+        const string _sitemapTag = "sitemap";
 
         private IWebHandlerService _webHandlerService;
        
@@ -26,6 +26,7 @@ namespace WebCrawler.Services
         {
             var webResult = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);
             var isValidResult = webResult.Exception == null && webResult.Content != null;
+
             if (!isValidResult)
             {
                 throw new ArgumentException();
@@ -66,6 +67,7 @@ namespace WebCrawler.Services
         private IReadOnlyCollection<HttpScanResult> GetUrlsCollection(XmlNodeList nodeList)
         {
             var resultList = new List<HttpScanResult>();
+
             foreach (XmlNode nodeItem in nodeList)
             {
                 resultList.Add(new HttpScanResult() { Url = nodeItem[_linkTag].InnerText, IsCrawled = false });
