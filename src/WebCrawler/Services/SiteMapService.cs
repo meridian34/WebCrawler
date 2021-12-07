@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Xml;
 using WebCrawler.Models;
 using WebCrawler.Services.Abstractions;
 
@@ -8,42 +9,50 @@ namespace WebCrawler.Services
 {
     public class SiteMapService : ISiteMapService
     {
-        private IWebHandlerService _webHandlerService;
-        private ISitemapDataService _xmlDocumentService;
+        private const string _sitemapindexName = "sitemapindex";
+        private const string _urlsetName = "urlset";
+        private const string _linkTag = "loc";
+        private const string _urlTag = "url";
+        private const string _sitemapTag = "sitemap";
 
-        public SiteMapService(IWebHandlerFactory webHandlerFactory, ISitemapDataService xmlDocumentService)
+        private IWebHandlerService _webHandlerService;
+       
+        public SiteMapService(IWebHandlerFactory webHandlerFactory)
         {
-            _xmlDocumentService = xmlDocumentService;
             _webHandlerService = webHandlerFactory.CreateForSiteMap();
         }
 
         public async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(string sitemapXmlUrl)
         {
-            var result = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);
-            if (result.Exception == null && result.Content != null)
+            var webResult = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);
+            var isValidResult = webResult.Exception == null && webResult.Content != null;
+            if (!isValidResult)
             {
-                return await GetResults(result.Content);
+                throw new ArgumentException();
             }
 
-            throw new ArgumentException();
-        }
+            var results = new List<HttpScanResult>();
+            var doc2 = new XmlDocument();
+            doc2.LoadXml(webResult.Content);
 
-        private async Task<IReadOnlyCollection<HttpScanResult>> GetResults(string content)
-        {
-            if (_xmlDocumentService.IsUrlSetDocument(content))
+            var isSitemapIndexDocument = doc2.DocumentElement.Name == _sitemapindexName;
+            var isUrlSetDocument = doc2.DocumentElement.Name == _urlsetName;
+
+            if (isUrlSetDocument)
             {
-                var urls = _xmlDocumentService.GetUrls(content);
+                var nodeList = doc2.GetElementsByTagName(_urlTag);
+                var urls = GetUrlsCollection(nodeList);                
                 return await _webHandlerService.ScanUrlConcurencyAsync(urls);
             }
-            else if (_xmlDocumentService.IsSitemapIndexDocument(content))
+            else if (isSitemapIndexDocument)
             {
-                var results = new List<HttpScanResult>();
-                var urls = _xmlDocumentService.GetUrls(content);
-                var resultsSitemapIndex = await _webHandlerService.ScanUrlConcurencyAsync(urls);
+                var nodeList = doc2.GetElementsByTagName(_sitemapTag);
+                var urls = GetUrlsCollection(nodeList);
+                var sitemapIndexResults = await _webHandlerService.ScanUrlConcurencyAsync(urls);
 
-                foreach (var res in resultsSitemapIndex)
+                foreach (var resuslt in sitemapIndexResults)
                 {
-                    results.AddRange(await GetResults(res.Content));
+                    results.AddRange(await MapAsync(resuslt.Content));
                 }
 
                 return results;
@@ -52,6 +61,17 @@ namespace WebCrawler.Services
             {
                 return new List<HttpScanResult>();
             }
+        }
+        
+        private IReadOnlyCollection<string> GetUrlsCollection(XmlNodeList nodeList)
+        {
+            var resultList = new List<string>();
+            foreach (XmlNode nodeItem in nodeList)
+            {
+                resultList.Add(nodeItem[_linkTag].InnerText);
+            }
+
+            return resultList;
         }
     }
 }
