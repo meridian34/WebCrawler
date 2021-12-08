@@ -25,7 +25,7 @@ namespace WebCrawler.Services
             
         }
 
-        public async Task<IReadOnlyCollection<HttpScanResult>> ScanSiteAsync(string url)
+        public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanSiteAsync(string url)
         {
             _scanList.Clear();
             Uri uriResult = new Uri(url);

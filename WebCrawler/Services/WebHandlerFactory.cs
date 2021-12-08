@@ -10,12 +10,12 @@ namespace WebCrawler.Services
         private const int MaxConcarency = 4;
         private const int DelayMilliseconds = 100;
 
-        public WebHandlerService CreateForSiteScan()
+        public virtual WebHandlerService CreateForSiteScan()
         {
             return new WebHandlerService(_contentTypesToHtml, MaxConcarency, DelayMilliseconds);
         }
 
-        public WebHandlerService CreateForSiteMap()
+        public  virtual WebHandlerService CreateForSiteMap()
         {
             return new WebHandlerService(_contentTypesToXml, MaxConcarency, DelayMilliseconds);
         }

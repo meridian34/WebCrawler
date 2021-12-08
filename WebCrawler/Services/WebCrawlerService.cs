@@ -23,7 +23,7 @@ namespace WebCrawler.Services
             _siteScanService = siteScanService;
         }
 
-        public async Task RunCrawler(string url)
+        public virtual async Task RunCrawler(string url)
         {
             var isHttpOrHttpsShema = url.Contains(Uri.UriSchemeHttp) || url.Contains(Uri.UriSchemeHttp);
 
@@ -46,27 +46,27 @@ namespace WebCrawler.Services
             _scanUniqueResults = _scanResults.Where(x => !_sitemapResults.Any(y => y.Url == x.Url)).ToList();
         }
 
-        public IReadOnlyCollection<HttpScanResult> GetSitemapUniqueResults()
+        public virtual IReadOnlyCollection<HttpScanResult> GetSitemapUniqueResults()
         {
             return _sitemapUniqueResults;
         }
 
-        public IReadOnlyCollection<HttpScanResult> GetScanUniqueResults()
+        public virtual IReadOnlyCollection<HttpScanResult> GetScanUniqueResults()
         {
             return _scanUniqueResults;
         }
 
-        public IReadOnlyCollection<HttpScanResult> GetSitemapResults()
+        public  virtual IReadOnlyCollection<HttpScanResult> GetSitemapResults()
         {
             return _sitemapResults;
         }
 
-        public IReadOnlyCollection<HttpScanResult> GetScanResults()
+        public virtual IReadOnlyCollection<HttpScanResult> GetScanResults()
         {
             return _scanResults;
         }
 
-        public IReadOnlyCollection<HttpScanResult> GetAllSortedResults()
+        public virtual IReadOnlyCollection<HttpScanResult> GetAllSortedResults()
         {
             var results = _scanResults.ToList();
             results.AddRange(_sitemapResults.ToList());

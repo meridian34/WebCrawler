@@ -22,7 +22,7 @@ namespace WebCrawler.Services
             _webHandlerService = webHandlerFactory.CreateForSiteMap();
         }
 
-        public async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(string sitemapXmlUrl)
+        public virtual async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(string sitemapXmlUrl)
         {
             var webResult = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);
             var isValidResult = webResult.Exception == null && webResult.Content != null;

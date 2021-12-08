@@ -24,14 +24,15 @@ namespace WebCrawler.Services
             _dalayMilliseconds = dalayMilliseconds;
         }
 
-        public async Task<HttpScanResult> ScanUrlAsync(string url)
+        public virtual async Task<HttpScanResult> ScanUrlAsync(string url)
         {
             var result = new HttpScanResult();
             result.Url = url;
 
             return await ScanUrlAsync(result);
         }
-        public async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
+
+        public virtual async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
         {   
             var timer = new Stopwatch();
             try
@@ -61,7 +62,7 @@ namespace WebCrawler.Services
             return result;
         }
 
-        public async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<HttpScanResult> urls)
+        public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<HttpScanResult> urls)
         {
             try
             {

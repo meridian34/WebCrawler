@@ -15,7 +15,7 @@ namespace WebCrawler.Services
         private string _htmlDocument;
         private List<string> ResultList = new List<string>();
 
-        public IReadOnlyCollection<string> GetLinks(string htmlBody)
+        public virtual IReadOnlyCollection<string> GetLinks(string htmlBody)
         {
             _htmlDocument = htmlBody;
             FindNext(0);
