@@ -1,5 +1,5 @@
 {
-  "delay": 300,
+  "delay": 100,
   "maxConcarency": 4,
   "contentTypesForHtml": [
     "text/html; charset=utf-8",

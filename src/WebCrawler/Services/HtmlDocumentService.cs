@@ -21,5 +21,13 @@ namespace WebCrawler.Services
 
             return links;
         }
+
+        public IReadOnlyCollection<string> GetLinksV2(string htmlBody)
+        {
+            var parser = new HtmlParserService();
+            var res = parser.Parse(htmlBody);
+            var links = res.Where(x=>x.Tag==_linkTag).Select(a=>a.Attributes.Where(b=>b.Key == _hrefAttribute ).Select(n=>n.Value));
+            return links.ToList();
+        }
     }
 }
