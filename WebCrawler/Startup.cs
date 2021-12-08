@@ -3,7 +3,6 @@ using System.IO;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebCrawler.Services;
-using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler
 {
@@ -27,6 +26,6 @@ namespace WebCrawler
             _provider = _services.BuildServiceProvider();
         }
 
-        public static IWebCrawlerService GetWebCrawler => _provider.GetService<IWebCrawlerService>();
+        public static WebCrawlerService GetWebCrawler => _provider.GetService<WebCrawlerService>();
     }
 }

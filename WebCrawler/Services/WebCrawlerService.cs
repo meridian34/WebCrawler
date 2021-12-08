@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
-using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {

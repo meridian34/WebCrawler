@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {

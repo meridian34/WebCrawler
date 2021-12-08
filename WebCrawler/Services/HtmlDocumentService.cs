@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using HtmlAgilityPack;
-using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
