@@ -4,11 +4,11 @@ namespace WebCrawler.Services
 {
     public class HtmlDocumentService 
     {
-        private const string StartOpeningLinkTag = "<a";
-        private const string EndTag = ">";
-        private const string Anchor = "#";
-        private const string HrefAttribute = "href";
-        private const string AttributeValueMarker = @"""";
+        const string StartOpeningLinkTag = "<a";
+        const string EndTag = ">";
+        const string Anchor = "#";
+        const string HrefAttribute = "href";
+        const string AttributeValueMarker = @"""";
         private string _htmlDocument;
         private List<string> ResultList = new List<string>();
 
@@ -17,8 +17,8 @@ namespace WebCrawler.Services
             ResultList.Clear();
             _htmlDocument = htmlBody;
             FindNext(0);
-            return ResultList;
 
+            return ResultList;
         }
         
         private void FindNext(int startPosition)
@@ -30,18 +30,20 @@ namespace WebCrawler.Services
                 var endPositionTag = _htmlDocument.IndexOf(EndTag, startPositionTag);
                 var tagBody = _htmlDocument.Substring(startPositionTag, endPositionTag - startPositionTag);
                 var positionHref = tagBody.IndexOf(HrefAttribute, 0);
+
                 if (positionHref > -1)
                 {
                     var startLink = tagBody.IndexOf(AttributeValueMarker, positionHref) + 1;
                     var endLink = tagBody.IndexOf(AttributeValueMarker, startLink);
                     var link = tagBody.Substring(startLink, endLink - startLink);
+
                     if (!link.Contains(Anchor))
                     {
                         ResultList.Add(link);
                     }
                 }
-                FindNext(endPositionTag++);
 
+                FindNext(endPositionTag++);
             }
         }
     }

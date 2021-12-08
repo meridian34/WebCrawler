@@ -8,11 +8,11 @@ namespace WebCrawler.Services
 {
     public class SiteMapService 
     {
-        const string _sitemapindexName = "sitemapindex";
-        const string _urlsetName = "urlset";
-        const string _linkTag = "loc";
-        const string _urlTag = "url";
-        const string _sitemapTag = "sitemap";
+        const string SitemapindexName = "sitemapindex";
+        const string UrlsetName = "urlset";
+        const string LinkTag = "loc";
+        const string UrlTag = "url";
+        const string SitemapTag = "sitemap";
 
         private WebHandlerService _webHandlerService;
        
@@ -35,18 +35,19 @@ namespace WebCrawler.Services
             var xmlDocument = new XmlDocument();
             xmlDocument.LoadXml(webResult.Content);
 
-            var isSitemapIndexDocument = xmlDocument.DocumentElement.Name == _sitemapindexName;
-            var isUrlSetDocument = xmlDocument.DocumentElement.Name == _urlsetName;
+            var isSitemapIndexDocument = xmlDocument.DocumentElement.Name == SitemapindexName;
+            var isUrlSetDocument = xmlDocument.DocumentElement.Name == UrlsetName;
 
             if (isUrlSetDocument)
             {
-                var nodeList = xmlDocument.GetElementsByTagName(_urlTag);
-                var urls = GetUrlsCollection(nodeList);                
+                var nodeList = xmlDocument.GetElementsByTagName(UrlTag);
+                var urls = GetUrlsCollection(nodeList);
+
                 return await _webHandlerService.ScanUrlConcurencyAsync(urls);
             }
             else if (isSitemapIndexDocument)
             {
-                var nodeList = xmlDocument.GetElementsByTagName(_sitemapTag);
+                var nodeList = xmlDocument.GetElementsByTagName(SitemapTag);
                 var urls = GetUrlsCollection(nodeList);
                 var sitemapIndexResults = await _webHandlerService.ScanUrlConcurencyAsync(urls);
 
@@ -69,7 +70,7 @@ namespace WebCrawler.Services
 
             foreach (XmlNode nodeItem in nodeList)
             {
-                resultList.Add(new HttpScanResult() { Url = nodeItem[_linkTag].InnerText, IsCrawled = false });
+                resultList.Add(new HttpScanResult() { Url = nodeItem[LinkTag].InnerText, IsCrawled = false });
             }
 
             return resultList;

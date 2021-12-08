@@ -11,8 +11,6 @@ namespace WebCrawler.Service
     {
         public static async Task Main(string[] args)
         {
-            
-
             //var url = Console.ReadLine();
             var webCrawler = new WebCrawlerService();
             var result = await webCrawler.RunCrawler("https://www.ukad-group.com/");
@@ -38,22 +36,26 @@ namespace WebCrawler.Service
 
         private static void PrintResult(IReadOnlyCollection<HttpScanResult> results, string headerMessage)
         {
-            Console.WriteLine($"{headerMessage}");            
+            Console.WriteLine($"{headerMessage}"); 
+            
             foreach (var i in results)
             {
                 Console.WriteLine($"{i.Url}");
             }
+
             Console.WriteLine();
         }
 
         private static void PrintTimeResult(IReadOnlyCollection<HttpScanResult> results)
         {
             Console.WriteLine($"Timing");
+
             foreach (var i in results)
             {
                 Console.WriteLine($"{i.Url}");
                 Console.WriteLine($"{i.ElapsedMilliseconds}");
             }
+
             Console.WriteLine();
         }
 

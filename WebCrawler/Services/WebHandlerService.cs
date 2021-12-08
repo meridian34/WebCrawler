@@ -43,6 +43,7 @@ namespace WebCrawler.Services
                 result.HttpStausCode = (int)response.StatusCode;
                 result.HttpContentType = response.ContentType;
                 result.ElapsedMilliseconds = timer.ElapsedMilliseconds;
+
                 if (_contentTypes.Contains(response.ContentType))
                 {
                     using Stream receiveStream = response.GetResponseStream();
@@ -58,6 +59,7 @@ namespace WebCrawler.Services
             }
 
             result.IsCrawled = true;
+
             return result;
         }
 
@@ -89,8 +91,8 @@ namespace WebCrawler.Services
                 }
 
                 return tasks.Where(t => t.IsFaulted == false)
-                                            .Select(x => x.Result)
-                                            .ToList();
+                            .Select(x => x.Result)
+                            .ToList();
             }
             catch (Exception)
             {

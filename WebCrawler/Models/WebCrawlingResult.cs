@@ -8,10 +8,14 @@ namespace WebCrawler.Models
 {
     public class WebCrawlingResult
     {
-        public IReadOnlyCollection<HttpScanResult> SitemapResults;
-        public IReadOnlyCollection<HttpScanResult> ScanResults;
-        public IReadOnlyCollection<HttpScanResult> SitemapUniqueResults;
-        public IReadOnlyCollection<HttpScanResult> ScanUniqueResults;
-        public IReadOnlyCollection<HttpScanResult> AllResults;
+        public IReadOnlyCollection<HttpScanResult> SitemapResults { get; set; }
+
+        public IReadOnlyCollection<HttpScanResult> ScanResults { get; set; }
+
+        public IReadOnlyCollection<HttpScanResult> SitemapUniqueResults { get; set; }
+
+        public IReadOnlyCollection<HttpScanResult> ScanUniqueResults { get; set; }
+
+        public IReadOnlyCollection<HttpScanResult> AllResults { get; set; }
     }
 }

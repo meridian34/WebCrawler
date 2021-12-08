@@ -50,12 +50,14 @@ namespace WebCrawler.Services
             var results = crawlingResult.ScanResults.ToList();
             results.AddRange(crawlingResult.SitemapUniqueResults.ToList());
             crawlingResult.AllResults = results.OrderBy(x => x.ElapsedMilliseconds).ToList();
+
             return crawlingResult;
         }
 
         private string GetRootUrl(string url)
         {
             Uri uriResult = new Uri(url);
+
             return uriResult.GetLeftPart(UriPartial.Authority);
         }
 
@@ -63,6 +65,7 @@ namespace WebCrawler.Services
         {
             var baseUri = new Uri(GetRootUrl(url));
             var myUri = new Uri(baseUri, _sitemapLink);
+
             return myUri.ToString();
         }
     }
