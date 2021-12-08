@@ -38,9 +38,34 @@ namespace WebCrawler.Models
 
 		public void SetEndIndex(int index, string source)
 		{
-			endIndex = index;
-			OuterHTML = source.Substring(startIndex, endIndex - startIndex);
+            try
+            {
+				endIndex = index;
+				//OuterHTML = source.Substring(startIndex, endIndex - startIndex);
+				OuterHTML = source.Substring(startIndex, source.Length - startIndex);
+			}
+            catch (Exception e)
+            {
+				var ex = e;
+                throw;
+            }
+			
 		}
+
+		public IReadOnlyCollection<HtmlNode> GetListChildrenNodes()
+        {
+			var resultList = new List<HtmlNode>();
+            if (HasChildren())
+            {
+				
+				foreach(var child in Children)
+                {
+					resultList.Add(child);
+					resultList.AddRange(child.GetListChildrenNodes());
+				}
+            }
+			return resultList;
+        }
 
 		internal static HtmlNode CreateWhiteSpace(string content = "")
 		   => new HtmlNode(HtmlNodeType.Whitespace) { Content = content };

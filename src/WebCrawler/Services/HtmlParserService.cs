@@ -41,10 +41,13 @@ namespace WebCrawler.Services
 			HtmlNode node = null;
 			while (q.Any())
 			{
+				
 				var c = q.Peek();
-				var c2 = q.Where((value, index) => index < 2).ToString();
+				
+				//var c2 = ;
+				var data = new String(q.ToArray());
 				var c4 = q.Where((value, index) => index < 4).ToString();
-				if (c2 == "</")
+				if (q.Where((value, index) => index < 2).ToString() == "</")
 				{
 					Dequeue(2);
 					if (parent != null)
@@ -56,7 +59,7 @@ namespace WebCrawler.Services
 					Dequeue();
 					return list;
 				}
-				else if (c4 == "<!--")
+				else if (q.Where((value, index) => index < 4).ToString() == "<!--")
 				{
 					var comment = GetComment();
 					node = HtmlNode.CreateComment();
@@ -64,7 +67,7 @@ namespace WebCrawler.Services
 					list.Add(node);
 
 				}
-				else if (c2 == "<!")
+				else if (q.Where((value, index) => index < 2).ToString() == "<!")
 				{
 					node = CreateDocType();
 					list.Add(node);
@@ -89,9 +92,9 @@ namespace WebCrawler.Services
 						break;
 					}
 
-					var c3 = q.Where((value, index) => index < 3).ToString();
+					//var c3 = ;
 					// instantly closed
-					if (q.Peek() == '>' && (c3 == "></"))
+					if (q.Peek() == '>' && (q.Where((value, index) => index < 3).ToString() == "></"))
 					{
 						Dequeue(3);
 						node.EndTag = GetUpTo('>');
@@ -101,7 +104,7 @@ namespace WebCrawler.Services
 						list.Add(node);
 					}
 					// self closing element
-					else if (c2 == "/>")
+					else if (q.Where((value, index) => index < 2).ToString() == "/>")
 					{
 						Dequeue(2);
 						node.SelfClosing = true;
@@ -204,7 +207,7 @@ namespace WebCrawler.Services
 				if (q.Peek() == '>') return new KeyValuePair<string, string>(name, null);
 
 				var c2 = q.Where((value, index) => index < 2).ToString();
-				if (c2 == "''" || c2 == "\"\"" || c2 == "``")
+				if (q.Where((value, index) => index < 2).ToString() == "''" || q.Where((value, index) => index < 2).ToString() == "\"\"" || q.Where((value, index) => index < 2).ToString() == "``")
 				{
 					Dequeue(2);
 					return new KeyValuePair<string, string>(name, string.Empty);
@@ -279,7 +282,11 @@ namespace WebCrawler.Services
 			while (length-- > 0)
 			{
 				index++;
-				text += q.Dequeue();
+                if (q.Count > 0)
+                {
+					text += q.Dequeue();
+				}
+				
 			}
 			return text;
 		}
