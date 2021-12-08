@@ -7,16 +7,16 @@ using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
-    public class SiteScanService : ISiteScanService
+    public class SiteScanService 
     {
-        private readonly IWebHandlerService _webHandlerService;
-        private readonly IHtmlDocumentService _htmlDocumentService;
+        private readonly WebHandlerService _webHandlerService;
+        private readonly HtmlDocumentService _htmlDocumentService;
         private List<HttpScanResult> _scanList;
         private string _root;
 
         public SiteScanService(
-            IWebHandlerFactory webHandlerFactory,
-            IHtmlDocumentService htmlDocumentService
+            WebHandlerFactory webHandlerFactory,
+            HtmlDocumentService htmlDocumentService
             )
         {
             _scanList = new List<HttpScanResult>();

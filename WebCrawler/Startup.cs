@@ -16,16 +16,13 @@ namespace WebCrawler
         {
             var builder = new ConfigurationBuilder();
             builder.SetBasePath(Directory.GetCurrentDirectory());
-            builder.AddJsonFile("config.json");
-            var configuration = builder.Build();
-            
 
             _services = new ServiceCollection();
-            _services.AddTransient<IHtmlDocumentService, HtmlDocumentService>();
-            _services.AddTransient<IWebHandlerFactory, WebHandlerFactory>();
-            _services.AddTransient<ISiteScanService, SiteScanService>();
-            _services.AddTransient<ISiteMapService, SiteMapService>();
-            _services.AddTransient<IWebCrawlerService, WebCrawlerService>();
+            _services.AddTransient<HtmlDocumentService>();
+            _services.AddTransient<WebHandlerFactory>();
+            _services.AddTransient<SiteScanService>();
+            _services.AddTransient<SiteMapService>();
+            _services.AddTransient<WebCrawlerService>();
             _services.BuildServiceProvider();
             _provider = _services.BuildServiceProvider();
         }

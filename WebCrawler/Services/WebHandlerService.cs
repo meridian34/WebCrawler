@@ -11,7 +11,7 @@ using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
-    public class WebHandlerService : IWebHandlerService
+    public class WebHandlerService
     {
         private readonly IReadOnlyCollection<string> _contentTypes;
         private readonly int _maxConcarency;

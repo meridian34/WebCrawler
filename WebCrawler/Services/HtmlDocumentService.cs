@@ -5,7 +5,7 @@ using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
-    public class HtmlDocumentService : IHtmlDocumentService
+    public class HtmlDocumentService 
     {
         private const string StartOpeningLinkTag = "<a";
         private const string EndTag = ">";

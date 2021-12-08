@@ -7,7 +7,7 @@ using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
-    public class SiteMapService : ISiteMapService
+    public class SiteMapService 
     {
         const string _sitemapindexName = "sitemapindex";
         const string _urlsetName = "urlset";
@@ -15,9 +15,9 @@ namespace WebCrawler.Services
         const string _urlTag = "url";
         const string _sitemapTag = "sitemap";
 
-        private IWebHandlerService _webHandlerService;
+        private WebHandlerService _webHandlerService;
        
-        public SiteMapService(IWebHandlerFactory webHandlerFactory)
+        public SiteMapService(WebHandlerFactory webHandlerFactory)
         {
             _webHandlerService = webHandlerFactory.CreateForSiteMap();
         }

@@ -7,17 +7,17 @@ using WebCrawler.Services.Abstractions;
 
 namespace WebCrawler.Services
 {
-    public class WebCrawlerService : IWebCrawlerService
+    public class WebCrawlerService 
     {
-        private readonly ISiteMapService _siteMapService;
-        private readonly ISiteScanService _siteScanService;
+        private readonly SiteMapService _siteMapService;
+        private readonly SiteScanService _siteScanService;
         private readonly string _sitemapLink = "sitemap.xml";
         private IReadOnlyCollection<HttpScanResult> _sitemapResults;
         private IReadOnlyCollection<HttpScanResult> _scanResults;
         private IReadOnlyCollection<HttpScanResult> _sitemapUniqueResults;
         private IReadOnlyCollection<HttpScanResult> _scanUniqueResults;
 
-        public WebCrawlerService(ISiteMapService siteMapService, ISiteScanService siteScanService)
+        public WebCrawlerService(SiteMapService siteMapService, SiteScanService siteScanService)
         {
             _siteMapService = siteMapService;
             _siteScanService = siteScanService;
