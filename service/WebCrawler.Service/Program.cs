@@ -10,24 +10,7 @@ namespace WebCrawler.Service
     {
         public static async Task Main(string[] args)
         {
-            //string path = @"C:\Users\a.sobol\source\repos_vs_code\WebCrawler\webcrawler\service\WebCrawler.Service\test.txt";
-            //string source = "";
-
-            //try
-            //{
-            //    using (StreamReader sr = new StreamReader(path))
-            //    {
-            //        source = sr.ReadToEnd();
-            //    }
-                
-            //}
-            //catch (Exception e)
-            //{
-            //    Console.WriteLine(e.Message);
-            //}
-            //var res =  source.Substring(2791, source.Length - 2791);
-
-
+            
 
             //var url = Console.ReadLine();
             var webCrawler = Startup.GetWebCrawler;
@@ -36,11 +19,7 @@ namespace WebCrawler.Service
             PrintSiteScanUniqueLink(webCrawler.GetScanUniqueResults());
             PrintTimeResult(webCrawler.GetAllSortedResults());
             PrintCount(webCrawler.GetScanResults().Count, webCrawler.GetSitemapResults().Count);
-            Console.WriteLine();
-            foreach(var item in webCrawler.GetScanResults())
-            {
-                Console.WriteLine(item.Url);
-            }
+           
             Console.ReadKey();            
         }
 

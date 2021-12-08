@@ -5,8 +5,8 @@ namespace WebCrawler.Services
 {
     public class WebHandlerFactory : IWebHandlerFactory
     {
-        private readonly IReadOnlyCollection<string> _contentTypesToHtml;
-        private readonly IReadOnlyCollection<string> _contentTypesToXml;
+        private readonly IReadOnlyCollection<string> _contentTypesToHtml = new[]{"text/html; charset=utf-8", "text/html" };
+        private readonly IReadOnlyCollection<string> _contentTypesToXml = new[] {"text/xml", "application/xml", "text/xml; charset=UTF-8" };
         private readonly int _maxConcarency;
         private readonly int _dalayMilliseconds;
 
