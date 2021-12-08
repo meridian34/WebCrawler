@@ -11,11 +11,7 @@ namespace WebCrawler.Services
         private readonly SiteMapService _siteMapService ;
         private readonly SiteScanService _siteScanService;
         private readonly string _sitemapLink = "sitemap.xml";
-        private IReadOnlyCollection<HttpScanResult> _sitemapResults;
-        private IReadOnlyCollection<HttpScanResult> _scanResults;
-        private IReadOnlyCollection<HttpScanResult> _sitemapUniqueResults;
-        private IReadOnlyCollection<HttpScanResult> _scanUniqueResults;
-
+        
         public WebCrawlerService()
         {
             var factory = new WebHandlerFactory();
@@ -23,7 +19,7 @@ namespace WebCrawler.Services
             _siteScanService = new SiteScanService(factory);
         }
 
-        public virtual async Task RunCrawler(string url)
+        public virtual async Task<WebCrawlingResult> RunCrawler(string url)
         {
             var isHttpOrHttpsShema = url.Contains(Uri.UriSchemeHttp) || url.Contains(Uri.UriSchemeHttp);
 
@@ -40,37 +36,21 @@ namespace WebCrawler.Services
                 throw new ArgumentException();
             }
 
-            _sitemapResults = await _siteMapService.MapAsync(GetSitemapXmlUrl(url));
-            _scanResults = await _siteScanService.ScanSiteAsync(GetRootUrl(url));
-            _sitemapUniqueResults = _sitemapResults.Where(x => !_scanResults.Any(y => y.Url == x.Url)).ToList();
-            _scanUniqueResults = _scanResults.Where(x => !_sitemapResults.Any(y => y.Url == x.Url)).ToList();
-        }
+            var crawlingResult = new WebCrawlingResult();
+            crawlingResult.SitemapResults = await _siteMapService.MapAsync(GetSitemapXmlUrl(url));
+            crawlingResult.ScanResults = await _siteScanService.ScanSiteAsync(GetRootUrl(url));
+            crawlingResult.SitemapUniqueResults = crawlingResult.SitemapResults
+                .Where(x => !crawlingResult.ScanResults.Any(y => y.Url == x.Url))
+                .ToList();
 
-        public virtual IReadOnlyCollection<HttpScanResult> GetSitemapUniqueResults()
-        {
-            return _sitemapUniqueResults;
-        }
+            crawlingResult.ScanUniqueResults = crawlingResult.ScanResults
+                .Where(x => !crawlingResult.SitemapResults.Any(y => y.Url == x.Url))
+                .ToList();
 
-        public virtual IReadOnlyCollection<HttpScanResult> GetScanUniqueResults()
-        {
-            return _scanUniqueResults;
-        }
-
-        public  virtual IReadOnlyCollection<HttpScanResult> GetSitemapResults()
-        {
-            return _sitemapResults;
-        }
-
-        public virtual IReadOnlyCollection<HttpScanResult> GetScanResults()
-        {
-            return _scanResults;
-        }
-
-        public virtual IReadOnlyCollection<HttpScanResult> GetAllSortedResults()
-        {
-            var results = _scanResults.ToList();
-            results.AddRange(_sitemapResults.ToList());
-            return results.OrderBy(x => x.ElapsedMilliseconds).ToList();
+            var results = crawlingResult.ScanResults.ToList();
+            results.AddRange(crawlingResult.SitemapUniqueResults.ToList());
+            crawlingResult.AllResults = results.OrderBy(x => x.ElapsedMilliseconds).ToList();
+            return crawlingResult;
         }
 
         private string GetRootUrl(string url)
@@ -85,7 +65,5 @@ namespace WebCrawler.Services
             var myUri = new Uri(baseUri, _sitemapLink);
             return myUri.ToString();
         }
-
-        
     }
 }

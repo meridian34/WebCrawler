@@ -15,11 +15,11 @@ namespace WebCrawler.Service
 
             //var url = Console.ReadLine();
             var webCrawler = new WebCrawlerService();
-            await webCrawler.RunCrawler("https://www.ukad-group.com/");
-            PrintSitemapUniqueLink(webCrawler.GetSitemapUniqueResults());
-            PrintSiteScanUniqueLink(webCrawler.GetScanUniqueResults());
-            PrintTimeResult(webCrawler.GetAllSortedResults());
-            PrintCount(webCrawler.GetScanResults().Count, webCrawler.GetSitemapResults().Count);
+            var result = await webCrawler.RunCrawler("https://www.ukad-group.com/");
+            PrintSitemapUniqueLink(result.SitemapUniqueResults);
+            PrintSiteScanUniqueLink(result.ScanUniqueResults);
+            PrintTimeResult(result.AllResults);
+            PrintCount(result.ScanResults.Count, result.SitemapResults.Count);
            
             Console.ReadKey();            
         }
