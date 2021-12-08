@@ -7,47 +7,44 @@ namespace WebCrawler.Services
 {
     public class HtmlDocumentService : IHtmlDocumentService
     {
-        private const string _linkTag = "a";
-        private const string _anchor = "#";
-        private const string _hrefAttribute = "href";
-
+        private const string StartOpeningLinkTag = "<a";
+        private const string EndTag = ">";
         private const string Anchor = "#";
         private const string HrefAttribute = "href";
         private const string AttributeValueMarker = @"""";
         private string _htmlDocument;
+        private List<string> ResultList = new List<string>();
 
         public IReadOnlyCollection<string> GetLinks(string htmlBody)
         {
             _htmlDocument = htmlBody;
-            return FindNext(0);
+            FindNext(0);
+            return ResultList;
 
         }
         
-        private IReadOnlyCollection<string> FindNext(int startPosition)
-        {
-            var resultList = new List<string>();
-            var startPositionTag = _htmlDocument.IndexOf("<a", startPosition);
+        private void FindNext(int startPosition)
+        {   
+            var startPositionTag = _htmlDocument.IndexOf(StartOpeningLinkTag, startPosition);
 
             if (startPositionTag > startPosition)
             {
-                var endPositionTag = _htmlDocument.IndexOf(">", startPositionTag);
-                var sub = _htmlDocument.Substring(startPositionTag, endPositionTag - startPositionTag);
-                var positionHref = sub.IndexOf(HrefAttribute, 0);
+                var endPositionTag = _htmlDocument.IndexOf(EndTag, startPositionTag);
+                var tagBody = _htmlDocument.Substring(startPositionTag, endPositionTag - startPositionTag);
+                var positionHref = tagBody.IndexOf(HrefAttribute, 0);
                 if (positionHref > -1)
                 {
-                    var startLink = sub.IndexOf(AttributeValueMarker, positionHref) + 1;
-                    var endLink = sub.IndexOf(AttributeValueMarker, startLink);
-                    var sub2 = sub.Substring(startLink, endLink - startLink);
-                    if (!sub2.Contains(Anchor))
+                    var startLink = tagBody.IndexOf(AttributeValueMarker, positionHref) + 1;
+                    var endLink = tagBody.IndexOf(AttributeValueMarker, startLink);
+                    var link = tagBody.Substring(startLink, endLink - startLink);
+                    if (!link.Contains(Anchor))
                     {
-                        resultList.Add(sub2);
+                        ResultList.Add(link);
                     }
                 }
-                resultList.AddRange(FindNext(endPositionTag++));
+                FindNext(endPositionTag++);
 
             }
-
-            return resultList;
         }
     }
 }
