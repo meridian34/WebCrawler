@@ -14,6 +14,7 @@ namespace WebCrawler.Services
 
         public virtual IReadOnlyCollection<string> GetLinks(string htmlBody)
         {
+            ResultList.Clear();
             _htmlDocument = htmlBody;
             FindNext(0);
             return ResultList;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using WebCrawler.Models;
+using WebCrawler.Services;
 
 namespace WebCrawler.Service
 {
@@ -13,7 +14,7 @@ namespace WebCrawler.Service
             
 
             //var url = Console.ReadLine();
-            var webCrawler = Startup.GetWebCrawler;
+            var webCrawler = new WebCrawlerService();
             await webCrawler.RunCrawler("https://www.ukad-group.com/");
             PrintSitemapUniqueLink(webCrawler.GetSitemapUniqueResults());
             PrintSiteScanUniqueLink(webCrawler.GetScanUniqueResults());

@@ -8,7 +8,7 @@ namespace WebCrawler.Services
 {
     public class WebCrawlerService 
     {
-        private readonly SiteMapService _siteMapService;
+        private readonly SiteMapService _siteMapService ;
         private readonly SiteScanService _siteScanService;
         private readonly string _sitemapLink = "sitemap.xml";
         private IReadOnlyCollection<HttpScanResult> _sitemapResults;
@@ -16,10 +16,11 @@ namespace WebCrawler.Services
         private IReadOnlyCollection<HttpScanResult> _sitemapUniqueResults;
         private IReadOnlyCollection<HttpScanResult> _scanUniqueResults;
 
-        public WebCrawlerService(SiteMapService siteMapService, SiteScanService siteScanService)
+        public WebCrawlerService()
         {
-            _siteMapService = siteMapService;
-            _siteScanService = siteScanService;
+            var factory = new WebHandlerFactory();
+            _siteMapService = new SiteMapService(factory);
+            _siteScanService = new SiteScanService(factory);
         }
 
         public virtual async Task RunCrawler(string url)

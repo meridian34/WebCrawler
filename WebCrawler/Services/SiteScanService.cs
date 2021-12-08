@@ -14,14 +14,12 @@ namespace WebCrawler.Services
         private string _root;
 
         public SiteScanService(
-            WebHandlerFactory webHandlerFactory,
-            HtmlDocumentService htmlDocumentService
+            WebHandlerFactory webHandlerFactory
             )
         {
             _scanList = new List<HttpScanResult>();
             _webHandlerService = webHandlerFactory.CreateForSiteScan();
-            _htmlDocumentService = htmlDocumentService;
-            
+            _htmlDocumentService = new HtmlDocumentService();
         }
 
         public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanSiteAsync(string url)
