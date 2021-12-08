@@ -18,17 +18,11 @@ namespace WebCrawler
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("config.json");
             var configuration = builder.Build();
-            var delay = configuration.GetSection("delay").Get<int>();
-            var maxConcarency = configuration.GetSection("maxConcarency").Get<int>();
+            
 
             _services = new ServiceCollection();
             _services.AddTransient<IHtmlDocumentService, HtmlDocumentService>();
-            _services.AddTransient<IWebHandlerFactory>((serviceProvider) =>
-            {
-                return new WebHandlerFactory(
-                    maxConcarency,
-                    delay);
-            });
+            _services.AddTransient<IWebHandlerFactory, WebHandlerFactory>();
             _services.AddTransient<ISiteScanService, SiteScanService>();
             _services.AddTransient<ISiteMapService, SiteMapService>();
             _services.AddTransient<IWebCrawlerService, WebCrawlerService>();
