@@ -10,10 +10,8 @@ namespace WebCrawler.Services
         private readonly int _maxConcarency;
         private readonly int _dalayMilliseconds;
 
-        public WebHandlerFactory(int maxConcarency, int dalayMilliseconds, IReadOnlyCollection<string> contentTypesToHtml, IReadOnlyCollection<string> contentTypesToXml)
+        public WebHandlerFactory(int maxConcarency, int dalayMilliseconds)
         {
-            _contentTypesToHtml = contentTypesToHtml;
-            _contentTypesToXml = contentTypesToXml;
             _maxConcarency = maxConcarency;
             _dalayMilliseconds = dalayMilliseconds;
         }

@@ -18,8 +18,6 @@ namespace WebCrawler
             builder.SetBasePath(Directory.GetCurrentDirectory());
             builder.AddJsonFile("config.json");
             var configuration = builder.Build();
-            var contentTypesHtml = configuration.GetSection("contentTypesForHtml").Get<string[]>();
-            var contentTypesXml = configuration.GetSection("contentTypesForXml").Get<string[]>();
             var delay = configuration.GetSection("delay").Get<int>();
             var maxConcarency = configuration.GetSection("maxConcarency").Get<int>();
 
@@ -29,9 +27,7 @@ namespace WebCrawler
             {
                 return new WebHandlerFactory(
                     maxConcarency,
-                    delay,
-                    contentTypesHtml,
-                    contentTypesXml);
+                    delay);
             });
             _services.AddTransient<ISiteScanService, SiteScanService>();
             _services.AddTransient<ISiteMapService, SiteMapService>();
