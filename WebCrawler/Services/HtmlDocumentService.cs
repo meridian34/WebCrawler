@@ -12,18 +12,19 @@ namespace WebCrawler.Services
         const string HrefAttribute = "href";
         const string AttributeValueMarker = @"""";
         private string _htmlDocument;
-        private List<string> ResultList = new List<string>();
+        private List<string> _resultList = new List<string>();
 
         public virtual IEnumerable<string> GetLinks(string htmlBody)
         {
-            ResultList.Clear();
+            _resultList.Clear();
             _htmlDocument = htmlBody;
-            FindNext(0);
+            var startPosition = 0;
+            RecursivelyFill(startPosition);
 
-            return ResultList;
+            return _resultList;
         }
         
-        private void FindNext(int startPosition)
+        private void RecursivelyFill(int startPosition)
         {   
             var startPositionTag = _htmlDocument.IndexOf(StartOpeningLinkTag, startPosition);
 
@@ -42,7 +43,7 @@ namespace WebCrawler.Services
                     AddLink(link);
                 }
 
-                FindNext(endPositionTag++);
+                RecursivelyFill(endPositionTag++);
             }
         }
         private void AddLink(string link)
@@ -58,7 +59,7 @@ namespace WebCrawler.Services
             }
             else
             {
-                ResultList.Add(link);
+                _resultList.Add(link);
             }
         }
     }
