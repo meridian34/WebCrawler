@@ -75,7 +75,7 @@ namespace WebCrawler.Services
             }
         }
         
-        private IReadOnlyCollection<HttpScanResult> GetUrlsCollection(XmlNodeList nodeList)
+        private IEnumerable<HttpScanResult> GetUrlsCollection(XmlNodeList nodeList)
         {
             var resultList = new List<HttpScanResult>();
 
