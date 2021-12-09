@@ -52,14 +52,14 @@ namespace WebCrawler.Services
             if (isUrlSetDocument)
             {
                 var nodeList = xmlDocument.GetElementsByTagName(UrlTag);
-                var urls = GetUrlsCollection(nodeList);
+                var urls = ConvertNodeListToIEnumerable(nodeList);
 
                 return await _webHandlerService.ScanUrlConcurencyAsync(urls);
             }
             else if (isSitemapIndexDocument)
             {
                 var nodeList = xmlDocument.GetElementsByTagName(SitemapTag);
-                var urls = GetUrlsCollection(nodeList);
+                var urls = ConvertNodeListToIEnumerable(nodeList);
                 var sitemapIndexResults = await _webHandlerService.ScanUrlConcurencyAsync(urls);
 
                 foreach (var resuslt in sitemapIndexResults)
@@ -75,7 +75,7 @@ namespace WebCrawler.Services
             }
         }
         
-        private IEnumerable<HttpScanResult> GetUrlsCollection(XmlNodeList nodeList)
+        private IEnumerable<HttpScanResult> ConvertNodeListToIEnumerable(XmlNodeList nodeList)
         {
             var resultList = new List<HttpScanResult>();
 
