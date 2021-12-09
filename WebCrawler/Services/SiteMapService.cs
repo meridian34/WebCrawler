@@ -22,16 +22,16 @@ namespace WebCrawler.Services
             _webHandlerService = new WebHandlerService(WebHandlerType.SiteMap);
         }
 
-        public virtual async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(Uri sitemapXmlUri)
+        public virtual async Task<IEnumerable<HttpScanResult>> MapAsync(Uri sitemapXmlUri)
         {
             var basePath = sitemapXmlUri.GetLeftPart(UriPartial.Authority);
-            var baseUrl = new Uri(basePath);
+            var baseUrl = new Uri(basePath);            
             var defaultSitemapUri = new Uri(baseUrl, SitemapLink).ToString();
 
             return await RecursionMapAsync(defaultSitemapUri);
         }
 
-        private async Task<IReadOnlyCollection<HttpScanResult>> RecursionMapAsync(string sitemapXmlUrl)
+        private async Task<IEnumerable<HttpScanResult>> RecursionMapAsync(string sitemapXmlUrl)
         {
             
             var webResult = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);

@@ -14,7 +14,7 @@ namespace WebCrawler.Services
         private string _htmlDocument;
         private List<string> ResultList = new List<string>();
 
-        public virtual IReadOnlyCollection<string> GetLinks(string htmlBody)
+        public virtual IEnumerable<string> GetLinks(string htmlBody)
         {
             ResultList.Clear();
             _htmlDocument = htmlBody;
@@ -54,8 +54,7 @@ namespace WebCrawler.Services
             }
             else if (link.Contains(PropSymbol))
             {
-                var endPositionLink = link.IndexOf(PropSymbol, 0);
-                AddLink(link.Substring(0, endPositionLink));
+                return;
             }
             else
             {

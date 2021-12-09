@@ -20,16 +20,16 @@ namespace WebCrawler.Services
             _htmlDocumentService = new HtmlDocumentService();
         }
 
-        public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanSiteAsync(string url)
+        public virtual async Task<IEnumerable<HttpScanResult>> ScanSiteAsync(string url)
         {
             _scanList.Clear();
             Uri uriResult = new Uri(url);
-            _root = uriResult.GetLeftPart(UriPartial.Authority);
+            _root = new Uri(uriResult.GetLeftPart(UriPartial.Authority)).ToString();
             _scanList.Add(new HttpScanResult() { Url = _root, IsCrawled = false });
 
             while (_scanList.Any(x => !x.IsCrawled))
             {
-                var scanResults = await _webHandlerService.ScanUrlConcurencyAsync(_scanList.Where(x => x.IsCrawled == false).ToList());
+                var scanResults = await _webHandlerService.ScanUrlConcurencyAsync(_scanList.Where(x => x.IsCrawled == false));
                 var contentList = scanResults.Where(x => x.Content != null && x.Exception == null)
                                         .Select(x => x.Content);
 
@@ -72,7 +72,7 @@ namespace WebCrawler.Services
                 AddInScanList(newUri.ToString());
             }
         }
-        private void AddInScanList(IReadOnlyCollection<string> links)
+        private void AddInScanList(IEnumerable<string> links)
         {
             foreach(var link in links)
             {

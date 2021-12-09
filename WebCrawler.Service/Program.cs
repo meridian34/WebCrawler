@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services;
@@ -11,30 +12,36 @@ namespace WebCrawler.Service
     {
         public static async Task Main(string[] args)
         {
+            var baseUrl = new Uri("https://www.ukad-group.com/123/");
+            var basePath = baseUrl.GetLeftPart(UriPartial.Authority);
+            var newUri = new Uri(basePath);
+
+
             //var url = Console.ReadLine();
+
             var webCrawler = new WebCrawlerService();
             var result = await webCrawler.RunCrawler("https://www.ukad-group.com/");
-            PrintSitemapUniqueLink(result.SitemapUniqueResults);
-            PrintSiteScanUniqueLink(result.ScanUniqueResults);
-            PrintTimeResult(result.AllResults);
-            PrintCount(result.ScanResults.Count, result.SitemapResults.Count);
+            PrintSitemapUniqueLink(result.Where(x=>x.IsSiteMap == true && x.IsSiteScan == false));
+            PrintSiteScanUniqueLink(result.Where(x => x.IsSiteMap == false && x.IsSiteScan == true));
+            PrintTimeResult(result);
+            PrintCount(result.Where(x => x.IsSiteScan == true).Count(), result.Where(x => x.IsSiteMap == true ).Count());
            
             Console.ReadKey();            
         }
 
         
 
-        private static void PrintSitemapUniqueLink(IReadOnlyCollection<CrawlResult> results)
+        private static void PrintSitemapUniqueLink(IEnumerable<CrawlResult> results)
         {
             PrintResult(results, "Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
         }
 
-        private static void PrintSiteScanUniqueLink(IReadOnlyCollection<CrawlResult> results)
+        private static void PrintSiteScanUniqueLink(IEnumerable<CrawlResult> results)
         {
             PrintResult(results, "Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
         }
 
-        private static void PrintResult(IReadOnlyCollection<CrawlResult> results, string headerMessage)
+        private static void PrintResult(IEnumerable<CrawlResult> results, string headerMessage)
         {
             Console.WriteLine($"{headerMessage}"); 
             
@@ -46,7 +53,7 @@ namespace WebCrawler.Service
             Console.WriteLine();
         }
 
-        private static void PrintTimeResult(IReadOnlyCollection<CrawlResult> results)
+        private static void PrintTimeResult(IEnumerable<CrawlResult> results)
         {
             Console.WriteLine($"Timing");
 

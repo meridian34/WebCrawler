@@ -15,11 +15,13 @@ namespace WebCrawler.Services
         private readonly IReadOnlyCollection<string> _contentTypesToHtml = new[] { "text/html; charset=utf-8", "text/html" };
         private readonly IReadOnlyCollection<string> _contentTypesToXml = new[] { "text/xml", "application/xml", "text/xml; charset=UTF-8" };
         private readonly IReadOnlyCollection<string> _targetContentTypes;
+        private readonly WebHandlerType _webHandlerType;
         private readonly int _maxConcarency;
         private readonly int _dalayMilliseconds;
 
         public WebHandlerService(WebHandlerType webHandlerType, int maxConcarency = 4, int dalayMilliseconds = 50)
         {
+            _webHandlerType = webHandlerType;
             _targetContentTypes = webHandlerType == WebHandlerType.SiteMap ? _contentTypesToXml : _contentTypesToHtml;
             _maxConcarency = maxConcarency > 1 ? maxConcarency : 1;
             _dalayMilliseconds = dalayMilliseconds;
@@ -59,13 +61,14 @@ namespace WebCrawler.Services
                 result.Exception = e;
                 result.ElapsedMilliseconds = timer.ElapsedMilliseconds;
             }
-
+            result.IsSiteMap = _webHandlerType == WebHandlerType.SiteMap;
+            result.IsSiteScan = _webHandlerType == WebHandlerType.SiteScan;
             result.IsCrawled = true;
 
             return result;
         }
 
-        public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<HttpScanResult> urls)
+        public virtual async Task<IEnumerable<HttpScanResult>> ScanUrlConcurencyAsync(IEnumerable<HttpScanResult> urls)
         {
             var tasks = new List<Task<HttpScanResult>>();
             var queue = new Queue<HttpScanResult>(urls);
@@ -91,8 +94,7 @@ namespace WebCrawler.Services
             }
 
             return tasks.Where(t => t.IsFaulted == false)
-                        .Select(x => x.Result)
-                        .ToList();
+                        .Select(x => x.Result);
         }
     }
 }
