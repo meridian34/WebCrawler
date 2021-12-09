@@ -38,23 +38,6 @@ namespace WebCrawler.Services
             AddResults(await _siteMapService.MapAsync(new Uri(url)));
             AddResults(await _siteScanService.ScanSiteAsync(url));
 
-            //List<CrawlResult> results1 = new List<CrawlResult>();
-
-            //var crawlingResult = new WebCrawlingResult();
-            //crawlingResult.SitemapResults = siteMapResults.Select(x => new CrawlResult { Url = x.Url, ElapsedMilliseconds = (int)x.ElapsedMilliseconds }).ToList();
-            //crawlingResult.ScanResults = siteScanResults.Select(x => new CrawlResult { Url = x.Url, ElapsedMilliseconds = (int)x.ElapsedMilliseconds }).ToList();
-            //crawlingResult.SitemapUniqueResults = crawlingResult.SitemapResults
-            //    .Where(x => !crawlingResult.ScanResults.Any(y => y.Url == x.Url))
-            //    .ToList();
-
-            //crawlingResult.ScanUniqueResults = crawlingResult.ScanResults
-            //    .Where(x => !crawlingResult.SitemapResults.Any(y => y.Url == x.Url))
-            //    .ToList();
-
-            //var results = crawlingResult.ScanResults.ToList();
-            //results.AddRange(crawlingResult.SitemapUniqueResults.ToList());
-            //crawlingResult.AllResults = results.OrderBy(x => x.ElapsedMilliseconds).ToList();
-
             return _crawlResults;
         }
 

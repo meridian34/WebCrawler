@@ -7,7 +7,9 @@ namespace WebCrawler.Models
         public string Url { get; set; }
 
         public bool IsCrawled { get; set; }
+
         public bool IsSiteScan { get; set; }
+
         public bool IsSiteMap { get; set; }
 
         public long ElapsedMilliseconds { get; set; }
