@@ -8,7 +8,7 @@ namespace WebCrawler.Services
 {
     public class WebCrawlerService 
     {
-        private readonly SiteMapService _siteMapService ;
+        private readonly SiteMapService _siteMapService;
         private readonly SiteScanService _siteScanService;
         private readonly List<CrawlResult> _crawlResults;
 
@@ -35,13 +35,13 @@ namespace WebCrawler.Services
                 throw new ArgumentException("Url in not valid");
             }
 
-            AddResults(await _siteMapService.MapAsync(new Uri(url)));
-            AddResults(await _siteScanService.ScanSiteAsync(url));
+            AddCrawlResults(await _siteMapService.MapAsync(new Uri(url)));
+            AddCrawlResults(await _siteScanService.ScanSiteAsync(url));
 
             return _crawlResults;
         }
 
-        private void AddResults(IEnumerable<HttpScanResult> scanResults)
+        private void AddCrawlResults(IEnumerable<HttpScanResult> scanResults)
         {
             foreach(var result in scanResults)
             {
