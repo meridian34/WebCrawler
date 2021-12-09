@@ -28,7 +28,7 @@ namespace WebCrawler.Services
         {   
             var startPositionTag = _htmlDocument.IndexOf(StartOpeningLinkTag, startPosition);
 
-            if (startPositionTag > startPosition)
+            if (startPositionTag >= startPosition)
             {
                 var endPositionTag = _htmlDocument.IndexOf(EndTag, startPositionTag);
                 var tagBody = _htmlDocument.Substring(startPositionTag, endPositionTag - startPositionTag);
@@ -46,6 +46,7 @@ namespace WebCrawler.Services
                 RecursivelyFill(endPositionTag++);
             }
         }
+
         private void AddLink(string link)
         {
             if (link.Contains(Anchor))
