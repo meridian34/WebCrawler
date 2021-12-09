@@ -12,13 +12,15 @@ namespace WebCrawler.Services
 {
     public class WebHandlerService
     {
-        private readonly IReadOnlyCollection<string> _contentTypes;
+        private readonly IReadOnlyCollection<string> _contentTypesToHtml = new[] { "text/html; charset=utf-8", "text/html" };
+        private readonly IReadOnlyCollection<string> _contentTypesToXml = new[] { "text/xml", "application/xml", "text/xml; charset=UTF-8" };
+        private readonly IReadOnlyCollection<string> _targetContentTypes;
         private readonly int _maxConcarency;
         private readonly int _dalayMilliseconds;
 
-        public WebHandlerService(IReadOnlyCollection<string> contentTypeToLoadBody, int maxConcarency, int dalayMilliseconds)
+        public WebHandlerService(WebHandlerType webHandlerType, int maxConcarency = 4, int dalayMilliseconds = 50)
         {
-            _contentTypes = contentTypeToLoadBody;
+            _targetContentTypes = webHandlerType == WebHandlerType.SiteMap ? _contentTypesToXml : _contentTypesToHtml;
             _maxConcarency = maxConcarency > 1 ? maxConcarency : 1;
             _dalayMilliseconds = dalayMilliseconds;
         }
@@ -31,7 +33,7 @@ namespace WebCrawler.Services
             return await ScanUrlAsync(result);
         }
 
-        public virtual async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
+        private async Task<HttpScanResult> ScanUrlAsync(HttpScanResult result)
         {   
             var timer = new Stopwatch();
             try
@@ -44,7 +46,7 @@ namespace WebCrawler.Services
                 result.HttpContentType = response.ContentType;
                 result.ElapsedMilliseconds = timer.ElapsedMilliseconds;
 
-                if (_contentTypes.Contains(response.ContentType))
+                if (_targetContentTypes.Contains(response.ContentType))
                 {
                     using Stream receiveStream = response.GetResponseStream();
                     using StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
@@ -65,39 +67,32 @@ namespace WebCrawler.Services
 
         public virtual async Task<IReadOnlyCollection<HttpScanResult>> ScanUrlConcurencyAsync(IReadOnlyCollection<HttpScanResult> urls)
         {
-            try
+            var tasks = new List<Task<HttpScanResult>>();
+            var queue = new Queue<HttpScanResult>(urls);
+
+            while (queue.Count > 0)
             {
-                var tasks = new List<Task<HttpScanResult>>();
-                var queue = new Queue<HttpScanResult>(urls);
-
-                while (queue.Count > 0)
+                await Task.Delay(_dalayMilliseconds);
+                for (var i = 0; i < _maxConcarency; i++)
                 {
-                    for (var i = 0; i < _maxConcarency; i++)
+                    if (queue.Count > 0)
                     {
-                        if (queue.Count > 0)
-                        {
-                            var item = queue.Dequeue();
-                            tasks.Add(Task.Run(async () =>
-                            {
-                                await Task.Delay(_dalayMilliseconds);
-                                var result = await ScanUrlAsync(item);
+                        var item = queue.Dequeue();
+                        tasks.Add(Task.Run(async () =>
+                        {   
+                            var result = await ScanUrlAsync(item);
 
-                                return result;
-                            }));
-                        }
+                            return result;
+                        }));
                     }
-
-                    await Task.WhenAll(tasks);
                 }
 
-                return tasks.Where(t => t.IsFaulted == false)
-                            .Select(x => x.Result)
-                            .ToList();
+                await Task.WhenAll(tasks);
             }
-            catch (Exception)
-            {
-                throw;
-            }
+
+            return tasks.Where(t => t.IsFaulted == false)
+                        .Select(x => x.Result)
+                        .ToList();
         }
     }
 }

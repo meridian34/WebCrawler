@@ -13,12 +13,10 @@ namespace WebCrawler.Services
         private List<HttpScanResult> _scanList;
         private string _root;
 
-        public SiteScanService(
-            WebHandlerFactory webHandlerFactory
-            )
+        public SiteScanService()
         {
             _scanList = new List<HttpScanResult>();
-            _webHandlerService = webHandlerFactory.CreateForSiteScan();
+            _webHandlerService = new WebHandlerService(WebHandlerType.SiteScan);
             _htmlDocumentService = new HtmlDocumentService();
         }
 
@@ -47,9 +45,8 @@ namespace WebCrawler.Services
 
         private void AddInScanList(string link)
         {   
-            Uri uriResult;
-            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out uriResult);
-
+            
+            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out Uri uriResult);
             if (isAbsoluteLink)
             {
                 var isUniqueLink = !_scanList.Any(x => x.Url == link);
@@ -64,6 +61,12 @@ namespace WebCrawler.Services
             }
             else
             {
+                var isRelativeLinkSource = link.Contains(":");
+                if (isRelativeLinkSource)
+                {
+                    return;
+                }
+
                 var root = new Uri(_root);
                 var newUri = new Uri(root, link);
                 AddInScanList(newUri.ToString());

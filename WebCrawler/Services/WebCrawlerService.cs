@@ -10,13 +10,11 @@ namespace WebCrawler.Services
     {
         private readonly SiteMapService _siteMapService ;
         private readonly SiteScanService _siteScanService;
-        private readonly string _sitemapLink = "sitemap.xml";
         
         public WebCrawlerService()
         {
-            var factory = new WebHandlerFactory();
-            _siteMapService = new SiteMapService(factory);
-            _siteScanService = new SiteScanService(factory);
+            _siteMapService = new SiteMapService();
+            _siteScanService = new SiteScanService();
         }
 
         public virtual async Task<WebCrawlingResult> RunCrawler(string url)
@@ -28,17 +26,19 @@ namespace WebCrawler.Services
                 url = new UriBuilder(url).Uri.ToString();
             }
 
-            Uri uriResult;
-            bool isValidUrl = Uri.TryCreate(url, UriKind.Absolute, out uriResult);
+            bool isValidUrl = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
 
             if (!isValidUrl)
             {
-                throw new ArgumentException();
+                throw new ArgumentException("Url in not valid");
             }
 
+            var siteMapResults = await _siteMapService.MapAsync(new Uri(url));
+            var siteScanResults = await _siteScanService.ScanSiteAsync(url);
+
             var crawlingResult = new WebCrawlingResult();
-            crawlingResult.SitemapResults = await _siteMapService.MapAsync(GetSitemapXmlUrl(url));
-            crawlingResult.ScanResults = await _siteScanService.ScanSiteAsync(GetRootUrl(url));
+            crawlingResult.SitemapResults = siteMapResults.Select(x => new CrawlResult { Url = x.Url, ElapsedMilliseconds = (int)x.ElapsedMilliseconds }).ToList();
+            crawlingResult.ScanResults = siteScanResults.Select(x => new CrawlResult { Url = x.Url, ElapsedMilliseconds = (int)x.ElapsedMilliseconds }).ToList();
             crawlingResult.SitemapUniqueResults = crawlingResult.SitemapResults
                 .Where(x => !crawlingResult.ScanResults.Any(y => y.Url == x.Url))
                 .ToList();
@@ -52,21 +52,6 @@ namespace WebCrawler.Services
             crawlingResult.AllResults = results.OrderBy(x => x.ElapsedMilliseconds).ToList();
 
             return crawlingResult;
-        }
-
-        private string GetRootUrl(string url)
-        {
-            Uri uriResult = new Uri(url);
-
-            return uriResult.GetLeftPart(UriPartial.Authority);
-        }
-
-        private string GetSitemapXmlUrl(string url)
-        {
-            var baseUri = new Uri(GetRootUrl(url));
-            var myUri = new Uri(baseUri, _sitemapLink);
-
-            return myUri.ToString();
         }
     }
 }

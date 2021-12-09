@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebCrawler.Services
 {
@@ -7,6 +8,7 @@ namespace WebCrawler.Services
         const string StartOpeningLinkTag = "<a";
         const string EndTag = ">";
         const string Anchor = "#";
+        const string PropSymbol = "?";
         const string HrefAttribute = "href";
         const string AttributeValueMarker = @"""";
         private string _htmlDocument;
@@ -37,13 +39,27 @@ namespace WebCrawler.Services
                     var endLink = tagBody.IndexOf(AttributeValueMarker, startLink);
                     var link = tagBody.Substring(startLink, endLink - startLink);
 
-                    if (!link.Contains(Anchor))
-                    {
-                        ResultList.Add(link);
-                    }
+                    AddLink(link);
                 }
 
                 FindNext(endPositionTag++);
+            }
+        }
+        private void AddLink(string link)
+        {
+            if (link.Contains(Anchor))
+            {
+                var endPositionLink = link.IndexOf(Anchor, 0);
+                AddLink(link.Substring(0, endPositionLink));
+            }
+            else if (link.Contains(PropSymbol))
+            {
+                var endPositionLink = link.IndexOf(PropSymbol, 0);
+                AddLink(link.Substring(0, endPositionLink));
+            }
+            else
+            {
+                ResultList.Add(link);
             }
         }
     }

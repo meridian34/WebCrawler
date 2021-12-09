@@ -24,17 +24,17 @@ namespace WebCrawler.Service
 
         
 
-        private static void PrintSitemapUniqueLink(IReadOnlyCollection<HttpScanResult> results)
+        private static void PrintSitemapUniqueLink(IReadOnlyCollection<CrawlResult> results)
         {
             PrintResult(results, "Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site");
         }
 
-        private static void PrintSiteScanUniqueLink(IReadOnlyCollection<HttpScanResult> results)
+        private static void PrintSiteScanUniqueLink(IReadOnlyCollection<CrawlResult> results)
         {
             PrintResult(results, "Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml");
         }
 
-        private static void PrintResult(IReadOnlyCollection<HttpScanResult> results, string headerMessage)
+        private static void PrintResult(IReadOnlyCollection<CrawlResult> results, string headerMessage)
         {
             Console.WriteLine($"{headerMessage}"); 
             
@@ -46,7 +46,7 @@ namespace WebCrawler.Service
             Console.WriteLine();
         }
 
-        private static void PrintTimeResult(IReadOnlyCollection<HttpScanResult> results)
+        private static void PrintTimeResult(IReadOnlyCollection<CrawlResult> results)
         {
             Console.WriteLine($"Timing");
 

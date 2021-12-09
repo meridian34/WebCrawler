@@ -13,22 +13,33 @@ namespace WebCrawler.Services
         const string LinkTag = "loc";
         const string UrlTag = "url";
         const string SitemapTag = "sitemap";
+        const string SitemapLink = "sitemap.xml";
 
         private WebHandlerService _webHandlerService;
        
-        public SiteMapService(WebHandlerFactory webHandlerFactory)
+        public SiteMapService()
         {
-            _webHandlerService = webHandlerFactory.CreateForSiteMap();
+            _webHandlerService = new WebHandlerService(WebHandlerType.SiteMap);
         }
 
-        public virtual async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(string sitemapXmlUrl)
+        public virtual async Task<IReadOnlyCollection<HttpScanResult>> MapAsync(Uri sitemapXmlUri)
         {
+            var basePath = sitemapXmlUri.GetLeftPart(UriPartial.Authority);
+            var baseUrl = new Uri(basePath);
+            var defaultSitemapUri = new Uri(baseUrl, SitemapLink).ToString();
+
+            return await RecursionMapAsync(defaultSitemapUri);
+        }
+
+        private async Task<IReadOnlyCollection<HttpScanResult>> RecursionMapAsync(string sitemapXmlUrl)
+        {
+            
             var webResult = await _webHandlerService.ScanUrlAsync(sitemapXmlUrl);
             var isValidResult = webResult.Exception == null && webResult.Content != null;
 
             if (!isValidResult)
             {
-                throw new ArgumentException();
+                throw new ArgumentException($"Scan result is not valid: {webResult.Exception.Message}");
             }
 
             var scanResults = new List<HttpScanResult>();
@@ -53,7 +64,7 @@ namespace WebCrawler.Services
 
                 foreach (var resuslt in sitemapIndexResults)
                 {
-                    scanResults.AddRange(await MapAsync(resuslt.Content));
+                    scanResults.AddRange(await RecursionMapAsync(resuslt.Content));
                 }
 
                 return scanResults;
