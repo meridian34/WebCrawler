@@ -13,14 +13,18 @@ namespace WebCrawler.Services
             {
                 ".png",
                 ".jpeg",
+                ".jpg",
+                ".ico",
+                ".woff",
+                ".woff2",
                 ".js",
                 ".css",
                 ".json",
                 ".git",
+                ".ttf",                
                 "@",
                 "?",
                 "#"
-
             };
         
         public virtual bool IsValidLink(string url)
