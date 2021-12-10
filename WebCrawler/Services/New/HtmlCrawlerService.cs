@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using WebCrawler.Models;
 
 namespace WebCrawler.Services.New
@@ -37,6 +35,7 @@ namespace WebCrawler.Services.New
             {
                 var link = linkQueue.Dequeue();
                 var resultContainsLink = resultList.Any(x => x.Url == link);
+
                 if (!_urlValidator.IsValidLink(link) || resultContainsLink)
                 {
                     continue;
@@ -44,33 +43,39 @@ namespace WebCrawler.Services.New
 
                 var linkIsCorrectUrl = _urlValidator.IsCorrectLink(link)
                     && _urlValidator.ContainsBaseUrl(link, baseUrl);
-                    
+
                 if (linkIsCorrectUrl)
                 {
                     var result = _requestService.ScanUrlAsync(link, out string html);
                     result.IsSiteScan = true;
                     resultList.Add(result);
 
-                    var parsedLinks = _parserService.GetLinks(html);
-
+                    var parsedLinks = _parserService.GetHtmlLinks(html);
                     foreach(var newLink in parsedLinks)
                     {
-                        linkQueue.Enqueue(newLink);
+                       var correctLink = _urlValidator.ContainsBaseUrl(newLink, baseUrl) 
+                            ? newLink 
+                            : _linkConverterService.ConvertRelativeToAbsolute(newLink, baseUrl);
+                        
+                        AnalyzeLink(correctLink, linkQueue);
                     }
                 }
-                else
-                {
-                    var conRes = _linkConverterService.ConvertToUrl(link, baseUrl);
-                }
             }
-
+            
             return resultList;
         }
 
+        private void AnalyzeLink(string parsedLinks, Queue<string> queue)
+        {
+            if(!queue.Any(x=>x == parsedLinks))
+            {
+                queue.Enqueue(parsedLinks);
+            }
+        }
 
         private string GetRootUrl(string url)
         {
-            var basePath = new Uri(url).GetLeftPart(UriPartial.Authority);
+            var basePath = $"{new Uri(url).GetLeftPart(UriPartial.Authority)}/";
             return basePath;
         }
     }
