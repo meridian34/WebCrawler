@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
+using WebCrawler.Services.New;
 
 namespace WebCrawler.Services
 {
@@ -36,9 +37,34 @@ namespace WebCrawler.Services
             }
 
             AddCrawlResults(await _siteMapService.MapAsync(new Uri(url)));
-            AddCrawlResults(await _siteScanService.ScanSiteAsync(url));
-
+            //AddCrawlResults(await _siteScanService.ScanSiteAsync(url));
+            var htmlService = new HtmlCrawlerService(new UrlValidatorService(), new RequestService(), new ParserService(), new LinkConverterService());
+            AddCrawlResults(htmlService.RunCrawler(url));
             return _crawlResults;
+        }
+
+        private void AddCrawlResults(IEnumerable<CrawlResult> scanResults)
+        {
+            foreach (var result in scanResults)
+            {
+                var findResult = _crawlResults.Where(x => x.Url == result.Url).FirstOrDefault();
+                if (findResult != null)
+                {
+                    findResult.IsSiteMap = findResult.IsSiteMap == false ? result.IsSiteMap : findResult.IsSiteMap;
+                    findResult.IsSiteScan = findResult.IsSiteScan == false ? result.IsSiteScan : findResult.IsSiteScan;
+                }
+                else
+                {
+                    _crawlResults.Add(new CrawlResult
+                    {
+                        ElapsedMilliseconds = (int)result.ElapsedMilliseconds,
+                        Url = result.Url,
+                        IsSiteScan = result.IsSiteScan,
+                        IsSiteMap = result.IsSiteMap
+                    });
+                }
+            }
+
         }
 
         private void AddCrawlResults(IEnumerable<HttpScanResult> scanResults)
