@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Net;
 using System.Text;
-using System.Threading.Tasks;
 using WebCrawler.Models;
 
 namespace WebCrawler.Services.New
 {
     public class RequestService
     {
-        private readonly IReadOnlyCollection<string> _contentTypesToHtml = new[] { "text/html; charset=utf-8", "text/html" };
-        private readonly IReadOnlyCollection<string> _contentTypesToXml = new[] { "text/xml", "application/xml", "text/xml; charset=UTF-8" };
-        private readonly IReadOnlyCollection<string> _targetContentTypes;
+        private readonly IEnumerable<string> _targetContentTypes = new[] { "text/html; charset=utf-8", "text/html", "text/xml", "application/xml", "text/xml; charset=UTF-8" };
        
         public CrawlResult ScanUrlAsync(string url, out string page)
         {
@@ -30,12 +25,9 @@ namespace WebCrawler.Services.New
                 timer.Stop();
                 result.ElapsedMilliseconds = (int)timer.ElapsedMilliseconds;
 
-                if (_targetContentTypes.Contains(response.ContentType))
-                {
-                    using Stream receiveStream = response.GetResponseStream();
-                    using StreamReader readStream = new StreamReader(receiveStream, Encoding.UTF8);
-                    page = readStream.ReadToEnd();
-                }
+                using var receiveStream = response.GetResponseStream();
+                using var readStream = new StreamReader(receiveStream, Encoding.UTF8);
+                page = readStream.ReadToEnd();
             }
             catch (WebException)
             {
