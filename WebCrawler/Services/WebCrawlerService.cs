@@ -3,92 +3,112 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
-using WebCrawler.Services.New;
+using WebCrawler.Services.Crawlers;
+using WebCrawler.Services.Parsers;
 
 namespace WebCrawler.Services
 {
     public class WebCrawlerService 
     {
-        private readonly SiteMapService _siteMapService;
-        private readonly SiteScanService _siteScanService;
-        private readonly List<CrawlResult> _crawlResults;
+        private readonly HtmlCrawler _htmlCrawler;
+        private readonly SitemapCrawler _sitemapCrawler;
+        private readonly UrlValidatorService _validator;
 
-        public WebCrawlerService()
+        public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService)
         {
-            _siteMapService = new SiteMapService();
-            _siteScanService = new SiteScanService();
-            _crawlResults = new List<CrawlResult>();
+            _validator = urlValidatorService; //new UrlValidatorService();
+            _htmlCrawler = htmlCrawler; //new HtmlCrawler(new UrlValidatorService(), new RequestService(), new HtmlParser(), new LinkConvertorService());
+            _sitemapCrawler = sitemapCrawler; //new SitemapCrawler(new UrlValidatorService(), new RequestService(), new SitemapParser(), new LinkConvertorService());
         }
 
-        public virtual async Task<IEnumerable<CrawlResult>> RunCrawler(string url)
+        public int GetHtmlLinksCount(string url)
         {
-            var isHttpOrHttpsShema = url.Contains(Uri.UriSchemeHttp) || url.Contains(Uri.UriSchemeHttp);
+            ValidateUrl(url);
 
-            if (!isHttpOrHttpsShema)
+            return _htmlCrawler.RunCrawler(url).Count();
+        }
+
+        public IEnumerable<Link> GetHtmlLinks(string url)
+        {
+            ValidateUrl(url);
+
+            return _htmlCrawler.RunCrawler(url);
+        }
+
+        public IEnumerable<PerfomanceData> GetHtmlLinksWithPerfomance(string url)
+        {
+            ValidateUrl(url);
+
+            return _htmlCrawler.RunCrawler(url);
+        }
+
+        public IEnumerable<Link> GetUniqueHtmlLinks(string url)
+        {
+            return GetUniqueCrawlingResult(url, false, true);
+        }
+
+        public int GetSitemapLinksCount(string url)
+        {
+            ValidateUrl(url);
+
+            return _sitemapCrawler.RunCrawler(url).Count();
+        }
+
+        public IEnumerable<Link> GetSitemapLinks(string url)
+        {
+            ValidateUrl(url);
+
+            return _sitemapCrawler.RunCrawler(url);
+        }
+
+        public IEnumerable<PerfomanceData> GetSitemapLinksWithPerfomance(string url)
+        {
+            ValidateUrl(url);
+
+            return _sitemapCrawler.RunCrawler(url);
+        }
+        public IEnumerable<Link> GetUniqueSitemapLinks(string url)
+        {
+            return GetUniqueCrawlingResult(url, true, false);
+        }
+
+        public IEnumerable<PerfomanceData> GetUniqueCrawlingResult(string url)
+        {
+            return GetUniqueCrawlingResult(url, true, true);
+        }
+
+        public IEnumerable<PerfomanceData> GetUniqueCrawlingResult(string url, bool unicalSitemapResults, bool unicalHtmlResults)
+        {
+            ValidateUrl(url);
+
+            var htmlResults = _htmlCrawler.RunCrawler(url);
+            var sitemapResults = _sitemapCrawler.RunCrawler(url);
+            var unicalResults = new List<PerfomanceData>();
+
+            if (unicalHtmlResults && unicalSitemapResults)
             {
-                url = new UriBuilder(url).Uri.ToString();
+                unicalResults.AddRange(htmlResults);
+                unicalResults.AddRange(sitemapResults.Where(x => !htmlResults.Any(y => y.Url == x.Url)));
+            }
+            else if (unicalHtmlResults && !unicalSitemapResults)
+            {
+                unicalResults.AddRange(htmlResults.Where(x => !sitemapResults.Any(y => y.Url == x.Url)));
+            }
+            else if (!unicalHtmlResults && unicalSitemapResults)
+            {
+                unicalResults.AddRange(sitemapResults.Where(x => !htmlResults.Any(y => y.Url == x.Url)));
             }
 
-            bool isValidUrl = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
+            return unicalResults;
+        }
 
-            if (!isValidUrl)
+        private void ValidateUrl(string url)
+        {
+            bool urlIsNotValid = !_validator.IsCorrectLink(url) && !_validator.IsValidLink(url);
+            if (urlIsNotValid)
             {
                 throw new ArgumentException("Url in not valid");
             }
-
-            AddCrawlResults(await _siteMapService.MapAsync(new Uri(url)));
-            //AddCrawlResults(await _siteScanService.ScanSiteAsync(url));
-            var htmlService = new HtmlCrawlerService(new UrlValidatorService(), new RequestService(), new ParserService(), new LinkConverterService());
-            AddCrawlResults(htmlService.RunCrawler(url));
-            return _crawlResults;
-        }
-
-        private void AddCrawlResults(IEnumerable<CrawlResult> scanResults)
-        {
-            foreach (var result in scanResults)
-            {
-                var findResult = _crawlResults.Where(x => x.Url == result.Url).FirstOrDefault();
-                if (findResult != null)
-                {
-                    findResult.IsSiteMap = findResult.IsSiteMap == false ? result.IsSiteMap : findResult.IsSiteMap;
-                    findResult.IsSiteScan = findResult.IsSiteScan == false ? result.IsSiteScan : findResult.IsSiteScan;
-                }
-                else
-                {
-                    _crawlResults.Add(new CrawlResult
-                    {
-                        ElapsedMilliseconds = (int)result.ElapsedMilliseconds,
-                        Url = result.Url,
-                        IsSiteScan = result.IsSiteScan,
-                        IsSiteMap = result.IsSiteMap
-                    });
-                }
-            }
-
-        }
-
-        private void AddCrawlResults(IEnumerable<HttpScanResult> scanResults)
-        {
-            foreach(var result in scanResults)
-            {
-                var findResult = _crawlResults.Where(x => x.Url == result.Url).FirstOrDefault();
-                if(findResult != null)
-                {
-                    findResult.IsSiteMap = findResult.IsSiteMap == false ? result.IsSiteMap : findResult.IsSiteMap;
-                    findResult.IsSiteScan = findResult.IsSiteScan == false ? result.IsSiteScan : findResult.IsSiteScan;
-                }
-                else
-                {
-                    _crawlResults.Add(new CrawlResult
-                    {
-                        ElapsedMilliseconds = (int)result.ElapsedMilliseconds,
-                        Url = result.Url,
-                        IsSiteScan = result.IsSiteScan,
-                        IsSiteMap = result.IsSiteMap
-                    });
-                }
-            }
-            
         }
     }
 }
