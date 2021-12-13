@@ -42,15 +42,14 @@ namespace WebCrawler.Services
 
         public virtual bool IsCorrectLink(string link)
         {
-
-            var containsSheme = link.Contains(Uri.UriSchemeHttp) || link.Contains(Uri.UriSchemeHttps);
-            if (!containsSheme)
+            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out Uri uriResult);
+            if (!isAbsoluteLink)
             {
                 return false;
             }
 
-            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out Uri uriResult);
-            if (!isAbsoluteLink)
+            var containsSheme = link.Contains(Uri.UriSchemeHttp) || link.Contains(Uri.UriSchemeHttps);
+            if (!containsSheme)
             {
                 return false;
             }
