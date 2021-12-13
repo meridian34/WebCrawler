@@ -5,9 +5,9 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler", "WebCrawler\WebCrawler.csproj", "{BCE2EE25-328F-4BC4-A4EB-D5E3DE0CEC63}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Service", "WebCrawler.Service\WebCrawler.Service.csproj", "{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplication", "WebCrawler.Service\WebCrawler.ConsoleApplication.csproj", "{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler.Tests", "WebCrawler.Tests\WebCrawler.Tests.csproj", "{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Tests", "WebCrawler.Tests\WebCrawler.Tests.csproj", "{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
