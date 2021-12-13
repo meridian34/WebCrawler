@@ -12,7 +12,7 @@ namespace WebCrawler.Services.Parsers
         {
             var linkList = new List<string>();
 
-            if (html == null)
+            if (string.IsNullOrEmpty(html))
             {
                 return linkList;
             }
