@@ -1,22 +1,30 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
-using System.IO;
 using System.Net;
-using System.Text;
 using WebCrawler.Models;
 
 namespace WebCrawler.Services
 {
     public class RequestService
     {
-        private readonly IEnumerable<string> _targetContentTypes = new[] { "text/html; charset=utf-8", "text/html", "text/xml", "application/xml", "text/xml; charset=UTF-8" };
-       
-        public PerfomanceData ScanUrlAsync(string url, out string page)
+        public virtual IEnumerable<PerfomanceData> GetElapsedTimeForLinks(IEnumerable<Link> links)
+        {
+            var results = new List<PerfomanceData>();
+
+            foreach(var link in links)
+            {
+                var perfomanceItem = GetElapsedTime(link.Url);
+                results.Add(perfomanceItem);
+            }
+
+            return results;
+        }
+
+        public virtual PerfomanceData GetElapsedTime(string url)
         {
             var timer = new Stopwatch();
             var result = new PerfomanceData();
             result.Url = url;
-            page = null;
 
             try
             {
@@ -25,10 +33,6 @@ namespace WebCrawler.Services
                 var response = (HttpWebResponse)(request.GetResponse());
                 timer.Stop();
                 result.ElapsedMilliseconds = (int)timer.ElapsedMilliseconds;
-
-                using var receiveStream = response.GetResponseStream();
-                using var readStream = new StreamReader(receiveStream, Encoding.UTF8);
-                page = readStream.ReadToEnd();
             }
             catch (WebException)
             {
@@ -37,6 +41,25 @@ namespace WebCrawler.Services
             }
 
             return result;
+        }
+
+        public virtual string Download(string url)
+        {
+            var data = string.Empty;
+
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    data = client.DownloadString(url);
+                }
+                catch (WebException)
+                {
+                    return null;
+                }
+                
+                return data;
+            }
         }
     }
     
