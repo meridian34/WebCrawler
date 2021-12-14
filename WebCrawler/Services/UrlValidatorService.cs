@@ -23,7 +23,7 @@ namespace WebCrawler.Services
                 "#"
             };
         
-        public virtual bool IsValidLink(string url)
+        public virtual bool LinkIsValid(string url)
         {
             foreach(var extension in _notValidWebExtension)
             {
@@ -36,7 +36,7 @@ namespace WebCrawler.Services
             return true;
         }
 
-        public virtual bool IsCorrectLink(string link)
+        public virtual bool LinkIsCorrect(string link)
         {
             var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out Uri uriResult);
             if (!isAbsoluteLink)
