@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services.Crawlers;
-using WebCrawler.Services.Parsers;
 
 namespace WebCrawler.Services
 {
@@ -16,9 +14,9 @@ namespace WebCrawler.Services
 
         public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService)
         {
-            _validator = urlValidatorService; //new UrlValidatorService();
-            _htmlCrawler = htmlCrawler; //new HtmlCrawler(new UrlValidatorService(), new RequestService(), new HtmlParser(), new LinkConvertorService());
-            _sitemapCrawler = sitemapCrawler; //new SitemapCrawler(new UrlValidatorService(), new RequestService(), new SitemapParser(), new LinkConvertorService());
+            _validator = urlValidatorService;
+            _htmlCrawler = htmlCrawler;
+            _sitemapCrawler = sitemapCrawler;
         }
 
         public int GetHtmlLinksCount(string url)
