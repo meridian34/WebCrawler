@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using WebCrawler.Models;
 using WebCrawler.Services;
 
@@ -16,12 +16,16 @@ namespace WebCrawler.ConsoleApplication.Services
             _webCrawlerService = webCrawlerService;
         }
 
-        public void Run(string url)
+        public void Run()
         {
-            PrintSitemapUniqueLink(_webCrawlerService.GetUniqueSitemapLinks(url));
-            PrintSiteScanUniqueLink(_webCrawlerService.GetUniqueHtmlLinks(url));
-            PrintTimeResult(_webCrawlerService.GetUniqueCrawlingResult(url));
-            PrintCount(_webCrawlerService.GetHtmlLinksCount(url), _webCrawlerService.GetSitemapLinksCount(url));
+            var url = _consoleService.ReadLine();
+            var res = _webCrawlerService.GetLinks(url);
+            PrintSitemapUniqueLink(res.Where(x => x.IsSitemap == true && x.IsCrawler == false));
+            PrintSiteScanUniqueLink(res.Where(x => x.IsSitemap == false && x.IsCrawler == true));
+            var res2 = _webCrawlerService.GetPerfomanceDataCollection(res);
+            PrintResultTime(res2);
+            PrintCrawlerCount(res.Where(x => x.IsCrawler == true).Count());
+            PrintSitemapCount(res.Where(x => x.IsSitemap == true).Count());
         }
 
         private void PrintSitemapUniqueLink(IEnumerable<Link> results)
@@ -46,7 +50,7 @@ namespace WebCrawler.ConsoleApplication.Services
             _consoleService.WriteLine("\n");
         }
 
-        private void PrintTimeResult(IEnumerable<PerfomanceData> results)
+        private void PrintResultTime(IEnumerable<PerfomanceData> results)
         {
             _consoleService.WriteLine($"Timings");
 
@@ -59,9 +63,13 @@ namespace WebCrawler.ConsoleApplication.Services
             _consoleService.WriteLine("\n");
         }
 
-        private void PrintCount(int countScanResults, int countSitemapResults)
+        private void PrintCrawlerCount(int countCrawlerResults)
         {
-            _consoleService.WriteLine($"Urls(html documents) found after crawling a website: {countScanResults}");
+            _consoleService.WriteLine($"Urls(html documents) found after crawling a website: {countCrawlerResults}");
+        }
+
+        private void PrintSitemapCount( int countSitemapResults)
+        {
             _consoleService.WriteLine($"Urls found in sitemap: {countSitemapResults}");
         }
     }
