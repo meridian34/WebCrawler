@@ -21,7 +21,7 @@ namespace WebCrawler.Services
             _requestService = requestService;
         }
 
-        public IEnumerable<Link> GetLinks(string url)
+        public virtual IEnumerable<Link> GetLinks(string url)
         {
             ValidateUrl(url);
 
@@ -44,7 +44,7 @@ namespace WebCrawler.Services
             return results;
         }
 
-        public IEnumerable<PerfomanceData> GetPerfomanceDataCollection(IEnumerable<Link> links)
+        public virtual IEnumerable<PerfomanceData> GetPerfomanceDataCollection(IEnumerable<Link> links)
         {
             return _requestService.GetElapsedTimeForLinks(links);
         }

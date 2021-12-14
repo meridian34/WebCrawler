@@ -12,14 +12,14 @@ namespace WebCrawler.Services
             return url;
         }
 
-        public string GetRootUrl(string url)
+        public virtual string GetRootUrl(string url)
         {
             var basePath = $"{new Uri(url).GetLeftPart(UriPartial.Authority)}/";
 
             return basePath;
         }
 
-        public string GetDefaultSitemap(string url)
+        public virtual string GetDefaultSitemap(string url)
         {
             var basePath = new Uri(url).GetLeftPart(UriPartial.Authority);
             var baseUrl = new Uri(basePath);
