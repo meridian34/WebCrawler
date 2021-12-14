@@ -11,10 +11,10 @@ namespace WebCrawler.ConsoleApplication
         {
             var htmlCrawler = new HtmlCrawler(new UrlValidatorService(), new RequestService(), new HtmlParser(), new LinkConvertorService());
             var sitemapCrawler = new SitemapCrawler(new UrlValidatorService(), new RequestService(), new SitemapParser(), new LinkConvertorService());
-            var webCrawler = new WebCrawlerService(htmlCrawler, sitemapCrawler, new UrlValidatorService());
+            var webCrawler = new WebCrawlerService(htmlCrawler, sitemapCrawler, new UrlValidatorService(), new RequestService());
             var consoleService = new ConsoleService();
             var crawlerService = new CrawlerService(consoleService, webCrawler);
-            crawlerService.Run("https://www.ukad-group.com/");
+            crawlerService.Run();
         }
     }
 }
