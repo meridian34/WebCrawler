@@ -25,20 +25,20 @@ namespace WebCrawler.Services.Crawlers
             _convertor = linkConvertorService;
         }
 
-        public virtual IEnumerable<PerfomanceData> RunCrawler(string url)
+        public virtual IEnumerable<Link> RunCrawler(string url)
         {
             var delay = 50;
             var baseUrl = _convertor.GetRootUrl(url);
             var linkQueue = new Queue<string>();
-            var resultList = new List<PerfomanceData>();
+            var resultList = new List<Link>();
             linkQueue.Enqueue(baseUrl);
 
             while (linkQueue.Count > 0)
             {
                 var link = linkQueue.Dequeue();
                 var resultsContainsLink = resultList.Any(x => x.Url == link);
-                var notValidLink = !_validator.IsValidLink(link);
-                var linkIsNotCorrect = !_validator.IsCorrectLink(link)
+                var notValidLink = !_validator.LinkIsValid(link);
+                var linkIsNotCorrect = !_validator.LinkIsCorrect(link)
                     || !_validator.ContainsBaseUrl(link, baseUrl);
 
                 if (notValidLink || resultsContainsLink || linkIsNotCorrect)
@@ -47,8 +47,9 @@ namespace WebCrawler.Services.Crawlers
                 }
 
                 Thread.Sleep(delay);
-                var result = _requestService.ScanUrlAsync(link, out string html);                
-                resultList.Add(result);
+
+                resultList.Add(new Link() { Url = link, IsCrawler = true });
+                var html = _requestService.Download(link);
                 var parsedLinks = _parserService.GetHtmlLinks(html);
 
                 foreach (var newLink in parsedLinks)

@@ -24,19 +24,19 @@ namespace WebCrawler.Services.Crawlers
             _convertor = convertorService;
         }
        
-        public virtual IEnumerable<PerfomanceData> RunCrawler(string url)
+        public virtual IEnumerable<Link> RunCrawler(string url)
         {
             var delay = 50;
             var sitemapUrl = _convertor.GetDefaultSitemap(url);
             var linkQueue = new Queue<string>();
-            var resultList = new List<PerfomanceData>();
+            var resultList = new List<Link>();
             linkQueue.Enqueue(sitemapUrl);
 
             while (linkQueue.Count > 0)
             {
                 var link = linkQueue.Dequeue();
                 var resultsContainsLink = resultList.Any(x => x.Url == link);
-                var notValidLink = !_urlValidator.IsValidLink(link);
+                var notValidLink = !_urlValidator.LinkIsValid(link);
 
                 if (notValidLink || resultsContainsLink)
                 {
@@ -44,12 +44,14 @@ namespace WebCrawler.Services.Crawlers
                 }
 
                 Thread.Sleep(delay);
-                var result = _requestService.ScanUrlAsync(link, out string xml);
+                
+                var xml = _requestService.Download(link);
+                
                 var notContainsLinkSitemap = !link.Contains(".xml.gz");
 
                 if (notContainsLinkSitemap)
                 {
-                    resultList.Add(result);
+                    resultList.Add(new Link() { Url = link, IsSitemap = true });
                 }
 
                 var parsedLinks = _parserService.GetSitemapLinks(xml);
