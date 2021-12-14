@@ -11,98 +11,47 @@ namespace WebCrawler.Services
         private readonly HtmlCrawler _htmlCrawler;
         private readonly SitemapCrawler _sitemapCrawler;
         private readonly UrlValidatorService _validator;
+        private readonly RequestService _requestService;
 
-        public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService)
+        public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService, RequestService requestService)
         {
             _validator = urlValidatorService;
             _htmlCrawler = htmlCrawler;
             _sitemapCrawler = sitemapCrawler;
+            _requestService = requestService;
         }
 
-        public int GetHtmlLinksCount(string url)
-        {
-            ValidateUrl(url);
-
-            return _htmlCrawler.RunCrawler(url).Count();
-        }
-
-        public IEnumerable<Link> GetHtmlLinks(string url)
-        {
-            ValidateUrl(url);
-
-            return _htmlCrawler.RunCrawler(url);
-        }
-
-        public IEnumerable<PerfomanceData> GetHtmlLinksWithPerfomance(string url)
-        {
-            ValidateUrl(url);
-
-            return _htmlCrawler.RunCrawler(url);
-        }
-
-        public IEnumerable<Link> GetUniqueHtmlLinks(string url)
-        {
-            return GetUniqueCrawlingResult(url, false, true);
-        }
-
-        public int GetSitemapLinksCount(string url)
-        {
-            ValidateUrl(url);
-
-            return _sitemapCrawler.RunCrawler(url).Count();
-        }
-
-        public IEnumerable<Link> GetSitemapLinks(string url)
-        {
-            ValidateUrl(url);
-
-            return _sitemapCrawler.RunCrawler(url);
-        }
-
-        public IEnumerable<PerfomanceData> GetSitemapLinksWithPerfomance(string url)
-        {
-            ValidateUrl(url);
-
-            return _sitemapCrawler.RunCrawler(url);
-        }
-        public IEnumerable<Link> GetUniqueSitemapLinks(string url)
-        {
-            return GetUniqueCrawlingResult(url, true, false);
-        }
-
-        public IEnumerable<PerfomanceData> GetUniqueCrawlingResult(string url)
-        {
-            return GetUniqueCrawlingResult(url, true, true);
-        }
-
-        public IEnumerable<PerfomanceData> GetUniqueCrawlingResult(string url, bool unicalSitemapResults, bool unicalHtmlResults)
+        public IEnumerable<Link> GetLinks(string url)
         {
             ValidateUrl(url);
 
             var htmlResults = _htmlCrawler.RunCrawler(url);
             var sitemapResults = _sitemapCrawler.RunCrawler(url);
-            var unicalResults = new List<PerfomanceData>();
-
-            if (unicalHtmlResults && unicalSitemapResults)
+            var results = new List<Link>();
+            results.AddRange(htmlResults);
+            
+            foreach(var result in results)
             {
-                unicalResults.AddRange(htmlResults);
-                unicalResults.AddRange(sitemapResults.Where(x => !htmlResults.Any(y => y.Url == x.Url)));
-            }
-            else if (unicalHtmlResults && !unicalSitemapResults)
-            {
-                unicalResults.AddRange(htmlResults.Where(x => !sitemapResults.Any(y => y.Url == x.Url)));
-            }
-            else if (!unicalHtmlResults && unicalSitemapResults)
-            {
-                unicalResults.AddRange(sitemapResults.Where(x => !htmlResults.Any(y => y.Url == x.Url)));
+                var contains = sitemapResults.Any(x => x.Url == result.Url);
+                if (contains)
+                {
+                    result.IsSitemap = true;
+                }
             }
 
-            return unicalResults;
+            results.AddRange(sitemapResults.Where(x => !htmlResults.Any(z => z.Url == x.Url)));
+
+            return results;
+        }
+
+        public IEnumerable<PerfomanceData> GetPerfomanceDataCollection(IEnumerable<Link> links)
+        {
+            return _requestService.GetElapsedTimeForLinks(links);
         }
 
         private void ValidateUrl(string url)
         {
-            bool urlIsNotValid = !_validator.IsCorrectLink(url) && !_validator.IsValidLink(url);
+            bool urlIsNotValid = !_validator.LinkIsCorrect(url) && !_validator.LinkIsValid(url);
             if (urlIsNotValid)
             {
                 throw new ArgumentException("Url in not valid");
