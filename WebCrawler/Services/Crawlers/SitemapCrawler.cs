@@ -12,6 +12,7 @@ namespace WebCrawler.Services.Crawlers
         private readonly RequestService _requestService;
         private readonly SitemapParser _parserService;
         private readonly LinkConvertorService _convertor;
+
         public SitemapCrawler(
             UrlValidatorService urlValidatorService,
             RequestService requestService,
@@ -44,10 +45,8 @@ namespace WebCrawler.Services.Crawlers
                 }
 
                 Thread.Sleep(delay);
-                
                 var xml = _requestService.Download(link);
-                
-                var notContainsLinkSitemap = !link.Contains(".xml.gz");
+                var notContainsLinkSitemap = !link.Contains(".xml");
 
                 if (notContainsLinkSitemap)
                 {
