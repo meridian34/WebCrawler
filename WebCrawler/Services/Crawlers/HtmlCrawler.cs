@@ -47,15 +47,12 @@ namespace WebCrawler.Services.Crawlers
                 }
 
                 Thread.Sleep(delay);
-
                 resultList.Add(new Link() { Url = link, IsCrawler = true });
                 var html = _requestService.Download(link);
                 var parsedLinks = _parserService.GetHtmlLinks(html);
 
                 foreach (var newLink in parsedLinks)
                 {
-
-
                     var correctLink = _validator.ContainsBaseUrl(newLink, baseUrl)
                          ? newLink
                          : _convertor.ConvertRelativeToAbsolute(newLink, baseUrl);
