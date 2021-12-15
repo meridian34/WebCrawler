@@ -51,7 +51,7 @@ namespace WebCrawler.Services
 
         private void ValidateUrl(string url)
         {
-            bool urlIsNotValid = !_validator.LinkIsCorrect(url) && !_validator.LinkIsValid(url);
+            bool urlIsNotValid = !_validator.UrlIsValid(url);
             if (urlIsNotValid)
             {
                 throw new ArgumentException("Url in not valid");
