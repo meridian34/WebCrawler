@@ -47,11 +47,11 @@ namespace WebCrawler.Services
         {
             var data = string.Empty;
 
-            using (var client = new WebClient())
+            using (var client = new WebClient()) 
             {
                 try
                 {
-                    data = client.DownloadString(url);
+                   data = client.DownloadString(url);
                 }
                 catch (WebException)
                 {
