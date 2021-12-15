@@ -1,18 +1,28 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebCrawler.Services.Parsers
 {
     public class HtmlParser
     {
-        public virtual IEnumerable<string> GetHtmlLinks(string html)
+        private readonly UrlValidatorService _urlValidatorService;
+        private readonly LinkConvertorService _linkConvertorService;
+
+        public HtmlParser(UrlValidatorService urlValidatorService, LinkConvertorService linkConvertorService)
+        {
+            _urlValidatorService = urlValidatorService;
+            _linkConvertorService = linkConvertorService;
+        }
+
+        public virtual IEnumerable<string> GetHtmlLinks(string html, string sourceUrl)
         {
             var linkList = new List<string>();
 
-            if (string.IsNullOrEmpty(html))
+            if (string.IsNullOrEmpty(html) )
             {
                 return linkList;
             }
-
+            var baseUrl = _linkConvertorService.GetRootUrl(sourceUrl);
             var startATag = "<a";
             var endTag = ">";
             var href = @"href=""";
@@ -38,7 +48,19 @@ namespace WebCrawler.Services.Parsers
                     var endLink = tagBody.IndexOf(endHref, startLink);
                     var link = tagBody.Substring(startLink, endLink - startLink);
 
-                    linkList.Add(link);
+                    var linkIsValid = _urlValidatorService.LinkIsValid(link);
+                    var linkIsUrl = _urlValidatorService.UrlIsValid(link);
+                    var linkContainsBaseUrl = _urlValidatorService.ContainsBaseUrl(link, baseUrl);
+
+                    if (linkIsValid && linkContainsBaseUrl)
+                    {
+                        linkList.Add(link);
+                    }
+                    else if (!linkIsUrl && linkIsValid && !linkContainsBaseUrl)
+                    {
+                        var absoluteUrl = _linkConvertorService.ConvertRelativeToAbsolute(link, sourceUrl);
+                        linkList.Add(absoluteUrl);
+                    }
                 }
 
                 position = endPositionTag + endTag.Length;
