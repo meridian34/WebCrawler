@@ -9,8 +9,8 @@ namespace WebCrawler.ConsoleApplication
     {
         public static void Main(string[] args)
         {
-            var htmlCrawler = new HtmlCrawler(new UrlValidatorService(), new RequestService(), new HtmlParser(), new LinkConvertorService());
-            var sitemapCrawler = new SitemapCrawler(new UrlValidatorService(), new RequestService(), new SitemapParser(), new LinkConvertorService());
+            var htmlCrawler = new HtmlCrawler( new RequestService(), new HtmlParser(new UrlValidatorService(),new LinkConvertorService()), new LinkConvertorService());
+            var sitemapCrawler = new SitemapCrawler( new RequestService(), new SitemapParser(new UrlValidatorService()), new LinkConvertorService());
             var webCrawler = new WebCrawlerService(htmlCrawler, sitemapCrawler, new UrlValidatorService(), new RequestService());
             var consoleService = new ConsoleService();
             var crawlerService = new CrawlerService(consoleService, webCrawler);
