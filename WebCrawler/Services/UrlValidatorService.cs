@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 
 namespace WebCrawler.Services
 {
@@ -20,37 +21,30 @@ namespace WebCrawler.Services
                 ".ttf",                
                 "@",
                 "?",
-                "#"
+                "#",
+                "%"
             };
         
         public virtual bool LinkIsValid(string url)
         {
-            foreach(var extension in _notValidWebExtension)
-            {
-                if (url.Contains(extension))
-                {
-                    return false;
-                }
-            }
-
-            return true;
+            return !_notValidWebExtension.Any(x => url.Contains(x));
         }
 
-        public virtual bool LinkIsCorrect(string link)
+        public virtual bool UrlIsValid(string url)
         {
-            var isAbsoluteLink = Uri.TryCreate(link, UriKind.Absolute, out Uri uriResult);
+            var isAbsoluteLink = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
             if (!isAbsoluteLink)
             {
                 return false;
             }
 
-            var containsSheme = link.Contains(Uri.UriSchemeHttp) || link.Contains(Uri.UriSchemeHttps);
+            var containsSheme = url.Contains(Uri.UriSchemeHttp) || url.Contains(Uri.UriSchemeHttps);
             if (!containsSheme)
             {
                 return false;
             }
 
-            return true;
+            return LinkIsValid(url);
         }
 
         public virtual bool ContainsBaseUrl(string url, string baseUrl)
