@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebCrawler.Models;
 using WebCrawler.Services;
@@ -19,7 +20,7 @@ namespace WebCrawler.ConsoleApplication.Services
         public void Run()
         {
             var url = _consoleService.ReadLine();
-            var res = _webCrawlerService.GetLinks(url);
+            var res = _webCrawlerService.GetLinks(new Uri(url));
             PrintSitemapUniqueLink(res.Where(x => x.IsSitemap == true && x.IsCrawler == false));
             PrintSiteScanUniqueLink(res.Where(x => x.IsSitemap == false && x.IsCrawler == true));
             var res2 = _webCrawlerService.GetPerfomanceDataCollection(res);
