@@ -14,14 +14,15 @@ namespace WebCrawler.Services.Parsers
             _linkConvertorService = linkConvertorService;
         }
 
-        public virtual IEnumerable<string> GetHtmlLinks(string html, string sourceUrl)
+        public virtual IEnumerable<Uri> GetHtmlLinks(string html, Uri sourceUrl)
         {
-            var linkList = new List<string>();
+            var linkList = new List<Uri>();
 
             if (string.IsNullOrEmpty(html) )
             {
                 return linkList;
             }
+
             var baseUrl = _linkConvertorService.GetRootUrl(sourceUrl);
             var startATag = "<a";
             var endTag = ">";
@@ -46,27 +47,37 @@ namespace WebCrawler.Services.Parsers
                 {
                     var startLink = positionHref + href.Length;
                     var endLink = tagBody.IndexOf(endHref, startLink);
-                    var link = tagBody.Substring(startLink, endLink - startLink);
+                    var parsedLink = tagBody.Substring(startLink, endLink - startLink);
 
-                    var linkIsValid = _urlValidatorService.LinkIsValid(link);
-                    var linkIsUrl = _urlValidatorService.UrlIsValid(link);
-                    var linkContainsBaseUrl = _urlValidatorService.ContainsBaseUrl(link, baseUrl);
-
-                    if (linkIsValid && linkContainsBaseUrl)
-                    {
-                        linkList.Add(link);
-                    }
-                    else if (!linkIsUrl && linkIsValid && !linkContainsBaseUrl)
-                    {
-                        var absoluteUrl = _linkConvertorService.ConvertRelativeToAbsolute(link, sourceUrl);
-                        linkList.Add(absoluteUrl);
-                    }
+                    AnalyzeLinkAndAdd(parsedLink, baseUrl, linkList);
                 }
 
                 position = endPositionTag + endTag.Length;
             }
 
             return linkList;
+        }
+
+        private void AnalyzeLinkAndAdd(string parsedLink, Uri baseUrl, List<Uri> results)
+        {
+            var isCreated = Uri.TryCreate(parsedLink, UriKind.RelativeOrAbsolute, out Uri link);
+            if (!isCreated)
+            {
+                return;
+            }
+
+            var linkIsValid = _urlValidatorService.LinkIsValid(link);
+            var linkContainsBaseUrl = _urlValidatorService.ContainsBaseUrl(link, baseUrl);
+
+            if (linkIsValid && linkContainsBaseUrl)
+            {
+                results.Add(link);
+            }
+            else if (linkIsValid && !link.IsAbsoluteUri)
+            {
+                var absoluteUrl = _linkConvertorService.ConvertRelativeToAbsolute(link, baseUrl);
+                results.Add(absoluteUrl);
+            }
         }
     }
 }
