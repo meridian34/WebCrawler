@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
 using WebCrawler.Models;
@@ -20,7 +21,7 @@ namespace WebCrawler.Services
             return results;
         }
 
-        public virtual PerfomanceData GetElapsedTime(string url)
+        public virtual PerfomanceData GetElapsedTime(Uri url)
         {
             var timer = new Stopwatch();
             var result = new PerfomanceData();
@@ -43,23 +44,20 @@ namespace WebCrawler.Services
             return result;
         }
 
-        public virtual string Download(string url)
+        public virtual string Download(Uri url)
         {
-            var data = string.Empty;
-
-            using (var client = new WebClient()) 
+            using var client = new WebClient();
+            string data;
+            try
             {
-                try
-                {
-                   data = client.DownloadString(url);
-                }
-                catch (WebException)
-                {
-                    return null;
-                }
-                
-                return data;
+                data = client.DownloadString(url);
             }
+            catch (WebException)
+            {
+                return null;
+            }
+
+            return data;
         }
     }
     
