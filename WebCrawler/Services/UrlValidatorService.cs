@@ -25,20 +25,20 @@ namespace WebCrawler.Services
                 "%"
             };
         
-        public virtual bool LinkIsValid(string url)
+        public virtual bool LinkIsValid(Uri url)
         {
-            return !_notValidWebExtension.Any(x => url.Contains(x));
+            return !_notValidWebExtension.Any(x => url.OriginalString.Contains(x));
         }
 
-        public virtual bool UrlIsValid(string url)
+        public virtual bool UrlIsValid(Uri url)
         {
-            var isAbsoluteLink = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult);
-            if (!isAbsoluteLink)
+            
+            if (!url.IsAbsoluteUri)
             {
                 return false;
             }
 
-            var containsSheme = url.Contains(Uri.UriSchemeHttp) || url.Contains(Uri.UriSchemeHttps);
+            var containsSheme = url.Scheme == Uri.UriSchemeHttp || url.Scheme == Uri.UriSchemeHttps;
             if (!containsSheme)
             {
                 return false;
@@ -47,9 +47,9 @@ namespace WebCrawler.Services
             return LinkIsValid(url);
         }
 
-        public virtual bool ContainsBaseUrl(string url, string baseUrl)
+        public virtual bool ContainsBaseUrl(Uri url, Uri baseUrl)
         {
-            return url.Contains(baseUrl);
+            return url.OriginalString.Contains(baseUrl.OriginalString);
         }
     }
 }
