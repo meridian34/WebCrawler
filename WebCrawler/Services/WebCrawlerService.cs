@@ -21,7 +21,7 @@ namespace WebCrawler.Services
             _requestService = requestService;
         }
 
-        public virtual IEnumerable<Link> GetLinks(string url)
+        public virtual IEnumerable<Link> GetLinks(Uri url)
         {
             ValidateUrl(url);
 
@@ -49,7 +49,7 @@ namespace WebCrawler.Services
             return _requestService.GetElapsedTimeForLinks(links);
         }
 
-        private void ValidateUrl(string url)
+        private void ValidateUrl(Uri url)
         {
             bool urlIsNotValid = !_validator.UrlIsValid(url);
             if (urlIsNotValid)
