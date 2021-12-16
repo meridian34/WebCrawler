@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebCrawler.Models;
 using WebCrawler.Services.Parsers;
@@ -21,15 +22,15 @@ namespace WebCrawler.Services.Crawlers
             _convertor = linkConvertorService;
         }
 
-        public virtual IEnumerable<Link> RunCrawler(string url)
+        public virtual IEnumerable<Link> RunCrawler(Uri url)
         {
             var baseUrl = _convertor.GetRootUrl(url);
-            var linkQueue = new Queue<string>();
+            var linkQueue = new Queue<Uri>();
             var resultList = new List<Link>();
             resultList.Add(new Link { IsCrawler = true, Url = baseUrl });
             linkQueue.Enqueue(baseUrl);
 
-            while (linkQueue.Count > 0)
+            while (linkQueue.Any())
             {
                 var link = linkQueue.Dequeue();
                 var html = _requestService.Download(link);

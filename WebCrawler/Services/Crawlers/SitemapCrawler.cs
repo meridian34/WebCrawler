@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WebCrawler.Models;
 using WebCrawler.Services.Parsers;
@@ -21,14 +22,14 @@ namespace WebCrawler.Services.Crawlers
             _convertor = convertorService;
         }
 
-        public virtual IEnumerable<Link> RunCrawler(string url)
+        public virtual IEnumerable<Link> RunCrawler(Uri url)
         {
             var sitemapUrl = _convertor.GetDefaultSitemap(url);
-            var linkQueue = new Queue<string>();
+            var linkQueue = new Queue<Uri>();
             var resultList = new List<Link>();
             linkQueue.Enqueue(sitemapUrl);
 
-            while (linkQueue.Count > 0)
+            while (linkQueue.Any())
             {
                 var link = linkQueue.Dequeue();
                 var xml = _requestService.Download(link);
@@ -37,7 +38,7 @@ namespace WebCrawler.Services.Crawlers
                 foreach (var newLink in parsedLinks)
                 {
                     var resultsContainsLink = resultList.Any(x => x.Url == newLink);
-                    var containsXmlExtension = newLink.Contains(".xml");
+                    var containsXmlExtension = newLink.OriginalString.Contains(".xml");
                     
                     if (containsXmlExtension)
                     {
