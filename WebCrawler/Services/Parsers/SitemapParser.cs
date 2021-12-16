@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 
 namespace WebCrawler.Services.Parsers
 {
@@ -12,9 +12,9 @@ namespace WebCrawler.Services.Parsers
             _urlValidatorService = urlValidatorService;
         }
 
-        public virtual IEnumerable<string> GetSitemapLinks(string data)
+        public virtual IEnumerable<Uri> GetSitemapLinks(string data)
         {
-            var linkList = new List<string>();
+            var linkList = new List<Uri>();
             if (data == null)
             {
                 return linkList;
@@ -38,7 +38,7 @@ namespace WebCrawler.Services.Parsers
                     break;
                 }
 
-                var link = data.Substring(startIndexTag + startTag.Length, endIndexTag - (startIndexTag + startTag.Length));
+                var link = new Uri(data.Substring(startIndexTag + startTag.Length, endIndexTag - (startIndexTag + startTag.Length)));
                 if (_urlValidatorService.UrlIsValid(link))
                 {
                     linkList.Add(link);
