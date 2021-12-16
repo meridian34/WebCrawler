@@ -4,26 +4,28 @@ namespace WebCrawler.Services
 {
     public class LinkConvertorService
     {
-        public virtual string ConvertRelativeToAbsolute(string link, string basePath)
+        public virtual Uri ConvertRelativeToAbsolute(Uri link, Uri basePath)
         {
-            var baseUrl = new Uri(basePath);
-            var url = new Uri(baseUrl, link).ToString();
+            var absoluteIsCreated = Uri.TryCreate(basePath, link, out Uri absolute);
+            if (!absoluteIsCreated)
+            {
+                throw new ArgumentException("Failed to convert, check the input parameters!");
+            }
 
-            return url;
+            return absolute;
         }
 
-        public virtual string GetRootUrl(string url)
+        public virtual Uri GetRootUrl(Uri url)
         {
-            var basePath = $"{new Uri(url).GetLeftPart(UriPartial.Authority)}/";
+            var basePath = $"{url.GetLeftPart(UriPartial.Authority)}/";
 
-            return basePath;
+            return new Uri(basePath);
         }
 
-        public virtual string GetDefaultSitemap(string url)
+        public virtual Uri GetDefaultSitemap(Uri url)
         {
-            var basePath = new Uri(url).GetLeftPart(UriPartial.Authority);
-            var baseUrl = new Uri(basePath);
-            var defaultSitemapUri = new Uri(baseUrl, "sitemap.xml").ToString();
+            var baseUrl = new Uri(url.GetLeftPart(UriPartial.Authority));
+            var defaultSitemapUri = new Uri(baseUrl, "sitemap.xml");
 
             return defaultSitemapUri;
         }
