@@ -9,6 +9,7 @@ namespace WebCrawler.Services
         public virtual async Task<HttpResponseMessage> GetAsync(Uri url)
         {
             var client = new HttpClient();
+
             return await client.GetAsync(url);
         }
     }
