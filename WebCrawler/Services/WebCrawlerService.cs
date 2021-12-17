@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services.Crawlers;
 
@@ -11,9 +12,9 @@ namespace WebCrawler.Services
         private readonly HtmlCrawler _htmlCrawler;
         private readonly SitemapCrawler _sitemapCrawler;
         private readonly UrlValidatorService _validator;
-        private readonly RequestService _requestService;
+        private readonly WebRequestService _requestService;
 
-        public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService, RequestService requestService)
+        public WebCrawlerService(HtmlCrawler htmlCrawler, SitemapCrawler sitemapCrawler, UrlValidatorService urlValidatorService, WebRequestService requestService)
         {
             _validator = urlValidatorService;
             _htmlCrawler = htmlCrawler;
@@ -21,12 +22,12 @@ namespace WebCrawler.Services
             _requestService = requestService;
         }
 
-        public virtual IEnumerable<Link> GetLinks(Uri url)
+        public virtual async Task<IEnumerable<Link>> GetLinksAsync(Uri url)
         {
             ValidateUrl(url);
 
-            var htmlResults = _htmlCrawler.RunCrawler(url);
-            var sitemapResults = _sitemapCrawler.RunCrawler(url);
+            var htmlResults = await _htmlCrawler.RunCrawlerAsync(url);
+            var sitemapResults = await _sitemapCrawler.RunCrawlerAsync(url);
             var results = new List<Link>();
             results.AddRange(htmlResults);
             
@@ -44,9 +45,9 @@ namespace WebCrawler.Services
             return results;
         }
 
-        public virtual IEnumerable<PerfomanceData> GetPerfomanceDataCollection(IEnumerable<Link> links)
+        public virtual async Task<IEnumerable<PerfomanceData>> GetPerfomanceDataCollectionAsync(IEnumerable<Link> links)
         {
-            return _requestService.GetElapsedTimeForLinks(links);
+            return await _requestService.GetElapsedTimeForLinksAsync(links);
         }
 
         private void ValidateUrl(Uri url)
