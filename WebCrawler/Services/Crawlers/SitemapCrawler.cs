@@ -26,19 +26,23 @@ namespace WebCrawler.Services.Crawlers
         public virtual async Task<IEnumerable<Link>> RunCrawlerAsync(Uri url)
         {
             var sitemapUrl = _convertor.GetDefaultSitemap(url);
-            
             var resultList = new List<Link>();
-            resultList.Add( new Link { Url = sitemapUrl });
 
-            while (resultList.Any(x=>!x.IsSitemap))
+            do
             {
-                var link = resultList.First(x => !x.IsSitemap);
+                var link = resultList.Find(x => !x.IsSitemap);
+
+                if (!resultList.Any())
+                {
+                    link = new Link { Url = sitemapUrl };
+                }
+
                 var xml = await _requestService.DownloadAsync(link.Url);
                 link.IsSitemap = true;
                 var parsedLinks = _parserService.GetSitemapLinks(xml);
-
                 FilterLinksAndAdd(parsedLinks, resultList);
             }
+            while (resultList.Any(x => !x.IsSitemap));
 
             return resultList;
         }
