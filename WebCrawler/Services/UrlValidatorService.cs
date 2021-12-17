@@ -44,12 +44,7 @@ namespace WebCrawler.Services
                 return false;
             }
 
-            return LinkIsValid(url);
-        }
-
-        public virtual bool ContainsBaseUrl(Uri url, Uri baseUrl)
-        {
-            return url.OriginalString.Contains(baseUrl.OriginalString);
+            return true;
         }
     }
 }
