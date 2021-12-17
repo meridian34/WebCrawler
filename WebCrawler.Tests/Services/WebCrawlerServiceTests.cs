@@ -15,23 +15,20 @@ namespace WebCrawler.Tests.Services
     {
 
         private readonly Mock<UrlValidatorService> _urlValidatorService;
-        private readonly Mock<LinkConvertorService> _linkConvertorService;
         private readonly Mock<WebRequestService> _requestService;
-        private readonly Mock<HtmlParser> _htmlParser;
         private readonly Mock<HtmlCrawler> _htmlCrawler;
-        private readonly Mock<SitemapParser> _sitemapParser;
         private readonly Mock<SitemapCrawler> _sitemapCrawler;
 
 
         public WebCrawlerServiceTests()
         {
             _urlValidatorService = new Mock<UrlValidatorService>();
-            _linkConvertorService = new Mock<LinkConvertorService>();
+            var linkConvertorService = new Mock<LinkConvertorService>();
             _requestService = new Mock<WebRequestService>(new Mock<HttpClientService>().Object);
-            _htmlParser = new Mock<HtmlParser>(_urlValidatorService.Object, _linkConvertorService.Object);
-            _htmlCrawler = new Mock<HtmlCrawler>(_requestService.Object, _htmlParser.Object, _linkConvertorService.Object);
-            _sitemapParser = new Mock<SitemapParser>(_urlValidatorService.Object);
-            _sitemapCrawler = new Mock<SitemapCrawler>(_requestService.Object, _sitemapParser.Object, _linkConvertorService.Object);
+            var htmlParser = new Mock<HtmlParser>(_urlValidatorService.Object, linkConvertorService.Object);
+            _htmlCrawler = new Mock<HtmlCrawler>(_requestService.Object, htmlParser.Object, linkConvertorService.Object);
+            var sitemapParser = new Mock<SitemapParser>(_urlValidatorService.Object);
+            _sitemapCrawler = new Mock<SitemapCrawler>(_requestService.Object, sitemapParser.Object, linkConvertorService.Object);
         }
 
         [Fact]
