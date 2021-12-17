@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services.Parsers;
 
@@ -8,12 +9,12 @@ namespace WebCrawler.Services.Crawlers
 {
     public class HtmlCrawler
     {
-        private readonly RequestService _requestService;
+        private readonly WebRequestService _requestService;
         private readonly HtmlParser _parserService;
         private readonly LinkConvertorService _convertor;
 
         public HtmlCrawler(
-            RequestService requestService,
+            WebRequestService requestService,
             HtmlParser parserService,
             LinkConvertorService linkConvertorService)
         {
@@ -22,38 +23,35 @@ namespace WebCrawler.Services.Crawlers
             _convertor = linkConvertorService;
         }
 
-        public virtual IEnumerable<Link> RunCrawler(Uri url)
+        public virtual async Task<IEnumerable<Link>> RunCrawlerAsync(Uri url)
         {
             var baseUrl = _convertor.GetRootUrl(url);
-            var linkQueue = new Queue<Uri>();
             var resultList = new List<Link>();
-            resultList.Add(new Link { IsCrawler = true, Url = baseUrl });
-            linkQueue.Enqueue(baseUrl);
+            resultList.Add(new Link { Url = baseUrl });            
 
-            while (linkQueue.Any())
+            while (resultList.Any(x=> !x.IsCrawler ))
             {
-                var link = linkQueue.Dequeue();
-                var html = _requestService.Download(link);
-                var parsedLinks = _parserService.GetHtmlLinks(html, link);
-                
-                foreach (var newLink in parsedLinks)
+                var link = resultList.First(x => !x.IsCrawler);
+                var html = await _requestService.DownloadAsync(link.Url);
+                link.IsCrawler = true;
+                var parsedLinks = _parserService.GetHtmlLinks(html, link.Url);
+
+                FilterLinksAndAdd(parsedLinks, resultList);
+            }
+
+            return resultList;
+        }
+
+        private void FilterLinksAndAdd(IEnumerable<Uri> filterLinks, List<Link> resultList)
+        {
+            foreach (var link in filterLinks)
+            {
+                var resultsContainsUrl = resultList.Any(x => x.Url == link);
+                if (!resultsContainsUrl)
                 {
-                    var queueContainsUrl = linkQueue.Any(x => x == newLink);
-                    var resultsContainsUrl = resultList.Any(x => x.Url == newLink);
-
-                    if (!resultsContainsUrl)
-                    {
-                        resultList.Add(new Link { IsCrawler = true, Url = newLink });
-                    }
-
-                    if (!resultsContainsUrl && !queueContainsUrl)
-                    {
-                        linkQueue.Enqueue(newLink);
-                    }
+                    resultList.Add(new Link { Url = link });
                 }
             }
-            
-            return resultList;
         }
     }
 }
