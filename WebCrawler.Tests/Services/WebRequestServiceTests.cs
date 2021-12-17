@@ -1,9 +1,7 @@
 ﻿using Moq;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
-using System.Text;
 using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services;
@@ -34,7 +32,7 @@ namespace WebCrawler.Tests.Services
         }
 
         [Fact]
-        public async Task DownloadAsync2_Url_ShouldReturnStringDataAsync()
+        public async Task GetElapsedTimeForLinksAsync_Url_ShouldReturnPerfomanceDataAsync()
         {
             // arrange
             var url = new Uri("https://www.ukad-group.com/");
