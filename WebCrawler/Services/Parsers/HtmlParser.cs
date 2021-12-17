@@ -67,7 +67,7 @@ namespace WebCrawler.Services.Parsers
             }
 
             var linkIsValid = _urlValidatorService.LinkIsValid(link);
-            var linkContainsBaseUrl = _urlValidatorService.ContainsBaseUrl(link, baseUrl);
+            var linkContainsBaseUrl = link.OriginalString.Contains(baseUrl.OriginalString); 
 
             if (linkIsValid && linkContainsBaseUrl)
             {
