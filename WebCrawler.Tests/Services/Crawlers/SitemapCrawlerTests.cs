@@ -1,10 +1,7 @@
 ﻿using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WebCrawler.Models;
-using WebCrawler.Services;
 using WebCrawler.Services.Crawlers;
 using WebCrawler.Services.Parsers;
 using Xunit;
