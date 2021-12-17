@@ -49,7 +49,7 @@ namespace WebCrawler.Services.Parsers
                     var endLink = tagBody.IndexOf(endHref, startLink);
                     var parsedLink = tagBody.Substring(startLink, endLink - startLink);
 
-                    AnalyzeLinkAndAdd(parsedLink, baseUrl, linkList);
+                    FilterLinkAndAdd(parsedLink, baseUrl, linkList);
                 }
 
                 position = endPositionTag + endTag.Length;
@@ -58,7 +58,7 @@ namespace WebCrawler.Services.Parsers
             return linkList;
         }
 
-        private void AnalyzeLinkAndAdd(string parsedLink, Uri baseUrl, List<Uri> results)
+        private void FilterLinkAndAdd(string parsedLink, Uri baseUrl, List<Uri> results)
         {
             var isCreated = Uri.TryCreate(parsedLink, UriKind.RelativeOrAbsolute, out Uri link);
             if (!isCreated)
