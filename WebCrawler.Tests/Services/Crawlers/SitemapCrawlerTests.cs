@@ -30,8 +30,14 @@ namespace WebCrawler.Services.Tests.Crawlers
             var parserService = new Mock<SitemapParser>(urlValidator.Object);
 
             linkConvertor.SetupSequence(x => x.GetDefaultSitemap(It.Is<Uri>(s => s == firstUrl))).Returns(sitemapUrl);
-            requestService.SetupSequence(x => x.DownloadAsync(It.Is<Uri>(s => s == sitemapUrl))).ReturnsAsync(xml).ReturnsAsync("").ReturnsAsync("");
-            parserService.SetupSequence(x => x.GetSitemapLinks(It.IsAny<string>())).Returns(new Uri[] { firstValue, secondValue });
+            requestService.SetupSequence(x => x.DownloadAsync(It.Is<Uri>(s => s == sitemapUrl)))
+                .ReturnsAsync(xml)
+                .ReturnsAsync("")
+                .ReturnsAsync("");
+            parserService.SetupSequence(x => x.GetSitemapLinks(It.IsAny<string>()))
+                .Returns(new List<Uri> { firstValue, secondValue })
+                .Returns(new List<Uri>())
+                .Returns(new List<Uri>());
 
             var service = new SitemapCrawler(requestService.Object, parserService.Object, linkConvertor.Object);
 
