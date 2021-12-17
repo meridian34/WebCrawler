@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services;
 
@@ -17,13 +18,13 @@ namespace WebCrawler.ConsoleApplication.Services
             _webCrawlerService = webCrawlerService;
         }
 
-        public void Run()
+        public async Task RunAsync()
         {
             var url = _consoleService.ReadLine();
-            var res = _webCrawlerService.GetLinks(new Uri(url));
+            var res = await _webCrawlerService.GetLinksAsync(new Uri(url));
             PrintSitemapUniqueLink(res.Where(x => x.IsSitemap == true && x.IsCrawler == false));
             PrintSiteScanUniqueLink(res.Where(x => x.IsSitemap == false && x.IsCrawler == true));
-            var res2 = _webCrawlerService.GetPerfomanceDataCollection(res);
+            var res2 = await _webCrawlerService.GetPerfomanceDataCollectionAsync(res);
             PrintResultTime(res2);
             PrintCrawlerCount(res.Where(x => x.IsCrawler == true).Count());
             PrintSitemapCount(res.Where(x => x.IsSitemap == true).Count());
