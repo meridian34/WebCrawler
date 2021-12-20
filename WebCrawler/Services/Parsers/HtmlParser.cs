@@ -16,7 +16,7 @@ namespace WebCrawler.Services.Parsers
 
         public virtual IEnumerable<Uri> GetHtmlLinks(string html, Uri sourceUrl)
         {
-            var linkList = new List<Uri>();
+            var linkList = new Queue<Uri>();
 
             if (string.IsNullOrEmpty(html) )
             {
@@ -49,7 +49,11 @@ namespace WebCrawler.Services.Parsers
                     var endLink = tagBody.IndexOf(endHref, startLink);
                     var parsedLink = tagBody.Substring(startLink, endLink - startLink);
 
-                    FilterLinkAndAdd(parsedLink, baseUrl, linkList);
+                    var filtredLink = FilterLink(parsedLink, baseUrl);
+                    if (filtredLink != null)
+                    {
+                        linkList.Enqueue(filtredLink);
+                    }
                 }
 
                 position = endPositionTag + endTag.Length;
@@ -58,26 +62,28 @@ namespace WebCrawler.Services.Parsers
             return linkList;
         }
 
-        private void FilterLinkAndAdd(string parsedLink, Uri baseUrl, List<Uri> results)
+        private Uri FilterLink(string parsedLink, Uri baseUrl)
         {
             var isCreated = Uri.TryCreate(parsedLink, UriKind.RelativeOrAbsolute, out Uri link);
             if (!isCreated)
             {
-                return;
+                return null;
             }
 
-            var linkIsValid = _urlValidatorService.LinkIsValid(link);
+            var linkIsValid = _urlValidatorService.ValidateLink(link);
             var linkContainsBaseUrl = link.OriginalString.Contains(baseUrl.OriginalString); 
 
             if (linkIsValid && linkContainsBaseUrl)
             {
-                results.Add(link);
+                return link;
             }
             else if (linkIsValid && !link.IsAbsoluteUri)
             {
                 var absoluteUrl = _linkConvertorService.ConvertRelativeToAbsolute(link, baseUrl);
-                results.Add(absoluteUrl);
+                return absoluteUrl;
             }
+
+            return null;
         }
     }
 }
