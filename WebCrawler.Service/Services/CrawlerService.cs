@@ -21,13 +21,18 @@ namespace WebCrawler.ConsoleApplication.Services
         public async Task RunAsync()
         {
             var url = _consoleService.ReadLine();
-            var res = await _webCrawlerService.GetLinksAsync(new Uri(url));
-            PrintSitemapUniqueLink(res.Where(x => x.IsSitemap == true && x.IsCrawler == false));
-            PrintSiteScanUniqueLink(res.Where(x => x.IsSitemap == false && x.IsCrawler == true));
-            var res2 = await _webCrawlerService.GetPerfomanceDataCollectionAsync(res);
-            PrintResultTime(res2);
-            PrintCrawlerCount(res.Where(x => x.IsCrawler == true).Count());
-            PrintSitemapCount(res.Where(x => x.IsSitemap == true).Count());
+
+            var links = await _webCrawlerService.GetLinksAsync(new Uri(url));
+            var uniqueSitemapLinks = links.Where(x => x.FromSitemap == true && x.FromHtml == false);
+            var uniqueHtmlLinks = links.Where(x => x.FromSitemap == false && x.FromHtml == true);
+
+            PrintSitemapUniqueLink(uniqueSitemapLinks);
+            PrintSiteScanUniqueLink(uniqueHtmlLinks);
+
+            var perfomanceData = await _webCrawlerService.GetPerfomanceDataCollectionAsync(links);
+
+            PrintResultTime(perfomanceData);
+            PrintCount(links.Where(x => x.FromHtml == true).Count(), links.Where(x => x.FromSitemap == true).Count());
         }
 
         private void PrintSitemapUniqueLink(IEnumerable<Link> results)
@@ -65,14 +70,11 @@ namespace WebCrawler.ConsoleApplication.Services
             _consoleService.WriteLine("\n");
         }
 
-        private void PrintCrawlerCount(int countCrawlerResults)
+        private void PrintCount(int countCrawlerResults, int countSitemapResults)
         {
             _consoleService.WriteLine($"Urls(html documents) found after crawling a website: {countCrawlerResults}");
-        }
-
-        private void PrintSitemapCount( int countSitemapResults)
-        {
             _consoleService.WriteLine($"Urls found in sitemap: {countSitemapResults}");
         }
+
     }
 }
