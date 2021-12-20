@@ -39,7 +39,7 @@ namespace WebCrawler.Services.Parsers
                 }
 
                 var link = new Uri(data.Substring(startIndexTag + startTag.Length, endIndexTag - (startIndexTag + startTag.Length)));
-                if (_urlValidatorService.UrlIsValid(link))
+                if (_urlValidatorService.ValidateUrl(link))
                 {
                     linkList.Add(link);
                 }
