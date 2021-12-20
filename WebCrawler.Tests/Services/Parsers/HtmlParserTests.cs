@@ -24,13 +24,13 @@ namespace WebCrawler.Tests.Services.Parsers
         {
             // arrange
             var html = @" <a href=""/latest-projects/"" class=""navigation - new__link"" title=""PORTFOLIO""></a>";
-            var expectedValue = new Uri[] { new Uri( "https://www.ukad-group.com/latest-projects/") };
-            var root = new Uri( "https://www.ukad-group.com/");
+            var expectedValue = new Uri[] { new Uri("https://www.example.com/latest-projects/") };
+            var root = new Uri("https://www.examplep.com/");
             var link =  new Uri("/latest-projects/", UriKind.Relative);
-            var convertResult = new Uri("https://www.ukad-group.com/latest-projects/");
+            var convertResult = new Uri("https://www.example.com/latest-projects/");
             _linkConvertorService.SetupSequence(x => x.GetRootUrl(It.IsAny<Uri>())).Returns(root);
-            _urlValidatorService.SetupSequence(x => x.LinkIsValid(It.Is<Uri>(s => s == link))).Returns(true);
-            _urlValidatorService.SetupSequence(x => x.UrlIsValid(It.Is<Uri>(s => s == link))).Returns(false);
+            _urlValidatorService.SetupSequence(x => x.ValidateLink(It.Is<Uri>(s => s == link))).Returns(true);
+            _urlValidatorService.SetupSequence(x => x.ValidateUrl(It.Is<Uri>(s => s == link))).Returns(false);
             _linkConvertorService.SetupSequence(x => x.ConvertRelativeToAbsolute(It.Is<Uri>(s => s == link), It.Is<Uri>(s => s == root))).Returns(convertResult);
             var service = new HtmlParser(_urlValidatorService.Object, _linkConvertorService.Object);
 
@@ -45,14 +45,14 @@ namespace WebCrawler.Tests.Services.Parsers
         public void GetHtmlLinks_HtmlDataWithAbsoluteLink_ShouldReturnLinksList()
         {
             // arrange
-            var html = @" <a href=""https://www.ukad-group.com/latest-projects/"" class=""navigation - new__link"" title=""PORTFOLIO""></a>";
-            var expectedValue = new Uri[] { new Uri("https://www.ukad-group.com/latest-projects/") };
-            var sourceUrl =  new Uri("https://www.ukad-group.com/123");
-            var root = new Uri("https://www.ukad-group.com/");
-            var link =  new Uri("https://www.ukad-group.com/latest-projects/");
+            var html = @" <a href=""https://www.example.com/latest-projects/"" class=""navigation - new__link"" title=""PORTFOLIO""></a>";
+            var expectedValue = new Uri[] { new Uri("https://www.example.com/latest-projects/") };
+            var sourceUrl =  new Uri("https://www.example.com/123");
+            var root = new Uri("https://www.example.com/");
+            var link =  new Uri("https://www.example.com/latest-projects/");
             _linkConvertorService.SetupSequence(x => x.GetRootUrl(It.Is<Uri>(s => s == sourceUrl))).Returns(root);
-            _urlValidatorService.SetupSequence(x => x.LinkIsValid(It.Is<Uri>(s => s == link))).Returns(true);
-            _urlValidatorService.SetupSequence(x => x.UrlIsValid(It.Is<Uri>(s => s == link))).Returns(true);
+            _urlValidatorService.SetupSequence(x => x.ValidateLink(It.Is<Uri>(s => s == link))).Returns(true);
+            _urlValidatorService.SetupSequence(x => x.ValidateUrl(It.Is<Uri>(s => s == link))).Returns(true);
             var service = new HtmlParser(_urlValidatorService.Object, _linkConvertorService.Object);
 
             //act

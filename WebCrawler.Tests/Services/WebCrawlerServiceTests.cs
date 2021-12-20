@@ -35,11 +35,11 @@ namespace WebCrawler.Tests.Services
         public async Task GetLinks_Uri_ShoudReturnResultListAsync()
         {
             // arrange
-            _urlValidatorService.SetupSequence(x => x.UrlIsValid(It.IsAny<Uri>())).Returns(true);
-            var inputUrl = new Uri("https://www.ukad-group.com/");
-            var resultCrawler = new List<Link> { new Link { Url = inputUrl, IsCrawler = true } };
-            var resultSitemap = new List<Link> { new Link { Url = inputUrl, IsSitemap = true } };
-            var expectedValue = new List<Link> { new Link { Url = inputUrl, IsCrawler = true, IsSitemap = true } };
+            _urlValidatorService.SetupSequence(x => x.ValidateUrl(It.IsAny<Uri>())).Returns(true);
+            var inputUrl = new Uri("https://www.example.com/");
+            var resultCrawler = new List<Link> { new Link { Url = inputUrl, FromHtml = true } };
+            var resultSitemap = new List<Link> { new Link { Url = inputUrl, FromSitemap = true } };
+            var expectedValue = new List<Link> { new Link { Url = inputUrl, FromHtml = true, FromSitemap = true } };
             _htmlCrawler.Setup(x => x.RunCrawlerAsync(It.IsAny<Uri>())).ReturnsAsync(resultCrawler);
             _sitemapCrawler.Setup(x => x.RunCrawlerAsync(It.IsAny<Uri>())).ReturnsAsync(resultSitemap);
 
@@ -49,14 +49,14 @@ namespace WebCrawler.Tests.Services
             var result = await webCrawler.GetLinksAsync(inputUrl);
 
             //assert
-            Assert.Collection(result, item => new Link { Url = inputUrl, IsCrawler = true, IsSitemap = true });
+            Assert.Collection(result, item => new Link { Url = inputUrl, FromHtml = true, FromSitemap = true });
         }
 
         [Fact]
         public async Task GetPerfomanceDataCollection_Uri_ShoudReturnPerfomanceListAsync()
         {
             // arrange
-            var inputUrl = new Uri("https://www.ukad-group.com/");
+            var inputUrl = new Uri("https://www.example.com/");
             var inputList = new List<Link> { new Link() };
             _requestService.Setup(x => x.GetElapsedTimeForLinksAsync(It.IsAny<List<Link>>())).ReturnsAsync(new PerfomanceData[] { new PerfomanceData { ElapsedMilliseconds = 10, Url = inputUrl } });
 

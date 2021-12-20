@@ -1,5 +1,6 @@
 ﻿using Moq;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services;
@@ -15,10 +16,12 @@ namespace WebCrawler.Tests.Services.Crawlers
         public async Task RunCrawler_Url_ShouldReturnLinkListAsync()
         {
             // arrange
-            var firstUrl = new Uri("https://www.ukad-group.com/");
-            var baseUrl = new Uri ("https://www.ukad-group.com/");
+            var firstUrl = new Uri("https://www.example.com/");
+            var baseUrl = new Uri ("https://www.example.com/");
             var html = @" <a href=""/latest-projects/""</a>";
             var link = new Uri("/latest-projects/", UriKind.Relative);
+            var expectedBoolArray = new bool[] { true };
+            var expectedUriArray = new Uri[] { baseUrl};
 
             var urlValidator = new Mock<UrlValidatorService>();
             var requestService = new Mock<WebRequestService>(new Mock<HttpClientService>().Object);
@@ -27,7 +30,7 @@ namespace WebCrawler.Tests.Services.Crawlers
 
             linkConvertor.SetupSequence(x => x.GetRootUrl(It.Is<Uri>(s => s == firstUrl))).Returns(baseUrl);
             requestService.SetupSequence(x => x.DownloadAsync(It.Is<Uri>(s => s == firstUrl))).ReturnsAsync(html);
-            parserService.SetupSequence(x => x.GetHtmlLinks(It.IsAny<string>(), It.Is<Uri>(s => s == firstUrl))).Returns(new Uri[] { });
+            parserService.SetupSequence(x => x.GetHtmlLinks(It.IsAny<string>(), It.Is<Uri>(s => s == firstUrl))).Returns(Array.Empty<Uri>());
 
             var service = new HtmlCrawler(requestService.Object, parserService.Object, linkConvertor.Object);
 
@@ -35,7 +38,9 @@ namespace WebCrawler.Tests.Services.Crawlers
             var result = await service.RunCrawlerAsync(firstUrl);
 
             //assert
-            Assert.Collection(result, item => new Link { IsCrawler = true, Url = baseUrl });
+            Assert.Equal(result.Select(x => x.FromHtml), expectedBoolArray);
+            Assert.Equal(result.Select(x => x.Url), expectedUriArray);
+            
         }
     }
 }

@@ -9,8 +9,8 @@ namespace WebCrawler.Tests.Services
         private readonly LinkConvertorService _service = new LinkConvertorService();
 
         [Theory]
-        [InlineData("https://www.ukad-group.com/ukadgroup/", "/123/", "https://www.ukad-group.com/123/")]
-        [InlineData("https://www.ukad-group.com/", "/ukadgroup/", "https://www.ukad-group.com/ukadgroup/")]
+        [InlineData("https://www.example.com/somegroup/", "/123/", "https://www.example.com/123/")]
+        [InlineData("https://www.example.com/", "/somegroup/", "https://www.example.com/ukadgroup/")]
         public void ConvertRelativeToAbsolute_LinkAndBasePath_ShouldReturnAbsolutePath(string rootUrl, string link, string expectedUrl)
         {
             // arrange
@@ -26,10 +26,9 @@ namespace WebCrawler.Tests.Services
         }
 
         [Theory]
-        [InlineData("https://www.ukad-group.com/", "https://www.ukad-group.com/sitemap.xml")]
-        [InlineData("https://www.facebook.com/ukadgroup/", "https://www.facebook.com/sitemap.xml")]
-        [InlineData("https://www.ukad-group.com/123/", "https://www.ukad-group.com/sitemap.xml")]
-        [InlineData("https://www.ukad-group.com/ukadgroup/", "https://www.ukad-group.com/sitemap.xml")]
+        [InlineData("https://www.example.com/", "https://www.example.com/sitemap.xml")]
+        [InlineData("https://www.example.com/somegroup/", "https://www.example.com/sitemap.xml")]
+        [InlineData("https://www.example.com/123/", "https://www.example.com/sitemap.xml")]
         public void GetDefaultSitemap_Url_ShouldReturnDefaultSitemapPath(string link, string expectedUrl)
         {
             // arrange
@@ -57,10 +56,10 @@ namespace WebCrawler.Tests.Services
         }
 
         [Theory]
-        [InlineData("https://www.ukad-group.com/", "https://www.ukad-group.com/")]
-        [InlineData("https://www.facebook.com/ukadgroup/", "https://www.facebook.com/")]
-        [InlineData("https://www.ukad-group.com/123/", "https://www.ukad-group.com/")]
-        [InlineData("https://www.ukad-group.com/ukadgroup/?param1=0", "https://www.ukad-group.com/")]
+        [InlineData("https://www.example.com/", "https://www.example.com/")]
+        [InlineData("https://www.example.com/somegroup/", "https://www.example.com/")]
+        [InlineData("https://www.example.com/123/", "https://www.example.com/")]
+        [InlineData("https://www.example.com/somegroup/?param1=0", "https://www.example.com/")]
         public void GetRootUrl_Url_ShouldReturnRootUrl(string link, string expectedUrl)
         {
             // arrange

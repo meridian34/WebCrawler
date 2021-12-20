@@ -14,11 +14,11 @@ namespace WebCrawler.Services.Tests.Crawlers
         public async Task RunCrawler_Url_ShouldReturnLinkListAsync()
         {
             // arrange
-            var firstUrl = new Uri("https://www.ukad-group.com/");
-            var sitemapUrl = new Uri("https://www.ukad-group.com/sitemap.xml");
-            var xml = @"<loc>https://www.ukad-group.com/latest-projects/</loc> <loc>https://www.ukad-group.com/</loc>";
-            var firstValue = new Uri("https://www.ukad-group.com/latest-projects/");
-            var secondValue = new Uri("https://www.ukad-group.com/");
+            var firstUrl = new Uri("https://www.example.com/");
+            var sitemapUrl = new Uri("https://www.example.com/sitemap.xml");
+            var xml = @"<loc>https://www.example.com/latest-projects/</loc> <loc>https://www.example.com/</loc>";
+            var firstValue = new Uri("https://www.example.com/latest-projects/");
+            var secondValue = new Uri("https://www.example.com/");
             var link = new Uri("/latest-projects/", UriKind.Relative);
 
             var urlValidator = new Mock<UrlValidatorService>();
@@ -42,7 +42,7 @@ namespace WebCrawler.Services.Tests.Crawlers
             var result = await service.RunCrawlerAsync(firstUrl);
 
             //assert
-            Assert.Collection(result, firstItem => new Uri("https://www.ukad-group.com/latest-projects/"), secondItem => new Uri("https://www.ukad-group.com/"));
+            Assert.Collection(result, firstItem => new Uri("https://www.example.com/latest-projects/"), secondItem => new Uri("https://www.example.com/"));
         }
     }
 }

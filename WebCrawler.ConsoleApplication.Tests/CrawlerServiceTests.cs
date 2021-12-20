@@ -28,14 +28,14 @@ namespace WebCrawler.ConsoleApplication.Tests
             
             var webCrawler = new Mock<WebCrawlerService>(htmlCrawler.Object, sitemapCrawler.Object, urlValidatorService.Object, requestService.Object);
 
-            var firstUri  = new Uri("https://www.ukad-group.com/");
-            var secondUri = new Uri("https://www.ukad-group.com/latest/");
-            var thirdUri = new Uri("https://www.ukad-group.com/projects/");
+            var firstUri  = new Uri("https://www.example.com/");
+            var secondUri = new Uri("https://www.example.com/latest/");
+            var thirdUri = new Uri("https://www.example.com/projects/");
             var crawlerLinkCollection = new Link[]
             {
-            new Link { IsCrawler = true, IsSitemap = true, Url = firstUri },
-            new Link { IsSitemap = true, Url = secondUri },
-            new Link {IsCrawler = true, Url = thirdUri}
+            new Link { FromHtml = true, FromSitemap = true, Url = firstUri },
+            new Link { FromSitemap = true, Url = secondUri },
+            new Link {FromHtml = true, Url = thirdUri}
             };
             var crawlerPerfomanceCollection = new PerfomanceData[]
             {

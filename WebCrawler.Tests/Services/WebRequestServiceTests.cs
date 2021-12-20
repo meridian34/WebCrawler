@@ -15,7 +15,7 @@ namespace WebCrawler.Tests.Services
         public async Task DownloadAsync_Url_ShouldReturnStringDataAsync()
         {
             // arrange
-            var url = new Uri("https://www.ukad-group.com/");
+            var url = new Uri("https://www.example.com/");
             var expectedValue = "xml or html data";
             var httpClient = new Mock<HttpClientService>();
             var response = new HttpResponseMessage();
@@ -35,7 +35,7 @@ namespace WebCrawler.Tests.Services
         public async Task GetElapsedTimeForLinksAsync_Url_ShouldReturnPerfomanceDataAsync()
         {
             // arrange
-            var url = new Uri("https://www.ukad-group.com/");
+            var url = new Uri("https://www.example.com/");
             var inputValue = new Link[] { new Link { Url = url } };
 
             var expectedValue = new PerfomanceData[] { new PerfomanceData { ElapsedMilliseconds = 50, Url = url } };

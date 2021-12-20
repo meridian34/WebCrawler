@@ -10,30 +10,30 @@ namespace WebCrawler.Tests.Services
 
 
         [Theory]
-        [InlineData("https://www.ukad-group.com/123/", true)]
-        [InlineData("https://www.facebook.com/ukadgroup/", true)]
+        [InlineData("https://www.example.com/123/", true)]
+        [InlineData("https://www.fakebook.com/somegroup/", true)]
         public void UrlIsValid_Url_ShouldReturnTrue(string stringUrl, bool expectedValue)
         {
             // arrange
             var url = new Uri(stringUrl);
 
             //act
-            var result = _service.UrlIsValid(url);
+            var result = _service.ValidateUrl(url);
 
             //assert
             Assert.Equal(result, expectedValue);
         }
 
         [Theory]
-        [InlineData("https://www.ukad-group.com/123/", true)]
-        [InlineData("https://www.facebook.com/ukadgroup/", true)]
+        [InlineData("https://www.example.com/123/", true)]
+        [InlineData("https://www.fakebook.com/somegroup/", true)]
         public void LinkIsValid_Url_ShouldReturnTrue(string stringUrl, bool expectedValue)
         {
             // arrange
             var url = new Uri(stringUrl);
 
             //act
-            var result = _service.LinkIsValid(url);
+            var result = _service.ValidateLink(url);
 
             //assert
             Assert.Equal(result, expectedValue);
@@ -43,10 +43,10 @@ namespace WebCrawler.Tests.Services
         public void LinkIsValid_Url_ShouldReturnFalse()
         {
             // arrange
-            var url = new Uri("https://www.ukad-group.com/123.png");
+            var url = new Uri("https://www.example.com/123.png");
             var expectedValue = false;
             //act
-            var result = _service.LinkIsValid(url);
+            var result = _service.ValidateLink(url);
 
             //assert
             Assert.Equal(result, expectedValue);
@@ -59,7 +59,7 @@ namespace WebCrawler.Tests.Services
             var expectedValue = "Object reference not set to an instance of an object.";
 
             //act
-            var result = Assert.Throws<NullReferenceException>(() => _service.LinkIsValid(null));
+            var result = Assert.Throws<NullReferenceException>(() => _service.ValidateLink(null));
 
             //assert
             Assert.Equal(result.Message, expectedValue);
