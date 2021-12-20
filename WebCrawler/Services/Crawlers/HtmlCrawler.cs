@@ -43,7 +43,7 @@ namespace WebCrawler.Services.Crawlers
             var resultList = new Queue<CrawlerData>();
             foreach (var link in filterLinks)
             {
-                var resultsContainsUrl = targetList.Any(x => x.Url == link);
+                var resultsContainsUrl = targetList.Any(x => x.Url == link) || resultList.Any(x=>x.Url == link);
                 if (!resultsContainsUrl)
                 {
                     resultList.Enqueue(new CrawlerData { Url = link });

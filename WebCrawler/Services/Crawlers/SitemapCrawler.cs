@@ -52,7 +52,7 @@ namespace WebCrawler.Services.Crawlers
             var resultList = new Queue<CrawlerData>();
             foreach (var link in filterLinks)
             {
-                var resultsContainsLink = targetList.Any(x => x.Url == link);
+                var resultsContainsLink = targetList.Any(x => x.Url == link) || resultList.Any(x=>x.Url == link);
                 var containsXmlExtension = link.OriginalString.Contains(".xml");
 
                 if (!containsXmlExtension && !resultsContainsLink)
