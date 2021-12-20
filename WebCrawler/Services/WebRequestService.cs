@@ -16,8 +16,7 @@ namespace WebCrawler.Services
 
         private async Task<PerfomanceData> GetElapsedTimeAsync(Uri url)
         {
-            var sw = new Stopwatch();
-            sw.Start();
+            var sw = Stopwatch.StartNew();
             await _httpClientService.GetAsync(url);
             sw.Stop();
 
@@ -40,14 +39,11 @@ namespace WebCrawler.Services
         public virtual async Task<string> DownloadAsync(Uri url)
         {
             var responseBody = string.Empty;
-            var sw = new Stopwatch();
-            sw.Start();
             var response = await _httpClientService.GetAsync(url);
             if (response.IsSuccessStatusCode)
             {
                 responseBody = await response.Content.ReadAsStringAsync();
             }
-            sw.Stop();
 
             return responseBody;
         }
