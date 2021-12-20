@@ -25,12 +25,12 @@ namespace WebCrawler.Services
                 "%"
             };
         
-        public virtual bool LinkIsValid(Uri url)
+        public virtual bool ValidateLink(Uri url)
         {
             return !_notValidWebExtension.Any(x => url.OriginalString.Contains(x));
         }
 
-        public virtual bool UrlIsValid(Uri url)
+        public virtual bool ValidateUrl(Uri url)
         {
             
             if (!url.IsAbsoluteUri)
