@@ -28,21 +28,8 @@ namespace WebCrawler.Services
 
             var htmlResults = await _htmlCrawler.RunCrawlerAsync(url);
             var sitemapResults = await _sitemapCrawler.RunCrawlerAsync(url);
-            var results = new List<Link>();
-            results.AddRange(htmlResults);
-            
-            foreach(var result in results)
-            {
-                var contains = sitemapResults.Any(x => x.Url == result.Url);
-                if (contains)
-                {
-                    result.IsSitemap = true;
-                }
-            }
 
-            results.AddRange(sitemapResults.Where(x => !htmlResults.Any(z => z.Url == x.Url)));
-
-            return results;
+            return SummarizeLists(htmlResults, sitemapResults);
         }
 
         public virtual async Task<IEnumerable<PerfomanceData>> GetPerfomanceDataCollectionAsync(IEnumerable<Link> links)
@@ -50,9 +37,27 @@ namespace WebCrawler.Services
             return await _requestService.GetElapsedTimeForLinksAsync(links);
         }
 
+        private IEnumerable<Link> SummarizeLists(IEnumerable<Link> htmlResults, IEnumerable<Link> sitemapResults)
+        {
+            var results = new List<Link>();
+            results.AddRange(htmlResults);
+
+            foreach (var result in results)
+            {
+                var contains = sitemapResults.Any(x => x.Url == result.Url);
+                if (contains)
+                {
+                    result.FromSitemap = true;
+                }
+            }
+
+            results.AddRange(sitemapResults.Where(x => !htmlResults.Any(z => z.Url == x.Url)));
+            return results;
+        }
+
         private void ValidateUrl(Uri url)
         {
-            bool urlIsNotValid = !_validator.UrlIsValid(url);
+            bool urlIsNotValid = !_validator.ValidateUrl(url);
             if (urlIsNotValid)
             {
                 throw new ArgumentException("Url in not valid");
