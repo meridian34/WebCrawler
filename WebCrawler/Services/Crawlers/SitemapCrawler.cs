@@ -26,39 +26,41 @@ namespace WebCrawler.Services.Crawlers
         public virtual async Task<IEnumerable<Link>> RunCrawlerAsync(Uri url)
         {
             var sitemapUrl = _convertor.GetDefaultSitemap(url);
-            var resultList = new List<Link>();
+            var resultList = new List<CrawlerData>();
 
             do
             {
-                var link = resultList.Find(x => !x.IsSitemap);
+                var link = resultList.Find(x => !x.Scanned);
 
                 if (!resultList.Any())
                 {
-                    link = new Link { Url = sitemapUrl };
+                    link = new CrawlerData { Url = sitemapUrl };
                 }
 
                 var xml = await _requestService.DownloadAsync(link.Url);
-                link.IsSitemap = true;
+                link.Scanned = true;
                 var parsedLinks = _parserService.GetSitemapLinks(xml);
-                FilterLinksAndAdd(parsedLinks, resultList);
+                resultList.AddRange(GetUniqueLinks(parsedLinks, resultList));
             }
-            while (resultList.Any(x => !x.IsSitemap));
+            while (resultList.Any(x => !x.Scanned));
 
-            return resultList;
+            return resultList.Select(x => new Link { Url = x.Url, FromSitemap = true });
         }
 
-        private void FilterLinksAndAdd(IEnumerable<Uri> filterLinks, List<Link> resultList)
+        private IEnumerable<CrawlerData> GetUniqueLinks(IEnumerable<Uri> filterLinks, List<CrawlerData> targetList)
         {
+            var resultList = new Queue<CrawlerData>();
             foreach (var link in filterLinks)
             {
-                var resultsContainsLink = resultList.Any(x => x.Url == link);
+                var resultsContainsLink = targetList.Any(x => x.Url == link);
                 var containsXmlExtension = link.OriginalString.Contains(".xml");
 
                 if (!containsXmlExtension && !resultsContainsLink)
                 {
-                    resultList.Add(new Link() { Url = link });
+                    resultList.Enqueue(new CrawlerData() { Url = link });
                 }
             }
+            return resultList;
         }
     }
 }
