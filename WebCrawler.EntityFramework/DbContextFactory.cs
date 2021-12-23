@@ -9,6 +9,7 @@ namespace WebCrawler.EntityFramework
         {
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-5NI0SMB; Initial Catalog=WebCrawlerDB; Integrated Security=True");
+
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
