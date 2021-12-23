@@ -4,7 +4,6 @@ using System;
 using System.Data;
 using System.Reflection;
 using WebCrawler.EntityFramework.Entities;
-using WebCrawler.EntityFramework.EntityConfigurations;
 
 namespace WebCrawler.EntityFramework
 {
