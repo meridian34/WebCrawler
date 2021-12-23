@@ -18,7 +18,6 @@ namespace WebCrawler.Logic.Providers
 
         public virtual async Task SaveTestResultAsync(string userUrl, IEnumerable<Link> links)
         {
-
             await _testRepository.AddAsync(new Test
             {
                 UserLink = userUrl,

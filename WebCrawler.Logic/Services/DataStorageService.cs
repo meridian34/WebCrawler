@@ -24,6 +24,7 @@ namespace WebCrawler.Logic.Services
         private IEnumerable<Link> CreateSavedCollection(IEnumerable<Models.Link> links, IEnumerable<Models.PerfomanceData> perfomances)
         {
             var listForSave = new List<Link>();
+
             foreach (var item in links)
             {
                 var buff = new Link();
@@ -34,6 +35,7 @@ namespace WebCrawler.Logic.Services
                 buff.ElapsedMilliseconds = currentItemPerfomance != null ? currentItemPerfomance.ElapsedMilliseconds : null;
                 listForSave.Add(buff);
             }
+
             return listForSave;
         }
     }
