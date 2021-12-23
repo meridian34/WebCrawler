@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Data;
+using System.Reflection;
 using WebCrawler.EntityFramework.Entities;
 using WebCrawler.EntityFramework.EntityConfigurations;
 
@@ -23,8 +24,7 @@ namespace WebCrawler.EntityFramework
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.ApplyConfiguration(new LinkConfiguration());
-            modelBuilder.ApplyConfiguration(new TestConfiguration());
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
         }
     }
 }
