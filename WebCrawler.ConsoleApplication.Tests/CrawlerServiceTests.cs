@@ -24,6 +24,7 @@ namespace WebCrawler.ConsoleApplication.Tests
             var sitemapParser = new Mock<SitemapParser>(urlValidatorService.Object);
             var sitemapCrawler = new Mock<SitemapCrawler>(requestService.Object, sitemapParser.Object, linkConvertorService.Object);
             var consoleService = new Mock<ConsoleService>();
+            var storage = new Mock<DataStorageService>();
 
             
             var webCrawler = new Mock<WebCrawlerService>(htmlCrawler.Object, sitemapCrawler.Object, urlValidatorService.Object, requestService.Object);
@@ -48,7 +49,7 @@ namespace WebCrawler.ConsoleApplication.Tests
             consoleService.Setup(x => x.ReadLine()).Returns(firstUri.OriginalString);
             webCrawler.Setup(x => x.GetPerfomanceDataCollectionAsync(It.IsAny<Link[]>())).ReturnsAsync(crawlerPerfomanceCollection);
 
-            var crawler = new CrawlerService(consoleService.Object, webCrawler.Object);
+            var crawler = new CrawlerService(consoleService.Object, webCrawler.Object, storage.Object);
 
             //act
             await crawler.RunAsync();
