@@ -1,21 +1,24 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using WebCrawler.ConsoleApplication.Services;
+using WebCrawler.EntityFramework;
 
 namespace WebCrawler.ConsoleApplication
 {
     public class Startup
     {
-        private static readonly IServiceProvider _provider;
-        static Startup()
-        {
-            var service = new ServiceCollection();
-            service.AddWebCrawler();
-            service.AddTransient<ConsoleService>();
-            service.AddTransient<CrawlerService>();
-            _provider = service.BuildServiceProvider();
-        }
+        public static IHostBuilder CreateHostBuilder(string[] args) =>
+            Host.CreateDefaultBuilder(args)
+            .ConfigureServices((hostContext, services) =>
+            {
+                services.AddWebCrawler();
+                services.AddTransient<ConsoleService>();
+                services.AddTransient<CrawlerService>();
+                services.AddEfRepository<ApplicationDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-5NI0SMB; Initial Catalog=WebCrawlerDB; Integrated Security=True"));
+                //services.AddWebCrawlerRepository(optionsBuilder => optionsBuilder.UseSqlServer(@"Data Source=DESKTOP-5NI0SMB; Initial Catalog=WebCrawlerDB; Integrated Security=True"));
+                services.AddTransient<DataStorageService>();
+            });
 
-        public static CrawlerService GetWebCrawler => _provider.GetService<CrawlerService>();
     }
 }
