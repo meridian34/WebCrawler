@@ -10,7 +10,7 @@ namespace WebCrawler.Services.Tests.Crawlers
 {
     public class SitemapCrawlerTests
     {
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task RunCrawler_Url_ShouldReturnLinkListAsync()
         {
             // arrange

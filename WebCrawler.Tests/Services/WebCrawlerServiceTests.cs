@@ -31,7 +31,7 @@ namespace WebCrawler.Tests.Services
             _sitemapCrawler = new Mock<SitemapCrawler>(_requestService.Object, sitemapParser.Object, linkConvertorService.Object);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task GetLinks_Uri_ShoudReturnResultListAsync()
         {
             // arrange
@@ -52,7 +52,7 @@ namespace WebCrawler.Tests.Services
             Assert.Collection(result, item => new Link { Url = inputUrl, FromHtml = true, FromSitemap = true });
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task GetPerfomanceDataCollection_Uri_ShoudReturnPerfomanceListAsync()
         {
             // arrange

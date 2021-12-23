@@ -9,7 +9,7 @@ namespace WebCrawler.Tests.Services
         private readonly UrlValidatorService _service = new UrlValidatorService();
 
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/123/", true)]
         [InlineData("https://www.fakebook.com/somegroup/", true)]
         public void UrlIsValid_Url_ShouldReturnTrue(string stringUrl, bool expectedValue)
@@ -24,7 +24,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/123/", true)]
         [InlineData("https://www.fakebook.com/somegroup/", true)]
         public void LinkIsValid_Url_ShouldReturnTrue(string stringUrl, bool expectedValue)
@@ -39,7 +39,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void LinkIsValid_Url_ShouldReturnFalse()
         {
             // arrange
@@ -52,7 +52,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void LinkIsValid_Null_ShouldThrowNullRefferenceException()
         {
             // arrange

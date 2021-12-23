@@ -12,7 +12,7 @@ namespace WebCrawler.ConsoleApplication.Tests
 {
     public class CrawlerServiceTests
     {
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task RunAsync_ReadLineConsoleService_ShouldPrintCrawlingResultsAsync()
         {
             // arrange

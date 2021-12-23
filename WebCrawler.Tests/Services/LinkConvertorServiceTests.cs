@@ -8,7 +8,7 @@ namespace WebCrawler.Tests.Services
     {
         private readonly LinkConvertorService _service = new LinkConvertorService();
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/somegroup/", "/123/", "https://www.example.com/123/")]
         [InlineData("https://www.example.com/", "/somegroup/", "https://www.example.com/ukadgroup/")]
         public void ConvertRelativeToAbsolute_LinkAndBasePath_ShouldReturnAbsolutePath(string rootUrl, string link, string expectedUrl)
@@ -25,7 +25,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/", "https://www.example.com/sitemap.xml")]
         [InlineData("https://www.example.com/somegroup/", "https://www.example.com/sitemap.xml")]
         [InlineData("https://www.example.com/123/", "https://www.example.com/sitemap.xml")]
@@ -42,7 +42,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetDefaultSitemap_EmptyString_ShouldThrowNullRefferenceException()
         {
             // arrange
@@ -55,7 +55,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result.Message, expectedValue);
         }
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/", "https://www.example.com/")]
         [InlineData("https://www.example.com/somegroup/", "https://www.example.com/")]
         [InlineData("https://www.example.com/123/", "https://www.example.com/")]
@@ -73,7 +73,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(result, expectedValue);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetRootUrl_EmptyString_ShouldThrowNullRefferenceException()
         {
             // arrange

@@ -19,7 +19,7 @@ namespace WebCrawler.Tests.Services.Parsers
         }
 
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetHtmlLinks_HtmlDataWithRelativeLink_ShouldReturnLinksList()
         {
             // arrange
@@ -41,7 +41,7 @@ namespace WebCrawler.Tests.Services.Parsers
             Assert.Equal(result, expectedValue);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetHtmlLinks_HtmlDataWithAbsoluteLink_ShouldReturnLinksList()
         {
             // arrange

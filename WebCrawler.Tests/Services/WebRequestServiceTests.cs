@@ -11,7 +11,7 @@ namespace WebCrawler.Tests.Services
 {
     public class WebRequestServiceTests
     {
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task DownloadAsync_Url_ShouldReturnStringDataAsync()
         {
             // arrange
@@ -31,7 +31,7 @@ namespace WebCrawler.Tests.Services
             Assert.Equal(expectedValue, data);
         }
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public async Task GetElapsedTimeForLinksAsync_Url_ShouldReturnPerfomanceDataAsync()
         {
             // arrange

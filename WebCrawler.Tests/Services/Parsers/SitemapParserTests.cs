@@ -10,7 +10,7 @@ namespace WebCrawler.Tests.Services.Parsers
     {
         private readonly Mock<UrlValidatorService> _urlValidatorService = new Mock<UrlValidatorService>();
 
-        [Fact]
+        [Fact(Timeout = 1000)]
         public void GetSitemapLinks_ValidSitemapXmlData_ShouldReturnLinksList()
         {
             // arrange
@@ -27,7 +27,7 @@ namespace WebCrawler.Tests.Services.Parsers
             Assert.Equal(result, expectedValue);
         }
 
-        [Theory]
+        [Theory(Timeout = 1000)]
         [InlineData("")]
         [InlineData(null)]
         [InlineData(@"<loc>https://www.example.com/latest-projects/?param1=24</loc>")]
