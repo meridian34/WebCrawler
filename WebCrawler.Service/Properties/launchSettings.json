@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "WebCrawler.ConsoleApplication": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "connectionString": "Data Source=DESKTOP-5NI0SMB; Initial Catalog=WebCrawlerDB; Integrated Security=True"
+      }
+    }
+  }
+}
