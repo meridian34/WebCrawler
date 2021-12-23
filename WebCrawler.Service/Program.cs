@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System.Threading.Tasks;
+using WebCrawler.ConsoleApplication.Services;
 
 namespace WebCrawler.ConsoleApplication
 {
@@ -6,7 +8,9 @@ namespace WebCrawler.ConsoleApplication
     {
         public static async Task Main(string[] args)
         {
-            await Startup.GetWebCrawler.RunAsync();
+            var host = Startup.CreateHostBuilder(args).Build();
+            var service = host.Services.GetRequiredService<CrawlerService>();
+            await service.RunAsync();
         }
     }
 }
