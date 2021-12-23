@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.EntityFramework", "WebCrawler.EntityFramework\WebCrawler.EntityFramework.csproj", "{FB40045E-8E70-4C8C-84DB-07CB863A8591}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler.Logic", "WebCrawler.Logic\WebCrawler.Logic.csproj", "{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
