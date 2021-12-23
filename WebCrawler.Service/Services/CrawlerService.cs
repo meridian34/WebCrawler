@@ -11,11 +11,13 @@ namespace WebCrawler.ConsoleApplication.Services
     {
         private readonly ConsoleService _consoleService;
         private readonly WebCrawlerService _webCrawlerService;
+        private readonly DataStorageService _storage;
 
-        public CrawlerService(ConsoleService consoleService, WebCrawlerService webCrawlerService)
+        public CrawlerService(ConsoleService consoleService, WebCrawlerService webCrawlerService, DataStorageService storage)
         {
             _consoleService = consoleService;
             _webCrawlerService = webCrawlerService;
+            _storage = storage;
         }
 
         public async Task RunAsync()
@@ -33,6 +35,8 @@ namespace WebCrawler.ConsoleApplication.Services
 
             PrintResultTime(perfomanceData);
             PrintCount(links.Where(x => x.FromHtml == true).Count(), links.Where(x => x.FromSitemap == true).Count());
+
+            await _storage.SaveAsync(url, links, perfomanceData);
         }
 
         private void PrintSitemapUniqueLink(IEnumerable<Link> results)
