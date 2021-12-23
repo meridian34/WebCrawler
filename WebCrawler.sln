@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplicati
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Tests", "WebCrawler.Tests\WebCrawler.Tests.csproj", "{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler.ConsoleApplication.Tests", "WebCrawler.ConsoleApplication.Tests\WebCrawler.ConsoleApplication.Tests.csproj", "{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplication.Tests", "WebCrawler.ConsoleApplication.Tests\WebCrawler.ConsoleApplication.Tests.csproj", "{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.EntityFramework", "WebCrawler.EntityFramework\WebCrawler.EntityFramework.csproj", "{FB40045E-8E70-4C8C-84DB-07CB863A8591}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
