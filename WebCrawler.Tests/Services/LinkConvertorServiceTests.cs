@@ -10,7 +10,7 @@ namespace WebCrawler.Tests.Services
 
         [Theory(Timeout = 1000)]
         [InlineData("https://www.example.com/somegroup/", "/123/", "https://www.example.com/123/")]
-        [InlineData("https://www.example.com/", "/somegroup/", "https://www.example.com/ukadgroup/")]
+        [InlineData("https://www.example.com/", "/somegroup/", "https://www.example.com/somegroup/")]
         public void ConvertRelativeToAbsolute_LinkAndBasePath_ShouldReturnAbsolutePath(string rootUrl, string link, string expectedUrl)
         {
             // arrange
