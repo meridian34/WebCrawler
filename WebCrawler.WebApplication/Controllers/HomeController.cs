@@ -20,6 +20,7 @@ namespace WebCrawler.WebApplication.Controllers
 
         public IActionResult Index()
         {
+            ViewData["TestData"] = "Давай Морти это приключение на 20 минут!";
             return View();
         }
 
