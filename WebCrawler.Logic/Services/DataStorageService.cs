@@ -39,13 +39,13 @@ namespace WebCrawler.Logic.Services
 
             foreach (var item in links)
             {
-                var buff = new Link();
-                buff.Url = item.Url.AbsoluteUri;
-                buff.FromHtml = item.FromHtml;
-                buff.FromSitemap = item.FromSitemap;
+                var link = new Link();
+                link.Url = item.Url.AbsoluteUri;
+                link.FromHtml = item.FromHtml;
+                link.FromSitemap = item.FromSitemap;
                 var currentItemPerfomance = perfomances.FirstOrDefault(x => x.Url == item.Url);
-                buff.ElapsedMilliseconds = currentItemPerfomance != null ? currentItemPerfomance.ElapsedMilliseconds : null;
-                listForSave.Add(buff);
+                link.ElapsedMilliseconds = currentItemPerfomance != null ? currentItemPerfomance.ElapsedMilliseconds : null;
+                listForSave.Add(link);
             }
 
             return listForSave;
