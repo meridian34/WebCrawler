@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using WebCrawler.Logic.Services;
 
-namespace WebCrawler.Logic.Extensions
+namespace WebCrawler.Services.Extensions
 {
     public static class DIExtension
     {
