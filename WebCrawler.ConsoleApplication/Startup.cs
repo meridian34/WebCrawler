@@ -4,7 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using WebCrawler.ConsoleApplication.Services;
 using WebCrawler.EntityFramework;
-using WebCrawler.Logic.Extensions;
+using WebCrawler.Services.Extensions;
 
 namespace WebCrawler.ConsoleApplication
 {
@@ -18,7 +18,7 @@ namespace WebCrawler.ConsoleApplication
                 services.AddTransient<ConsoleService>();
                 services.AddTransient<CrawlerService>();
                 services.AddEfRepository<ApplicationDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("connectionString")));
-                services.AddWebCrawlerLogic();
+                services.AddWebCrawlerServices();
                 
             });
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WebCrawler.Logic.Services;
 using WebCrawler.Models;
 using WebCrawler.Services;
 
