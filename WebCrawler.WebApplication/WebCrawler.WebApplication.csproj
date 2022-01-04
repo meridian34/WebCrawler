@@ -9,7 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WebCrawler.Logic\WebCrawler.Logic.csproj" />
+    <ProjectReference Include="..\WebCrawler.EntityFramework\WebCrawler.EntityFramework.csproj" />
+    <ProjectReference Include="..\WebCrawler.Services\WebCrawler.Services.csproj" />
+    <ProjectReference Include="..\WebCrawler\WebCrawler.csproj" />
   </ItemGroup>
 
 </Project>
