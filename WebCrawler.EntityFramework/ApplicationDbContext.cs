@@ -13,8 +13,8 @@ namespace WebCrawler.EntityFramework
         {
         }
 
-        public DbSet<Link> Links { get; set; }
-        public DbSet<Test> Tests { get; set; }
+        public DbSet<LinkEntity> Links { get; set; }
+        public DbSet<TestEntity> Tests { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
