@@ -1,14 +1,12 @@
 ﻿using Moq;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Data;
 using System.Threading.Tasks;
 using Xunit;
-using WebCrawler.Logic.Services;
 using WebCrawler.Models;
 using System.Threading;
+using WebCrawler.Services.Services;
 
 namespace WebCrawler.Logic.Tests
 {
@@ -18,15 +16,16 @@ namespace WebCrawler.Logic.Tests
         public async Task SaveAsync_WebCrawlerResults_ShouldConvrtrAndTransferToRepository()
         {
             // arrange
-            var repository = new Mock<IRepository<EntityFramework.Entities.Test>>();
-            var storage = new DataStorageService(repository.Object);
+            var testRepository = new Mock<IRepository<EntityFramework.Entities.TestEntity>>();
+            var linkRepository = new Mock<IRepository<EntityFramework.Entities.LinkEntity>>();
+            var storage = new DataStorageService(testRepository.Object, linkRepository.Object);
             var inputUrl = "https://www.example.com/";
             var inputLinkCollection = new Link[] { new Link { Url = new Uri(inputUrl), FromHtml = true, FromSitemap = true } };
             var inputPerfomanceCollection = new PerfomanceData[] { new PerfomanceData { Url = new Uri(inputUrl), ElapsedMilliseconds = 200 } };
             var testDateTime = DateTimeOffset.Now;
-            var expectedLinkList = new List<EntityFramework.Entities.Link>()
+            var expectedLinkList = new List<EntityFramework.Entities.LinkEntity>()
             {
-                new EntityFramework.Entities.Link
+                new EntityFramework.Entities.LinkEntity
                 {
                     Url = inputUrl,
                     FromHtml = true,
@@ -34,16 +33,16 @@ namespace WebCrawler.Logic.Tests
                     ElapsedMilliseconds = 200
                 }
             };
-            var expectedResult = new EntityFramework.Entities.Test { TestDateTime = testDateTime, UserLink = inputUrl, Links = expectedLinkList };
+            var expectedResult = new EntityFramework.Entities.TestEntity { TestDateTime = testDateTime, UserLink = inputUrl, Links = expectedLinkList };
 
             //act
             await storage.SaveAsync(inputUrl, inputLinkCollection, inputPerfomanceCollection);
 
             //assert
-            repository.Verify(x => x.AddAsync(It.Is<EntityFramework.Entities.Test>(t =>
+            testRepository.Verify(x => x.AddAsync(It.Is<EntityFramework.Entities.TestEntity>(t =>
                 t.UserLink == inputUrl
                 && t.Links.Count == expectedLinkList.Count), It.IsAny<CancellationToken>()));
-            repository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
+            testRepository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
         }
     }
 }
