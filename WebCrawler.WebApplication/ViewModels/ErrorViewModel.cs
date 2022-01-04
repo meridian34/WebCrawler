@@ -1,6 +1,6 @@
 using System;
 
-namespace WebCrawler.WebApplication.Models
+namespace WebCrawler.WebApplication.ViewModels
 {
     public class ErrorViewModel
     {
