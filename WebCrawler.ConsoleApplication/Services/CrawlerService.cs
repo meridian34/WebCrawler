@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using WebCrawler.Models;
 using WebCrawler.Services;
+using WebCrawler.Services.Services;
 
 namespace WebCrawler.ConsoleApplication.Services
 {
