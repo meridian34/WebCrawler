@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using WebCrawler.EntityFramework;
+using WebCrawler.Services.Extensions;
+using WebCrawler.WebApplication.Services;
 
 namespace WebCrawler.WebApplication
 {
@@ -22,7 +23,14 @@ namespace WebCrawler.WebApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddControllersWithViews(mvcOtions =>
+            {
+                mvcOtions.EnableEndpointRouting = false;
+            });
+            services.AddWebCrawler();
+            services.AddEfRepository<ApplicationDbContext>(optionsBuilder => optionsBuilder.UseSqlServer(Environment.GetEnvironmentVariable("connectionString")));
+            services.AddWebCrawlerServices();
+            services.AddScoped<Mapper>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,7 +42,7 @@ namespace WebCrawler.WebApplication
             }
             else
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Test/Error");
             }
             app.UseStaticFiles();
 
@@ -42,11 +50,11 @@ namespace WebCrawler.WebApplication
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
+            app.UseMvc(routes =>
             {
-                endpoints.MapControllerRoute(
+                routes.MapRoute(
                     name: "default",
-                    pattern: "{controller=Home}/{action=Index}/{id?}");
+                    template: "{controller=Test}/{action=Index}");
             });
         }
     }
