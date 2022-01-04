@@ -27,9 +27,10 @@ namespace WebCrawler.Services.Services
             return await _storage.GetTestsByPageAsync(pageNumber, pageSize);
         }
 
-        public virtual async Task GetLinksPage()
+        public virtual async Task<LinksPage> GetLinksPage(int testId)
         {
-
+            return await _storage.GetLinksPageByTestIdAsync(testId);
+            
         }
     }
 }
