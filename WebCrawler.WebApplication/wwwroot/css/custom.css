@@ -11,3 +11,14 @@
 .table-row {
     cursor: pointer;
 }
+.tblContent {
+    margin-bottom: 50%;
+}
+.mx-10 {
+    margin-left: 10px; 
+    margin-right: 10px;
+}
+.disabled-link {
+    pointer-events: none;
+    cursor: default;
+}
