@@ -30,9 +30,9 @@ namespace WebCrawler.Services.Services
         {
             var page = new TestsPage() { CurrentPage = pageNumber, ItemsCount = pageSize, Tests = new List<Test>() };
             var query = _testRepository.GetAll().OrderByDescending(x => x.TestDateTime);
-            var (TotalCount, Result) = await _testRepository.GetPageAsync(query, pageNumber, pageSize);
-            page.TotalPages = (int)Math.Ceiling( TotalCount / (decimal)pageSize);
-            page.Tests = Result.Select(x => new Test
+            var dbPage = await _testRepository.GetPageAsync(query, pageNumber, pageSize);
+            page.TotalPages = (int)Math.Ceiling( dbPage.TotalCount / (decimal)pageSize);
+            page.Tests = dbPage.Result.Select(x => new Test
             {
                 Id = x.Id,
                 TestDateTime = x.TestDateTime,
