@@ -1,6 +1,6 @@
 ﻿namespace WebCrawler.EntityFramework.Entities
 {
-    public class Link
+    public class LinkEntity
     {
         public int Id { get; set; }
 
@@ -13,6 +13,6 @@
         public int? ElapsedMilliseconds { get; set; }
 
         public int TestId { get; set; }
-        public Test Test { get; set; }
+        public TestEntity Test { get; set; }
     }
 }
