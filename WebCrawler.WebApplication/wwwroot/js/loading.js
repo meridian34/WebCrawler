@@ -1,12 +1,11 @@
 ﻿function CallLoadingAnimation() {
     
-    //let button = document.getElementById("searchButton");
-    //button.disabled = true;
-
     let parent = document.getElementById("loading");
+    let input = document.getElementById("urlField");
+     
 
     let elementsCollection = parent.getElementsByClassName("loader bodyElement");
-    if (elementsCollection.length === 0) {
+    if (elementsCollection.length === 0 && isValidUrl(input.value)) {
         let css = document.createElement("link");
         css.rel = "stylesheet";
         css.href = "/css/Loading.css";
@@ -36,17 +35,16 @@
         loaderBody.appendChild(thirdLine);
         parent.appendChild(loaderBody);
     }
+}
 
-    //window.location.reload();
+function isValidUrl(string) {
+    let url;
 
+    try {
+        url = new URL(string);
+    } catch (_) {
+        return false;
+    }
 
-    //document.getElementById("loading").innerHTML = `
-    //<div>
-    //    <link rel="stylesheet" href="/css/Loading.css" type="text/css" />
-    //    <div class="loader body">
-    //        <div class="line one"></div>
-    //        <div class="line two"></div>
-    //        <div class="line three"></div>
-    //    </div>
-    //</div>`;
+    return url.protocol === "http:" || url.protocol === "https:";
 }
