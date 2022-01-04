@@ -4,9 +4,9 @@ using WebCrawler.EntityFramework.Entities;
 
 namespace WebCrawler.EntityFramework.EntityConfigurations
 {
-    public class LinkConfiguration : IEntityTypeConfiguration<Link>
+    public class LinkConfiguration : IEntityTypeConfiguration<LinkEntity>
     {
-        public void Configure(EntityTypeBuilder<Link> builder)
+        public void Configure(EntityTypeBuilder<LinkEntity> builder)
         {
             builder.HasKey(x => x.Id);
 

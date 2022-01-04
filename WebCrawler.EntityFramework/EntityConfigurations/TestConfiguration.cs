@@ -4,9 +4,9 @@ using WebCrawler.EntityFramework.Entities;
 
 namespace WebCrawler.EntityFramework.EntityConfigurations
 {
-    public class TestConfiguration : IEntityTypeConfiguration<Test>
+    public class TestConfiguration : IEntityTypeConfiguration<TestEntity>
     {
-        public void Configure(EntityTypeBuilder<Test> builder)
+        public void Configure(EntityTypeBuilder<TestEntity> builder)
         {
             builder.HasKey(x => x.Id);
 
