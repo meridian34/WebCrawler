@@ -7,11 +7,11 @@
             <span class="input-group-text">Enter a website:</span>
         </div>
         <input id="urlField" type="url" class="form-control" name="Url" placeholder="https://www.example.com/" required />
-        <button id="searchButton" class="btn btn-success" UseSubmitBehavior="false" type="submit" onclick="CallLoadingAnimation()">Start Crawler</button>
+        <button id="searchButton" class="btn btn-success" UseSubmitBehavior="false" type="submit" onclick="CallLoadingAnimation()">Test</button>
     </form>
     <div id="loading"></div>
 
-    <h1 class="elementInTheCenter">Tests</h1>
+    <h1 class="elementInTheCenter">Test results</h1>
 
     <table class="table table-striped table-bordered table-active">
 
@@ -19,7 +19,7 @@
             <tr>
                 <th>Url</th>
                 <th>Test Date Time</th>
-                <th>More</th>
+                <th></th>
             </tr>
         </thead>
         @foreach (var item in Model.Tests)
@@ -28,7 +28,7 @@
 
                 <td>@item.UserLink</td>
                 <td>@item.TestDateTime.DateTime.ToString("dd-MM-yyyy HH:mm:ss")</td>
-                <td><a asp-controller="Result" asp-action="TestData" asp-route-testId="@item.Id">See details</a></td>
+                <td><a asp-controller="Result" asp-action="TestData" asp-route-testId="@item.Id"><u>See details</u></a></td>
             </tr>
         }
 
@@ -38,7 +38,7 @@
         <form class="form-inline">
             @if (Model.CurrentPage > 1)
             {
-                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage-1)" asp-route-count="18">Previus page</a>
+                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage-1)" asp-route-count="2">Previus page</a>
             }
             else
             {
@@ -47,7 +47,7 @@
             <div class="mx-10">Страница @Model.CurrentPage из @Model.TotalPages</div>
             @if (Model.CurrentPage < Model.TotalPages && Model.CurrentPage != Model.TotalPages)
             {
-                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage+1)" asp-route-count="18">Next page</a>
+                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage+1)" asp-route-count="2">Next page</a>
             }
             else
             {
