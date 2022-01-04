@@ -5,19 +5,19 @@ VisualStudioVersion = 16.0.31424.327
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler", "WebCrawler\WebCrawler.csproj", "{BCE2EE25-328F-4BC4-A4EB-D5E3DE0CEC63}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplication", "WebCrawler.Service\WebCrawler.ConsoleApplication.csproj", "{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Tests", "WebCrawler.Tests\WebCrawler.Tests.csproj", "{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplication.Tests", "WebCrawler.ConsoleApplication.Tests\WebCrawler.ConsoleApplication.Tests.csproj", "{BBC6EF0F-4BC2-41B8-A12C-7FFF93C033A9}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.EntityFramework", "WebCrawler.EntityFramework\WebCrawler.EntityFramework.csproj", "{FB40045E-8E70-4C8C-84DB-07CB863A8591}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Logic", "WebCrawler.Logic\WebCrawler.Logic.csproj", "{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.WebApplication", "WebCrawler.WebApplication\WebCrawler.WebApplication.csproj", "{576D844A-4875-45D3-B413-294FCFE734E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler.Logic.Tests", "WebCrawler.Logic.Tests\WebCrawler.Logic.Tests.csproj", "{7AC7D1E8-D130-4A6A-9564-B5B1ECF737DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Services", "WebCrawler.Services\WebCrawler.Services.csproj", "{EDAD7EC9-DBFD-42B3-85CB-BEFFB48676FA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebCrawler.WebApplication", "WebCrawler.WebApplication\WebCrawler.WebApplication.csproj", "{576D844A-4875-45D3-B413-294FCFE734E8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.Services.Tests", "WebCrawler.Services.Tests\WebCrawler.Services.Tests.csproj", "{F3011D7B-1266-40F6-BD51-A4D87344D687}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WebCrawler.ConsoleApplication", "WebCrawler.ConsoleApplication\WebCrawler.ConsoleApplication.csproj", "{5624392B-476C-491C-9C40-5389B922B7CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +29,6 @@ Global
 		{BCE2EE25-328F-4BC4-A4EB-D5E3DE0CEC63}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BCE2EE25-328F-4BC4-A4EB-D5E3DE0CEC63}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BCE2EE25-328F-4BC4-A4EB-D5E3DE0CEC63}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F33174C9-61EF-4D4E-A85B-1DE3B63A1295}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C88A8A34-8E4C-41D5-B4D2-EFCC9D70B41E}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -45,18 +41,22 @@ Global
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FB40045E-8E70-4C8C-84DB-07CB863A8591}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB268C0C-6BB0-4C0A-8BF7-CDD19802DF3D}.Release|Any CPU.Build.0 = Release|Any CPU
-		{7AC7D1E8-D130-4A6A-9564-B5B1ECF737DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{7AC7D1E8-D130-4A6A-9564-B5B1ECF737DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{7AC7D1E8-D130-4A6A-9564-B5B1ECF737DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{7AC7D1E8-D130-4A6A-9564-B5B1ECF737DD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{576D844A-4875-45D3-B413-294FCFE734E8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{576D844A-4875-45D3-B413-294FCFE734E8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{576D844A-4875-45D3-B413-294FCFE734E8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{576D844A-4875-45D3-B413-294FCFE734E8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDAD7EC9-DBFD-42B3-85CB-BEFFB48676FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDAD7EC9-DBFD-42B3-85CB-BEFFB48676FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDAD7EC9-DBFD-42B3-85CB-BEFFB48676FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDAD7EC9-DBFD-42B3-85CB-BEFFB48676FA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3011D7B-1266-40F6-BD51-A4D87344D687}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3011D7B-1266-40F6-BD51-A4D87344D687}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3011D7B-1266-40F6-BD51-A4D87344D687}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3011D7B-1266-40F6-BD51-A4D87344D687}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5624392B-476C-491C-9C40-5389B922B7CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5624392B-476C-491C-9C40-5389B922B7CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5624392B-476C-491C-9C40-5389B922B7CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5624392B-476C-491C-9C40-5389B922B7CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
