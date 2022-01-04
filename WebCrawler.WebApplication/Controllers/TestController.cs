@@ -2,7 +2,6 @@
 using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using WebCrawler.Services;
 using WebCrawler.Services.Services;
 using WebCrawler.WebApplication.Services;
 using WebCrawler.WebApplication.ViewModels;
@@ -11,15 +10,11 @@ namespace WebCrawler.WebApplication.Controllers
 {
     public class TestController : Controller
     {
-        private readonly DataStorageService _storage;
-        private readonly WebCrawlerService _webCrawler;
         private readonly DataProcessingService _processingService;
         private readonly Mapper _mapper;
 
-        public TestController(DataStorageService storage, WebCrawlerService webCrawler, DataProcessingService processingService, Mapper mapper)
+        public TestController(DataProcessingService processingService, Mapper mapper)
         {
-            _storage = storage;
-            _webCrawler = webCrawler;
             _processingService = processingService;
             _mapper = mapper;
         }
@@ -30,7 +25,7 @@ namespace WebCrawler.WebApplication.Controllers
         }
 
         [HttpGet("[controller]/[action]")]
-        public async Task<IActionResult> Tests([FromQuery] int page = 1, [FromQuery] int count = 18)
+        public async Task<IActionResult> Tests([FromQuery] int page = 1, [FromQuery] int count = 2)
         {
             if (page < 0 || count < 0)
             {
@@ -45,9 +40,13 @@ namespace WebCrawler.WebApplication.Controllers
         [HttpPost]
         public async Task<IActionResult> Tests(string url)
         {
-            var links = await _webCrawler.GetLinksAsync(new Uri(url));
-            var perfomanceData = await _webCrawler.GetPerfomanceDataCollectionAsync(links);
-            await _storage.SaveAsync(url, links, perfomanceData);
+            bool urlIsValid = Uri.TryCreate(url, UriKind.Absolute, out Uri uriResult) && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps);
+            if (!urlIsValid)
+            {
+                return BadRequest("Input url is not valid");
+            }
+
+            await _processingService.StartCrawlingSite(uriResult);
 
             return RedirectToAction("Tests");
         }
