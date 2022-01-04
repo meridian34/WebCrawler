@@ -1,0 +1,59 @@
+﻿<div>
+
+    <h1 class="elementInTheCenter">Search</h1>
+
+    <form class="input-group" method="post">
+        <div class="input-group-prepend">
+            <span class="input-group-text">Enter a website:</span>
+        </div>
+        <input id="urlField" type="url" class="form-control" name="Url" placeholder="https://www.example.com/" required />
+        <button id="searchButton" class="btn btn-success" UseSubmitBehavior="false" type="submit" onclick="CallLoadingAnimation()">Start Crawler</button>
+    </form>
+    <div id="loading"></div>
+
+    <h1 class="elementInTheCenter">Tests</h1>
+
+    <table class="table table-striped table-bordered table-active">
+
+        <thead class="thead-dark">
+            <tr>
+                <th>Url</th>
+                <th>Test Date Time</th>
+                <th>More</th>
+            </tr>
+        </thead>
+        @foreach (var item in Model.Tests)
+        {
+            <tr>
+
+                <td>@item.UserLink</td>
+                <td>@item.TestDateTime.DateTime.ToString("dd-MM-yyyy HH:mm:ss")</td>
+                <td><a asp-controller="Result" asp-action="TestData" asp-route-testId="@item.Id">See details</a></td>
+            </tr>
+        }
+
+    </table>
+
+    <nav class="navbar navbar-light bg-light">
+        <form class="form-inline">
+            @if (Model.CurrentPage > 1)
+            {
+                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage-1)" asp-route-count="18">Previus page</a>
+            }
+            else
+            {
+                <a class="btn btn-sm btn-outline-secondary disabled">Previus page</a>
+            }
+            <div class="mx-10">Страница @Model.CurrentPage из @Model.TotalPages</div>
+            @if (Model.CurrentPage < Model.TotalPages && Model.CurrentPage != Model.TotalPages)
+            {
+                <a class="btn btn-sm btn-outline-secondary" asp-route-page="@(Model.CurrentPage+1)" asp-route-count="18">Next page</a>
+            }
+            else
+            {
+                <a class="btn btn-sm btn-outline-secondary disabled">Next page</a>
+            }
+
+        </form>
+    </nav>
+</div>
