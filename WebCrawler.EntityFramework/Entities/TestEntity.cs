@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace WebCrawler.EntityFramework.Entities
 {
-    public class Test
+    public class TestEntity
     {
         public int Id { get; set; }
 
@@ -11,6 +11,6 @@ namespace WebCrawler.EntityFramework.Entities
 
         public DateTimeOffset TestDateTime { get; set; }
 
-        public List<Link> Links { get; set; }
+        public List<LinkEntity> Links { get; set; }
     }
 }
