@@ -1,0 +1,18 @@
+﻿<div>
+    <h3 class="elementInTheCenter">@Model.Title</h3>
+    <table class="table table-striped table-bordered table-active">
+
+        <thead class="thead-dark">
+            <tr>
+                <th>Url</th>
+            </tr>
+        </thead>
+
+        @foreach (var item in Model.UrlList)
+        {
+            <tr>
+                <td>@item</td>
+            </tr>
+        }
+    </table>
+</div>

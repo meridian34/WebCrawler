@@ -1,0 +1,33 @@
+﻿
+@{
+    ViewData["Title"] = "TestData";
+}
+
+<div class="page-container">
+    <div class="container">
+        <h3 class="elementInTheCenter">@Model.Url</h3>
+        <br />
+        <h3 class="elementInTheCenter">Timings</h3>
+        <table class="table table-striped table-bordered table-active">
+
+            <thead class="thead-dark">
+                <tr>
+                    <th>Url</th>
+                    <th>ElapsedMilliseconds</th>
+                </tr>
+            </thead>
+
+            @foreach (var item in Model.Links)
+            {
+                <tr>
+                    <td>@item.Url</td>
+                    <td>@item.ElapsedMilliseconds</td>
+                </tr>
+            }
+        </table>
+
+        @await Html.PartialAsync("_GetUrlTable", new { Title = "Urls FOUNDED IN SITEMAP.XML but not founded after crawling a web site", UrlList = Model.SitemapLinks })
+        @await Html.PartialAsync("_GetUrlTable", new { Title = "Urls FOUNDED BY CRAWLING THE WEBSITE but not in sitemap.xml", UrlList = Model.HtmlLinks })
+    </div>
+
+</div>
