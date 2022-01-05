@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WebCrawler.Services.Models;
 
 namespace WebCrawler.WebApplication.ViewModels
 {
@@ -8,6 +9,6 @@ namespace WebCrawler.WebApplication.ViewModels
         public int CurrentPage { get; set; }
         public int TotalPages { get; set; }
 
-        public IEnumerable<TestViewModel> Tests { get; set; }
+        public IEnumerable<Test> Tests { get; set; }
     }
 }
