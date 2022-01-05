@@ -2,14 +2,15 @@
 @{
     ViewData["Title"] = "TestData";
 }
+@model WebCrawler.WebApplication.ViewModels.LinksPageViewModel
 
 <div class="page-container">
     <div class="container">
         <h3 class="elementInTheCenter">@Model.Url</h3>
         <br />
 
-        @await Html.PartialAsync("~/Views/Partial/_GetUrlTable.cshtml", new { Title = "URLs NOT FOUND AT WEBSITE", UrlList = Model.SitemapLinks })
-        @await Html.PartialAsync("~/Views/Partial/_GetUrlTable.cshtml", new { Title = "URLs NOT FOUND AT SITEMAP", UrlList = Model.HtmlLinks })
+        @await Html.PartialAsync("~/Views/Partial/_GetUrlTable.cshtml", new { Title = "URLs NOT FOUND AT WEBSITE", UrlList = Model.Links.Where(x=>!x.FromHtml && x.FromSitemap) })
+        @await Html.PartialAsync("~/Views/Partial/_GetUrlTable.cshtml", new { Title = "URLs NOT FOUND AT SITEMAP", UrlList = Model.Links.Where(x => x.FromHtml && !x.FromSitemap) })
 
         <h3 class="elementInTheCenter">PERFOMANCE</h3>
         <table class="table table-striped table-bordered table-active">
