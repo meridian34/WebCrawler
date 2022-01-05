@@ -9,6 +9,7 @@ using WebCrawler.Services.Parsers;
 using Xunit;
 using Moq;
 using WebCrawler.Services.Services;
+using WebCrawler.EntityFramework.Entities;
 
 namespace WebCrawler.ConsoleApplication.Tests
 {
@@ -26,7 +27,7 @@ namespace WebCrawler.ConsoleApplication.Tests
             var sitemapParser = new Mock<SitemapParser>(urlValidatorService.Object);
             var sitemapCrawler = new Mock<SitemapCrawler>(requestService.Object, sitemapParser.Object, linkConvertorService.Object);
             var consoleService = new Mock<ConsoleService>();
-            var storage = new Mock<DataStorageService>(new Mock<IRepository<EntityFramework.Entities.TestEntity>>().Object);
+            var storage = new Mock<DataStorageService>(new Mock<IRepository<TestEntity>>().Object, new Mock<IRepository<LinkEntity>>().Object);
             
             var webCrawler = new Mock<WebCrawlerService>(htmlCrawler.Object, sitemapCrawler.Object, urlValidatorService.Object, requestService.Object);
 
@@ -76,7 +77,7 @@ namespace WebCrawler.ConsoleApplication.Tests
             var sitemapParser = new Mock<SitemapParser>(urlValidatorService.Object);
             var sitemapCrawler = new Mock<SitemapCrawler>(requestService.Object, sitemapParser.Object, linkConvertorService.Object);
             var consoleService = new Mock<ConsoleService>();
-            var storage = new Mock<DataStorageService>(new Mock<IRepository<EntityFramework.Entities.TestEntity>>().Object);
+            var storage = new Mock<DataStorageService>(new Mock<IRepository<TestEntity>>().Object, new Mock<IRepository<LinkEntity>>().Object);
 
             var webCrawler = new Mock<WebCrawlerService>(htmlCrawler.Object, sitemapCrawler.Object, urlValidatorService.Object, requestService.Object);
 
