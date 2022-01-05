@@ -44,10 +44,8 @@ namespace WebCrawler.Services.Services
 
         public virtual async Task<LinksPage> GetLinksPageByTestIdAsync(int testId)
         {
-            var page = new LinksPage
-            {
-                Url = (await _testRepository.GetByIdAsync(testId)).UserLink
-            };
+            var page = new LinksPage();
+            page.Url = (await _testRepository.GetByIdAsync(testId)).UserLink;
 
             var links = _linkRepository
                .GetAllAsNoTracking()
@@ -58,17 +56,11 @@ namespace WebCrawler.Services.Services
                .Select(x => new Link
                {
                    ElapsedMilliseconds = x.ElapsedMilliseconds,
+                   FromHtml = x.FromHtml,
+                   FromSitemap = x.FromSitemap,
                    Id = x.Id,
                    Url = x.Url
                });
-
-            page.HtmlLinks = links
-                .Where(x=>x.FromHtml && !x.FromSitemap)
-                .Select(x => x.Url);
-
-            page.SitemapLinks = links
-                .Where(x => !x.FromHtml && x.FromSitemap)
-                .Select(x => x.Url);
 
             return page;
         }
