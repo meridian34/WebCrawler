@@ -21,6 +21,7 @@ namespace WebCrawler.WebApplication.Controllers
         {
             var result = await _processingService.GetLinksPage(testId);
             var resultViewModel = _mapper.LinksPageToLinksPageViewModel(result);
+
             return View(resultViewModel);
         }
         
