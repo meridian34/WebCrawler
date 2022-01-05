@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using WebCrawler.Services.Services;
 using WebCrawler.WebApplication.Services;
-using WebCrawler.WebApplication.ViewModels;
 
 namespace WebCrawler.WebApplication.Controllers
 {
@@ -24,7 +22,7 @@ namespace WebCrawler.WebApplication.Controllers
             return RedirectToAction("Tests");
         }
 
-        [HttpGet("[controller]/[action]")]
+        [HttpGet]
         public async Task<IActionResult> Tests([FromQuery] int page = 1, [FromQuery] int count = 2)
         {
             if (page < 0 || count < 0)
@@ -34,6 +32,7 @@ namespace WebCrawler.WebApplication.Controllers
 
             var testsPage = await _processingService.GetTestsPage(page, count);
             var testPageViewModel = _mapper.TestPageToTestPageViewModel(testsPage);
+
             return View(testPageViewModel);
         }
 
@@ -49,12 +48,6 @@ namespace WebCrawler.WebApplication.Controllers
             await _processingService.StartCrawlingSite(uriResult);
 
             return RedirectToAction("Tests");
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
 }
