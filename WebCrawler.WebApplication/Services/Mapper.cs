@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using WebCrawler.Services.Models;
+﻿using WebCrawler.Services.Models;
 using WebCrawler.WebApplication.ViewModels;
 
 namespace WebCrawler.WebApplication.Services
@@ -13,12 +12,7 @@ namespace WebCrawler.WebApplication.Services
                 CurrentPage = testsPage.CurrentPage,
                 ItemsCount = testsPage.ItemsCount,
                 TotalPages = testsPage.TotalPages,
-                Tests = testsPage.Tests.Select(x => new TestViewModel
-                {
-                    Id = x.Id,
-                    TestDateTime = x.TestDateTime,
-                    UserLink = x.UserLink
-                })
+                Tests = testsPage.Tests
             };
         }
 
@@ -26,17 +20,7 @@ namespace WebCrawler.WebApplication.Services
         {
             return new LinksPageViewModel
             {
-                Links = linksPage.Links
-                 .Select(x => new LinkViewModel
-                 {
-                     ElapsedMilliseconds = x.ElapsedMilliseconds,
-                     FromHtml = x.FromHtml,
-                     FromSitemap = x.FromSitemap,
-                     Url = x.Url,
-                     Id = x.Id
-                 }),
-                HtmlLinks = linksPage.HtmlLinks,
-                SitemapLinks = linksPage.SitemapLinks,
+                Links = linksPage.Links,
                 Url = linksPage.Url
             };
         }
