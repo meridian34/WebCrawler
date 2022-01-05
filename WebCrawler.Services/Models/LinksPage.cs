@@ -6,7 +6,5 @@ namespace WebCrawler.Services.Models
     {
         public string Url { get; set; }
         public IEnumerable<Link> Links { get; set; }
-        public IEnumerable<string> SitemapLinks { get; set; }
-        public IEnumerable<string> HtmlLinks { get; set; }
     }
 }
