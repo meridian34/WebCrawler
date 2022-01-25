@@ -16,7 +16,7 @@ namespace WebCrawler.WebApplication.Controllers
             _mapper = mapper;
         }
 
-        [HttpGet("[controller]/[action]")]
+        [HttpGet]
         public async Task<IActionResult> TestData([FromQuery] int testId)
         {
             var result = await _processingService.GetLinksPage(testId);

@@ -41,7 +41,7 @@ namespace WebCrawler.Services.Tests
             await storage.SaveAsync(inputUrl, inputLinkCollection, inputPerfomanceCollection);
 
             //assert
-            testRepository.Verify(x => x.AddAsync(It.Is<EntityFramework.Entities.TestEntity>(t =>
+            testRepository.Verify(x => x.AddAsync(It.Is<TestEntity>(t =>
                 t.UserLink == inputUrl
                 && t.Links.Count == expectedLinkList.Count), It.IsAny<CancellationToken>()));
             testRepository.Verify(x => x.SaveChangesAsync(It.IsAny<CancellationToken>()));
