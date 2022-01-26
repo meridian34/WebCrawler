@@ -19,7 +19,7 @@ namespace WebCrawler.WebApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> TestData([FromQuery] int testId)
         {
-            var result = await _processingService.GetLinksPage(testId);
+            var result = await _processingService.GetLinksPageAsync(testId);
             var resultViewModel = _mapper.LinksPageToLinksPageViewModel(result);
 
             return View(resultViewModel);

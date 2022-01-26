@@ -29,7 +29,7 @@ namespace WebCrawler.Services.Services
         public virtual async Task<TestsPage> GetTestsByPageAsync(int pageNumber, int pageSize)
         {
             var page = new TestsPage() { CurrentPage = pageNumber, ItemsCount = pageSize, Tests = new List<Test>() };
-            var query = _testRepository.GetAll().OrderByDescending(x => x.TestDateTime);
+            var query = _testRepository.GetAllAsNoTracking().OrderByDescending(x => x.TestDateTime);
             var dbPage = await _testRepository.GetPageAsync(query, pageNumber, pageSize);
             page.TotalPages = (int)Math.Ceiling( dbPage.TotalCount / (decimal)pageSize);
             page.Tests = dbPage.Result.Select(x => new Test
@@ -61,6 +61,24 @@ namespace WebCrawler.Services.Services
                    Id = x.Id,
                    Url = x.Url
                });
+
+            return page;
+        }
+
+        public virtual async Task<LinksPage> GetLinksPageByPageAsync(int pageNumber, int pageSize, int testId)
+        {
+            var page = new LinksPage() { CurrentPage = pageNumber, ItemsCount = pageSize,  Links = new List<Link>() };
+            var query = _linkRepository.GetAllAsNoTracking().OrderBy(x => x.ElapsedMilliseconds);
+            var dbPage = await _linkRepository.GetPageAsync(query, pageNumber, pageSize);
+            page.TotalPages = (int)Math.Ceiling(dbPage.TotalCount / (decimal)pageSize);
+            page.Links = dbPage.Result.Select(x => new Link
+            {
+                Id = x.Id,
+                ElapsedMilliseconds = x.ElapsedMilliseconds,
+                FromHtml = x.FromHtml,
+                FromSitemap = x.FromSitemap,
+                Url = x.Url
+            });
 
             return page;
         }

@@ -30,7 +30,7 @@ namespace WebCrawler.WebApplication.Controllers
                 return BadRequest();
             }
 
-            var testsPage = await _processingService.GetTestsPage(page, count);
+            var testsPage = await _processingService.GetTestsPageAsync(page, count);
             var testPageViewModel = _mapper.TestPageToTestPageViewModel(testsPage);
 
             return View(testPageViewModel);
@@ -45,7 +45,7 @@ namespace WebCrawler.WebApplication.Controllers
                 return BadRequest("Input url is not valid");
             }
 
-            await _processingService.StartCrawlingSite(uriResult);
+            await _processingService.StartCrawlingSiteAsync(uriResult);
 
             return RedirectToAction("Tests");
         }

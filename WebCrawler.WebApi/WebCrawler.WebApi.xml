@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>WebCrawler.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:WebCrawler.WebApi.Controllers.TestDetailsController.GetByTestId(System.Int32)">
+            <summary>
+            Get test results by test id
+            </summary>
+            <param name="testId">Id of the test for which you want to get the test results</param>
+            <returns>Response with test results</returns>
+        </member>
+        <member name="M:WebCrawler.WebApi.Controllers.TestDetailsController.GetDetailsByPage(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            Get test results by page
+            </summary>
+            <param name="testId">Id of the test for which you want to get the test results</param>
+            <param name="pageNumber">Number of page</param>
+            <param name="pageSize">Number of elements per page</param>
+            <returns>Response with test results</returns>
+        </member>
+        <member name="M:WebCrawler.WebApi.Controllers.TestsController.GetTests(System.Int32,System.Int32)">
+            <summary>
+            Get tests by page
+            </summary>
+            <param name="pageNumber">Number of page</param>
+            <param name="pageSize">Number of elements per page</param>
+            <returns>Tests</returns>
+            <response code="200">Successful operation</response>
+            <response code="400">Invalid one of the input parameters</response>
+        </member>
+        <member name="M:WebCrawler.WebApi.Controllers.TestsController.StartTest(WebCrawler.WebApi.Requests.StartTestRequest)">
+            <summary>
+            Start site testing
+            </summary>
+            <param name="request">Request with URL for crawling</param>
+            <returns></returns>
+            <response code="200">Successful operation</response>
+            <response code="400">Invalid input URL</response>
+        </member>
+    </members>
+</doc>
