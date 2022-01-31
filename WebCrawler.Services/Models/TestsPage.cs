@@ -2,11 +2,8 @@
 
 namespace WebCrawler.Services.Models
 {
-    public class TestsPage
+    public class TestsPage : BasePage
     {
-        public int ItemsCount { get; set; }
-        public int CurrentPage { get; set; }
-        public int TotalPages { get; set; }
         public IEnumerable<Test> Tests { get; set; }
     }
 }

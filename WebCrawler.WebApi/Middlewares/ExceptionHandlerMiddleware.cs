@@ -6,7 +6,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WebCrawler.WebApi.Exceptions;
 
-namespace WebCrawler.WebApi.Middleware
+namespace WebCrawler.WebApi.Middlewares
 {
     public class ExceptionHandlerMiddleware
     {

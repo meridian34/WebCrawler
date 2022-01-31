@@ -16,7 +16,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using WebCrawler.EntityFramework;
 using WebCrawler.Services.Extensions;
-using WebCrawler.WebApi.Middleware;
+using WebCrawler.WebApi.Middlewares;
 using WebCrawler.WebApi.Services;
 
 namespace WebCrawler.WebApi
