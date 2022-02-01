@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using WebCrawler.WebApi.Responses;
+using WebCrawler.WebApi.Models;
 using WebCrawler.WebApi.Services;
 
 namespace WebCrawler.WebApi.Controllers
@@ -13,6 +13,7 @@ namespace WebCrawler.WebApi.Controllers
 
         public TestDetailsController(TestDetailsService detailsService)
         {
+
             _detailsService = detailsService;
         }
 
@@ -22,12 +23,11 @@ namespace WebCrawler.WebApi.Controllers
         /// <param name="testId">Id of the test for which you want to get the test results</param>
         /// <returns>Response with test results</returns>
         [HttpGet]
-        [Route("[action]/{testId}")]
-        public async Task<ActionResult<LinkPageResponse>> GetByTestId([FromRoute]int testId)
+        public async Task<ActionResult<LinkPageResponse>> GetByTestId([FromQuery]int testId)
         {
-            var respose = await _detailsService.GetByTestIdAsync(testId);
+            var response = await _detailsService.GetByTestIdAsync(testId);
 
-            return Ok(respose);
+            return Ok(response);
         }
 
         /// <summary>
@@ -37,13 +37,12 @@ namespace WebCrawler.WebApi.Controllers
         /// <param name="pageNumber">Number of page</param>
         /// <param name="pageSize">Number of elements per page</param>
         /// <returns>Response with test results</returns>
-        [HttpGet]
-        [Route("{testId}")]
+        [HttpGet("{testId}")]
         public async Task<ActionResult<LinkPageResponse>> GetDetailsByPage([FromRoute] int testId, [FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var respose = await _detailsService.GetDetailsByPageAsync(testId, pageNumber, pageSize);
+            var response = await _detailsService.GetDetailsByPageAsync(testId, pageNumber, pageSize);
 
-            return Ok(respose);
+            return Ok(response);
         }
     }
 }

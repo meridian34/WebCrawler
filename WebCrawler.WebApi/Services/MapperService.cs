@@ -1,20 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using WebCrawler.Services.Models;
-using WebCrawler.WebApi.DTOs;
+using WebCrawler.WebApi.Models;
 
 namespace WebCrawler.WebApi.Services
 {
     public class MapperService
     {
-        public TestDetailsPageDto MapModelToDetailsDto(LinksPage linksPage)
+        public TestDetailsPage MapModelToDetailsDto(LinksPage linksPage)
         {
-            var result = new TestDetailsPageDto
+            var result = new TestDetailsPage
             {
                 Url = linksPage.Url,
-                Links = linksPage.Links.Select(x => new LinkDto
+                Links = linksPage.Links.Select(x => new WebApi.Models.Link
                 {
                     ElapsedMilliseconds = x.ElapsedMilliseconds,
                     FromHtml = x.FromHtml,
@@ -27,14 +24,14 @@ namespace WebCrawler.WebApi.Services
             return result;
         }
 
-        public TestsPageDto MapModelToTestsDto(TestsPage testsPage)
+        public WebApi.Models.TestsPage MapModelToTestsDto(WebCrawler.Services.Models.TestsPage testsPage)
         {
-            var result = new TestsPageDto
+            var result = new WebApi.Models.TestsPage
             {
                 CurrentPage = testsPage.CurrentPage,
                 ItemsCount = testsPage.ItemsCount,
                 TotalPages = testsPage.TotalPages,
-                Tests = testsPage.Tests.Select(x => new TestDto
+                Tests = testsPage.Tests.Select(x => new TestResponse
                 {
                     Id = x.Id,
                     TestDateTime = x.TestDateTime,

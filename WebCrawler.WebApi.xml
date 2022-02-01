@@ -30,7 +30,7 @@
             <response code="200">Successful operation</response>
             <response code="400">Invalid one of the input parameters</response>
         </member>
-        <member name="M:WebCrawler.WebApi.Controllers.TestsController.StartTest(WebCrawler.WebApi.Models.StartTestRequest)">
+        <member name="M:WebCrawler.WebApi.Controllers.TestsController.StartTest(WebCrawler.WebApi.Requests.StartTestRequest)">
             <summary>
             Start site testing
             </summary>

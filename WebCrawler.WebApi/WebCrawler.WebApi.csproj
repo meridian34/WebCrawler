@@ -1,11 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DocumentationFile>C:\Users\a.sobol\source\repos_vs_code\WebCrawler\webcrawler\WebCrawler.WebApi\WebCrawler.WebApi.xml</DocumentationFile>
+    <DocumentationFile>..\WebCrawler.WebApi\WebCrawler.WebApi.xml</DocumentationFile>
     <NoWarn>1701;1702;1591</NoWarn>
   </PropertyGroup>
 
@@ -17,6 +17,12 @@
     <ProjectReference Include="..\WebCrawler.EntityFramework\WebCrawler.EntityFramework.csproj" />
     <ProjectReference Include="..\WebCrawler.Services\WebCrawler.Services.csproj" />
     <ProjectReference Include="..\WebCrawler\WebCrawler.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="WebCrawler.WebApi.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

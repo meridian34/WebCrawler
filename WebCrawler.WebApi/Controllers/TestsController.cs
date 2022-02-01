@@ -1,13 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using WebCrawler.Services.Models;
-using WebCrawler.Services.Services;
-using WebCrawler.WebApi.Requests;
+using WebCrawler.WebApi.Models;
 using WebCrawler.WebApi.Services;
-using WebCrawler.WebApi.Responses;
 
 namespace WebCrawler.WebApi.Controllers
 {
@@ -33,9 +27,9 @@ namespace WebCrawler.WebApi.Controllers
         [HttpGet]
         public async Task<ActionResult<TestPageResponse>> GetTests([FromQuery] int pageNumber, [FromQuery] int pageSize)
         {
-            var respose = await _testsService.GetTestsAsync(pageNumber, pageSize);
+            var response = await _testsService.GetTestsAsync(pageNumber, pageSize);
 
-            return Ok(respose);
+            return Ok(response);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using WebCrawler.WebApi.Exceptions;
+using WebCrawler.Services.Exceptions;
 
 namespace WebCrawler.WebApi.Middlewares
 {
@@ -32,29 +32,28 @@ namespace WebCrawler.WebApi.Middlewares
             }
             catch (ValidationException e)
             {
-                await AddExceptionInfoToRespose(400, e, context);
+                await AddExceptionInfoToResponse(400, e, context);
             }
             catch (Exception e)
             {
-                await AddExceptionInfoToRespose(400, e, context);
+                await AddExceptionInfoToResponse(500, e, context);
             }
         }
 
-        private async Task AddExceptionInfoToRespose(int statusCode, Exception exception, HttpContext context)
+        private async Task AddExceptionInfoToResponse(int statusCode, Exception exception, HttpContext context)
         {
             context.Response.StatusCode = statusCode;
             context.Response.ContentType = "application/json";
-            var responseObject = await GetResponseObject(exception);
+            var responseObject = GetResponseObject(exception);
             var serialized = JsonSerializer.Serialize(responseObject, _serializerOptions);
 
             await context.Response.WriteAsync(serialized);
         }
 
-        private async Task<Object> GetResponseObject(Exception exception)
+        private Object GetResponseObject(Exception exception)
         {
             if (_environment.IsDevelopment())
             {
-
                 return new
                 {
                     Message = exception.Message,

@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace WebCrawler.WebApi.DTOs
+namespace WebCrawler.WebApi.Models
 {
-    public class TestDto
+    public class TestResponse
     {
         public int Id { get; set; }
 
