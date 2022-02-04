@@ -43,7 +43,7 @@ namespace WebCrawler.Services.Services
 
         public virtual async Task<LinksPage> GetLinksPageAsync(int testId)
         {
-            if (testId < 0)
+            if (testId <= 0)
             {
                 throw new ValidationException("Input parameter 'testId' must be >= 0");
             }

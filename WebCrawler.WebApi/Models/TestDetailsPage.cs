@@ -2,7 +2,7 @@
 
 namespace WebCrawler.WebApi.Models
 {
-    public class TestDetailsPage
+    public class TestDetailsPage : BasePage
     {
         public string Url { get; set; }
 

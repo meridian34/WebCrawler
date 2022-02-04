@@ -34,6 +34,10 @@ namespace WebCrawler.WebApi.Middlewares
             {
                 await AddExceptionInfoToResponse(400, e, context);
             }
+            catch(ArgumentException e)
+            {
+                await AddExceptionInfoToResponse(400, e, context);
+            }
             catch (Exception e)
             {
                 await AddExceptionInfoToResponse(500, e, context);

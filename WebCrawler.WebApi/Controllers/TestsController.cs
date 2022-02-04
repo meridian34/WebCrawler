@@ -35,15 +35,15 @@ namespace WebCrawler.WebApi.Controllers
         /// <summary>
         /// Start site testing
         /// </summary>
-        /// <param name="request">Request with URL for crawling</param>
+        /// <param name="startRequest">Request with URL for crawling</param>
         /// <returns></returns>
         /// <response code="200">Successful operation</response>
         /// <response code="400">Invalid input URL</response>
         [HttpPost]
-        public async Task<IActionResult> StartTest([FromBody] StartTestRequest request)
+        public async Task<IActionResult> StartTest([FromBody] StartTestRequest startRequest)
         {
-            await _testsService.StartTest(request.CrawlUrl);
-
+            await _testsService.StartTest(startRequest.CrawlUrl);
+           
             return Ok("Crawling completed!");
         }
     }

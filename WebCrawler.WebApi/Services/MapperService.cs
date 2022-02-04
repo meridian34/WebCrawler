@@ -11,6 +11,9 @@ namespace WebCrawler.WebApi.Services
             var result = new TestDetailsPage
             {
                 Url = linksPage.Url,
+                CurrentPage = linksPage.CurrentPage,
+                ItemsCount = linksPage.ItemsCount,
+                TotalPages = linksPage.TotalPages,
                 Links = linksPage.Links.Select(x => new WebApi.Models.Link
                 {
                     ElapsedMilliseconds = x.ElapsedMilliseconds,

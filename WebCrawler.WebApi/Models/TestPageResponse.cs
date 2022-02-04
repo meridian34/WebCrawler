@@ -1,5 +1,4 @@
-﻿
-namespace WebCrawler.WebApi.Models
+﻿namespace WebCrawler.WebApi.Models
 {
     public class TestPageResponse
     {
