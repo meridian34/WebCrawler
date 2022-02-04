@@ -1,10 +1,10 @@
 <template>
   <div>
-    <usrls-table-component v-bind:page="pageUniqueSitemapUrl"></usrls-table-component>
+    <usrls-table-component :page="pageUniqueSitemapUrl"></usrls-table-component>
 
-    <usrls-table-component v-bind:page="pageUniqueWebsiteUrl"></usrls-table-component>
+    <usrls-table-component :page="pageUniqueWebsiteUrl"></usrls-table-component>
 
-    <perfomance-table-component v-bind:page="page"></perfomance-table-component>
+    <perfomance-table-component :page="page"></perfomance-table-component>
   </div>
 </template>
 

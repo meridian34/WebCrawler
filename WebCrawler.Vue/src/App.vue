@@ -13,6 +13,7 @@
 <script>
 import navigationComponent from './components/Navigation.vue'
 
+
 export default {
   name: "app",
   data() {
@@ -23,6 +24,7 @@ export default {
   components:{
     'navigationComponent' : navigationComponent
   },
+  
 
 };
 </script>

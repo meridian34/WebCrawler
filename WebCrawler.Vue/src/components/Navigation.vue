@@ -20,9 +20,6 @@
               <li class="nav-item">
                 <router-link class="nav-link text-dark" to="/">Tests</router-link>
               </li>
-              <!-- <li class="nav-item">
-                <router-link class="nav-link text-dark" to="/TestDetails">Test Details</router-link>
-              </li> -->
             </ul>
           </div>
         </div>

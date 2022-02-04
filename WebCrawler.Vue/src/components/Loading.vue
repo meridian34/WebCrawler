@@ -2,9 +2,9 @@
   <div v-if="loadingVisible" id="loading">
       <h2 class="elementInTheCenter">Идет загрузка не паникуйте...</h2>
       <div class="loader bodyElement">
-          <div class="line one"></div>
-          <div class="line two"></div>
-          <div class="line three"></div>
+          <div class="line one"/>
+          <div class="line two"/>
+          <div class="line three"/>
       </div>
   </div>
 </template>
@@ -14,19 +14,19 @@ import {eventEmitter} from '../main.js'
 
 export default {
   data(){
-      return{
-          loadingVisible: false
-      }
+    return{
+      loadingVisible: false
+    }
   },
 
   created() {
-      eventEmitter.$on("crawlingStarted",()=>{
-          this.loadingVisible = true;
-      })
+    eventEmitter.$on("crawlingStarted",()=>{
+      this.loadingVisible = true;
+    })
 
-      eventEmitter.$on("crawlingFinished",()=>{
-          this.loadingVisible = false;
-      })
+    eventEmitter.$on("crawlingFinished",()=>{
+      this.loadingVisible = false;
+    })
   }
 };
 </script>
@@ -37,10 +37,6 @@ export default {
     margin-left : auto;
     margin-right : auto;
     display:block;
-}
-
-html {
-  height: 100%;
 }
 
 .bodyElement {

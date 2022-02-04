@@ -1,12 +1,12 @@
 <template>
   <div>
-      <h2 class="elementInTheCenter mt-50">Test results</h2>
+    <h2 class="elementInTheCenter mt-50">Test results</h2>
     <table class="table table-striped table-bordered table-active">
       <thead class="thead-dark">
         <tr >
           <th>Url</th>
           <th>Test Date Time</th>
-          <th></th>
+          <th/>
         </tr>
       </thead>
       <tbody>
@@ -14,18 +14,18 @@
           <td>{{ test.userLink }}</td>
           <td>{{ formatData(test.testDateTime) }}</td>
           <td>
-              <router-link :to="'/TestDetails?testId='+test.id">
+            <router-link :to="'/testdetails?testId='+test.id">
               <u>See details</u>
-              </router-link>
-            </td>
+            </router-link>
+          </td>
         </tr>
       </tbody>
     </table>
 
     <paging-component 
-    v-bind:currentPage="page.currentPage"
-    v-bind:itemsCount="page.itemsCount"
-    v-bind:totalPages="page.totalPages"
+    :currentPage="page.currentPage"
+    :itemsCount="page.itemsCount"
+    :totalPages="page.totalPages"
     @changePageEvent="changeTestPageHandler($event)" ></paging-component>
   </div>
 
@@ -49,12 +49,16 @@ data() {
     },
 
     changeTestPage(pageNumber, pageSize){
-        this.resource.get({pageNumber, pageSize})
+      this.resource.get({pageNumber, pageSize})
         .then((response) => {
           return response.json();
         })
         .then((body) => {
           this.page = body.testsPage;
+        })
+        .catch(e=>{
+          eventEmitter.$emit("testsLoadingError");
+          window.alert("Sorry, data tests is not available at this time. Try load later")
         });
     },
 
@@ -76,21 +80,21 @@ data() {
   },
   created: function () {
     
-    this.resource = this.$resource('api/v1/Tests')
+    this.resource = this.$resource('api/v1/tests')
 
     this.changeTestPage(defaultPageNumber, defaultPageSize);
 
     eventEmitter.$on("crawlingFinished",()=>{
-          this.changeTestPage(defaultPageNumber, defaultPageSize)
-      })
+      this.changeTestPage(defaultPageNumber, defaultPageSize)
+    })
 
     eventEmitter.$on("changeTestsPage",({pageNumber, pageSize})=>{
-          this.changeTestPage(pageNumber, pageSize)
-      })
+      this.changeTestPage(pageNumber, pageSize)
+    })
   },
 
   components:{
-      "pagingComponent" : pagingComponent
+    "pagingComponent" : pagingComponent
   },
 }
 </script>
