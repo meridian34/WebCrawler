@@ -6,7 +6,7 @@ using WebCrawler.WebApi.Services;
 namespace WebCrawler.WebApi.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     public class TestsController : ControllerBase
     {
         private readonly TestsService _testsService;
