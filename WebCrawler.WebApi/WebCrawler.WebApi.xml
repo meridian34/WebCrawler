@@ -34,7 +34,7 @@
             <summary>
             Start site testing
             </summary>
-            <param name="request">Request with URL for crawling</param>
+            <param name="startRequest">Request with URL for crawling</param>
             <returns></returns>
             <response code="200">Successful operation</response>
             <response code="400">Invalid input URL</response>

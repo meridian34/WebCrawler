@@ -13,7 +13,6 @@ namespace WebCrawler.WebApi.Controllers
 
         public TestDetailsController(TestDetailsService detailsService)
         {
-
             _detailsService = detailsService;
         }
 
