@@ -65,24 +65,6 @@ namespace WebCrawler.Services.Services
             return page;
         }
 
-        public virtual async Task<LinksPage> GetLinksPageByPageAsync(int pageNumber, int pageSize, int testId)
-        {
-            var page = new LinksPage() { CurrentPage = pageNumber, ItemsCount = pageSize,  Links = new List<Link>() };
-            var query = _linkRepository.GetAllAsNoTracking().OrderBy(x => x.ElapsedMilliseconds);
-            var dbPage = await _linkRepository.GetPageAsync(query, pageNumber, pageSize);
-            page.TotalPages = (int)Math.Ceiling(dbPage.TotalCount / (decimal)pageSize);
-            page.Links = dbPage.Result.Select(x => new Link
-            {
-                Id = x.Id,
-                ElapsedMilliseconds = x.ElapsedMilliseconds,
-                FromHtml = x.FromHtml,
-                FromSitemap = x.FromSitemap,
-                Url = x.Url
-            });
-
-            return page;
-        }
-
         private async Task<int> SaveTestResultAsync(string userUrl, IEnumerable<LinkEntity> links)
         {
             var test = new TestEntity

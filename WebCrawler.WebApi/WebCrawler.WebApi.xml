@@ -11,15 +11,6 @@
             <param name="testId">Id of the test for which you want to get the test results</param>
             <returns>Response with test results</returns>
         </member>
-        <member name="M:WebCrawler.WebApi.Controllers.TestDetailsController.GetDetailsByPage(System.Int32,System.Int32,System.Int32)">
-            <summary>
-            Get test results by page
-            </summary>
-            <param name="testId">Id of the test for which you want to get the test results</param>
-            <param name="pageNumber">Number of page</param>
-            <param name="pageSize">Number of elements per page</param>
-            <returns>Response with test results</returns>
-        </member>
         <member name="M:WebCrawler.WebApi.Controllers.TestsController.GetTests(System.Int32,System.Int32)">
             <summary>
             Get tests by page

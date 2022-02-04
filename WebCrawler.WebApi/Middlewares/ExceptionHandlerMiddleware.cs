@@ -32,15 +32,15 @@ namespace WebCrawler.WebApi.Middlewares
             }
             catch (ValidationException e)
             {
-                await AddExceptionInfoToResponse(400, e, context);
+                await AddExceptionInfoToResponse(StatusCodes.Status400BadRequest, e, context);
             }
             catch(ArgumentException e)
             {
-                await AddExceptionInfoToResponse(400, e, context);
+                await AddExceptionInfoToResponse(StatusCodes.Status400BadRequest, e, context);
             }
             catch (Exception e)
             {
-                await AddExceptionInfoToResponse(500, e, context);
+                await AddExceptionInfoToResponse(StatusCodes.Status500InternalServerError, e, context);
             }
         }
 

@@ -50,18 +50,5 @@ namespace WebCrawler.Services.Services
 
             return await _storage.GetLinksPageByTestIdAsync(testId);
         }
-        public virtual async Task<LinksPage> GetLinksPageAsync(int pageNumber, int pageSize,int testId)
-        {
-            if (testId < 0)
-            {
-                throw new ValidationException("Input parameter 'testId' must be >= 0");
-            }
-            if (pageNumber <= 0 || pageSize <= 0)
-            {
-                throw new ValidationException("Input parameters must be >= 0");
-            }
-
-            return await _storage.GetLinksPageByPageAsync(pageNumber, pageSize, testId);
-        }
     }
 }
